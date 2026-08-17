@@ -1,0 +1,14 @@
+# Reference material from a different client's build (Kiwi/PHI/L&T Finance) —
+# used only as a template, not part of this project's deliverable.
+LT-reference/
+
+# OS cruft
+.DS_Store
+
+# Python artifacts
+__pycache__/
+*.pyc
+.venv/
+
+# Railway local state (project link is machine-specific, not something to share)
+.railway/

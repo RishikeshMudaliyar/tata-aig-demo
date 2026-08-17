@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>__TAB_TITLE__ · Tata AIG × Nurix</title>
+<style>
+/* Typeface note: tataaig.com's live site uses Google Fonts "Poppins" (confirmed via
+   view-source, 2026-08-17). Substituted here with a system font stack — no CDN
+   dependency — per playbook convention (same approach LTF's kit used). Poppins is a
+   geometric humanist sans; -apple-system/Segoe UI is the closest system equivalent,
+   not a pixel match. Documented substitution, see tataaig_constants.py FONTS dict. */
+:root{
+  --blue:#004da7; --blue-deep:#00306b; --blue-tint:#E8F0FA;
+  --ink:#0B0B0C; --grey:#5C5C60; --grey-2:#8E8E93;
+  --lime:#DCDCDF; --lime-deep:#A8A8AE;
+  --bg:#F7F7F8; --panel:#FFFFFF; --line:#E3E3E6;
+  --red:#D8232A; --green:#0F8A5F; --green-tint:#E8F5EF;
+  --fd:-apple-system,'Segoe UI',system-ui,sans-serif;
+  --fb:-apple-system,'Segoe UI',system-ui,sans-serif;
+  --fm:ui-monospace,'SF Mono','Segoe UI Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:var(--fb);color:var(--ink);background:var(--bg);overflow:hidden;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+#deck{height:100vh;display:flex;flex-direction:column}
+main{flex:1;position:relative;overflow:hidden;min-height:0}
+
+/* ── slide chrome ── */
+.slide{position:absolute;inset:0;display:none;padding:30px 50px 20px}
+.slide.on{display:flex;gap:44px;align-items:stretch}
+.slide.full.on{display:block;overflow-y:auto}
+
+.slide .left{width:398px;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;min-height:0}
+.stagebadge{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;background:var(--ink);color:#fff;font-family:var(--fm);font-size:10px;letter-spacing:1.5px;font-weight:500;border-radius:999px;padding:6px 14px;margin-bottom:12px}
+.agentcode{font-family:var(--fm);font-size:11px;color:var(--blue);letter-spacing:1px;margin-bottom:7px}
+.left h2{font-family:var(--fd);font-weight:800;font-size:29px;letter-spacing:-.9px;line-height:1.06;color:var(--blue)}
+.left .what{margin-top:10px;font-size:13px;line-height:1.55;color:var(--ink);max-width:390px}
+.sowchips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.sowchip{font-family:var(--fm);font-size:9px;letter-spacing:.3px;border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:var(--grey);background:#fff}
+.sowchip.b{border-color:#C8D6F9;background:var(--blue-tint);color:var(--blue-deep)}
+.chain{display:flex;align-items:center;gap:5px;margin-top:13px;font-family:var(--fm);font-size:9.5px;color:var(--grey-2);flex-wrap:wrap}
+.chain b{font-weight:500}
+.chain .cs{border:1px solid var(--line);border-radius:6px;padding:3px 7px;background:#fff}
+.chain .cs.now{background:var(--blue);border-color:var(--blue);color:#fff}
+.chain .cs.done{background:var(--green-tint);border-color:#BCE2D2;color:var(--green)}
+
+/* channel switcher */
+.chans{margin-top:13px}
+.chans .cl{font-family:var(--fm);font-size:9px;letter-spacing:1.2px;color:var(--grey-2);text-transform:uppercase;margin-bottom:6px}
+.chans .cbtns2{display:flex;gap:6px;flex-wrap:wrap}
+.chbtn{border:1px solid var(--line);border-radius:9px;padding:6px 12px;font-family:var(--fd);font-weight:600;font-size:11.5px;background:#fff;color:var(--grey);transition:all .13s;display:inline-flex;align-items:center;gap:6px}
+.chbtn:hover{border-color:var(--blue);color:var(--blue)}
+.chbtn.on{background:var(--blue);border-color:var(--blue);color:#fff}
+
+/* CRM record */
+.crm{margin-top:13px;background:var(--ink);border-radius:14px;padding:12px 14px 10px;min-height:132px;max-height:216px;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(14,27,58,.16)}
+.crm .ch{display:flex;align-items:center;gap:8px;font-family:var(--fm);font-size:9px;letter-spacing:1.5px;color:#8FA0C8;text-transform:uppercase;margin-bottom:8px;flex-shrink:0}
+.crm .ch .pl{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 rgba(201,226,101,.5);animation:pl 2s infinite}
+@keyframes pl{0%{box-shadow:0 0 0 0 rgba(201,226,101,.45)}70%{box-shadow:0 0 0 7px rgba(201,226,101,0)}100%{box-shadow:0 0 0 0 rgba(201,226,101,0)}}
+.crm .cbdy{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:5px;min-height:0}
+.crow{font-family:var(--fm);font-size:10px;line-height:1.45;color:#C4CEE6;padding:5px 9px;border-radius:7px;background:rgba(255,255,255,.05);border-left:2px solid #33406B;animation:up .3s ease both}
+.crow b{color:#fff;font-weight:500}
+.crow.ok{border-left-color:var(--lime)}
+.crow.hot{border-left-color:#FF7A7E}
+
+.right{flex:1;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0}
+
+/* ── PHONE ── */
+.phone{width:330px;height:min(650px,98%);background:#0B1226;border-radius:40px;padding:10px;box-shadow:0 30px 70px rgba(14,27,58,.25)}
+.pscr{width:100%;height:100%;border-radius:31px;overflow:hidden;position:relative;display:flex;flex-direction:column;background:#F4F6FB;min-height:0}
+.notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:106px;height:21px;background:#0B1226;border-radius:999px;z-index:6}
+
+.chat-h{background:#0E1B3A;color:#fff;padding:37px 15px 11px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.av{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-family:var(--fd);font-weight:800;font-size:12px;color:#fff;flex-shrink:0;background:var(--blue)}
+.chat-h .t b{font-family:var(--fd);font-size:13.5px;display:block;letter-spacing:-.1px}
+.chat-h .t span{font-size:10px;color:#9FB0D8;display:flex;align-items:center;gap:5px}
+.chat-h .t span i{width:6px;height:6px;border-radius:50%;background:#4ADE80;display:inline-block}
+
+.cbody{flex:1;overflow-y:auto;padding:12px 11px;display:flex;flex-direction:column;gap:8px;scroll-behavior:smooth;min-height:0}
+.m{max-width:86%;padding:8px 11px;border-radius:12px;font-size:12px;line-height:1.5;animation:up .28s ease both;position:relative}
+@keyframes up{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.m.bot{align-self:flex-start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:4px;box-shadow:0 1px 2px rgba(14,27,58,.04)}
+.m.usr{align-self:flex-end;background:#0E1B3A;color:#fff;border-bottom-right-radius:4px}
+.m .src{display:inline-flex;align-items:center;gap:5px;margin-top:6px;font-family:var(--fm);font-size:8.5px;color:var(--green);background:var(--green-tint);border-radius:5px;padding:3px 7px}
+.m .fine{display:block;margin-top:6px;font-size:9.3px;color:var(--grey-2);line-height:1.4;font-style:italic}
+.note{align-self:center;max-width:92%;text-align:center;font-family:var(--fm);font-size:9px;letter-spacing:.4px;color:var(--grey);background:#E9EDF7;border-radius:8px;padding:5px 11px;animation:up .3s ease both;line-height:1.5}
+.typing{align-self:flex-start;background:#fff;border:1px solid var(--line);border-radius:12px;border-bottom-left-radius:4px;padding:10px 13px;display:flex;gap:4px}
+.typing i{width:6px;height:6px;border-radius:50%;background:var(--grey-2);animation:tp 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes tp{0%,60%,100%{transform:none;opacity:.5}30%{transform:translateY(-4px);opacity:1}}
+
+.qr{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.qr i{font-style:normal;text-align:center;border:1px solid var(--blue);color:var(--blue);border-radius:8px;padding:6px 10px;font-size:11.3px;font-weight:500;background:#fff;transition:all .15s}
+.qr i.sel{background:var(--blue);color:#fff}
+.qr i.dim{opacity:.4}
+
+.icard{align-self:stretch;background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 12px;animation:up .32s ease both}
+.icard .ih{font-family:var(--fm);font-size:8.5px;letter-spacing:1.1px;text-transform:uppercase;color:var(--grey);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.icard .ih i{width:6px;height:6px;border-radius:50%;background:var(--blue);display:inline-block;flex-shrink:0}
+.icard .ih.grn i{background:var(--green)}
+.icard table{width:100%;border-collapse:collapse;font-size:11px}
+.icard td{padding:3px 0;vertical-align:top}
+.icard td:first-child{color:var(--grey);width:46%}
+.icard td:last-child{font-weight:600}
+.icard .tot td{border-top:1px solid var(--line);padding-top:6px;font-family:var(--fd);font-size:12px}
+.rowic{display:flex;gap:9px;align-items:flex-start;padding:5px 0}
+.rowic .ri{width:26px;height:26px;border-radius:8px;background:var(--blue-tint);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.rowic b{font-size:11.3px;display:block}
+.rowic span{font-size:10px;color:var(--grey);line-height:1.4}
+.planrow{display:flex;gap:8px}
+.plancol{flex:1;border:1px solid var(--line);border-radius:10px;padding:9px 9px 8px;text-align:center}
+.plancol.pick{border-color:var(--blue);box-shadow:0 0 0 2px var(--blue-tint)}
+.plancol b{font-family:var(--fd);font-size:11px;display:block;letter-spacing:-.1px}
+.plancol .cv{font-family:var(--fd);font-weight:800;font-size:17px;color:var(--blue);margin-top:3px}
+.plancol .pp{font-size:10px;margin-top:3px;font-weight:600}
+.plancol .pp span{color:var(--grey);font-weight:400;font-size:9px}
+.plancol .tg{display:inline-block;margin-top:5px;font-family:var(--fm);font-size:7.5px;letter-spacing:.5px;background:var(--blue-tint);color:var(--blue-deep);border-radius:4px;padding:2px 6px}
+.progressline{height:5px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:7px}
+.progressline i{display:block;height:100%;background:var(--green);border-radius:99px}
+.cta{margin-top:9px;background:var(--blue);color:#fff;text-align:center;border-radius:9px;padding:9px;font-family:var(--fd);font-weight:700;font-size:12px;transition:background .2s}
+.cta.pressed{background:var(--blue-deep)}
+.issuedcard{border-color:var(--green)!important;box-shadow:0 0 0 3px var(--green-tint);text-align:center}
+.issuedcard .ic{width:40px;height:40px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:18px;margin:2px 0 7px}
+.issuedcard b{font-family:var(--fd);font-size:13.5px;display:block;letter-spacing:-.2px}
+.issuedcard span{font-size:10px;color:var(--grey);display:block;margin-top:4px;line-height:1.55}
+
+.comply{flex-shrink:0;font-family:var(--fm);font-size:7.8px;letter-spacing:.3px;color:var(--grey-2);text-align:center;padding:6px 12px 8px;background:#fff;border-top:1px solid var(--line);line-height:1.5}
+.cinput{flex-shrink:0;display:flex;gap:8px;padding:9px 11px;background:#fff;border-top:1px solid var(--line)}
+.cinput .f{flex:1;background:#EEF1F8;border-radius:999px;padding:8px 13px;font-size:11px;color:var(--grey-2)}
+.cinput .s{width:32px;height:32px;border-radius:50%;background:var(--lime);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+
+/* whatsapp skin */
+.wa .chat-h{background:#075E54}
+.wa .chat-h .t span{color:#B9E4DD}
+.wa .cbody{background:#ECE5DD}
+.wa .m.bot{background:#fff;border:none;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.wa .m.usr{background:#DCF8C6;color:var(--ink)}
+.wa .m .tick{display:block;text-align:right;font-size:8.5px;color:#8CA39B;margin-top:3px}
+.wa .typing{border:none;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.wa .qr i{border-color:#00A884;color:#00806A}
+.wa .qr i.sel{background:#00A884;color:#fff}
+.wa .note{background:#FDF3C6;color:#6E6132}
+.wa .icard{box-shadow:0 1px 1px rgba(0,0,0,.08);border:none}
+.attach{align-self:flex-end;max-width:86%;background:#DCF8C6;border-radius:12px;border-bottom-right-radius:4px;padding:8px;animation:up .3s ease both;width:228px}
+.attach .af{display:flex;gap:9px;align-items:center;background:#CFEEB8;border-radius:9px;padding:9px 10px}
+.attach .pdf{width:32px;height:32px;border-radius:7px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-weight:800;font-size:9px;flex-shrink:0}
+.attach .an b{font-size:11px;display:block;word-break:break-all}
+.attach .an span{font-size:9.5px;color:#5E7355}
+.attach .abar{height:4px;border-radius:99px;background:#BBDDA4;overflow:hidden;margin-top:7px}
+.attach .abar i{display:block;height:100%;width:0%;background:#00A884;border-radius:99px;transition:width .2s linear}
+.attach .tick{display:block;text-align:right;font-size:8.5px;color:#8CA39B;margin-top:4px}
+
+/* app-chat skin (Tata AIG app) */
+.appc .chat-h{background:var(--blue)}
+.appc .chat-h .t span{color:#C8D6F9}
+.appc .av{background:rgba(255,255,255,.24)}
+
+/* call */
+.call{flex:1;display:flex;flex-direction:column;background:#0E1B3A;color:#E9EEFA;min-height:0}
+.call .top{text-align:center;padding:40px 16px 6px;flex-shrink:0}
+.call .top .cb{font-family:var(--fm);font-size:8.5px;letter-spacing:1.6px;color:#7E90BE;text-transform:uppercase}
+.call .top h4{font-family:var(--fd);font-weight:700;font-size:18px;margin-top:5px}
+.call .top .ct{font-family:var(--fm);font-size:11px;color:#4ADE80;margin-top:2px}
+.wave{display:flex;align-items:center;justify-content:center;gap:3px;height:26px;margin:4px 0;flex-shrink:0}
+.wave i{width:3px;border-radius:2px;background:var(--lime);height:5px}
+.wave.on i{animation:wv .8s ease-in-out infinite}
+.wave i:nth-child(2n){animation-delay:.12s}.wave i:nth-child(3n){animation-delay:.24s}.wave i:nth-child(5n){animation-delay:.36s}
+@keyframes wv{0%,100%{height:5px}50%{height:20px}}
+.tr-h{font-family:var(--fm);font-size:8.5px;letter-spacing:1.6px;color:#7E90BE;text-transform:uppercase;text-align:center;padding:6px 0;border-top:1px solid rgba(255,255,255,.09);margin:0 14px;flex-shrink:0}
+.tr{flex:1;overflow-y:auto;padding:2px 14px 8px;display:flex;flex-direction:column;gap:9px;scroll-behavior:smooth;min-height:0}
+.tl{animation:up .3s ease both}
+.tl .w{font-family:var(--fm);font-size:8.5px;letter-spacing:1.2px;margin-bottom:2px}
+.tl.ai .w{color:var(--lime)}
+.tl.cu .w{color:#8FB7FF}
+.tl.sy{align-self:center;text-align:center}
+.tl.sy p{font-family:var(--fm);font-size:9px;color:#7E90BE;background:rgba(255,255,255,.06);border-radius:7px;padding:4px 10px}
+.tl p{font-size:11.8px;line-height:1.5;color:#DCE4F7}
+.callnote{flex-shrink:0;font-family:var(--fm);font-size:8px;color:#7E90BE;text-align:center;padding:6px 14px;border-top:1px solid rgba(255,255,255,.09);line-height:1.55}
+.cbtns{display:flex;justify-content:center;gap:20px;padding:9px 0 13px;flex-shrink:0}
+.cbtn{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:15px}
+.cbtn.end{background:var(--red)}
+
+/* buy app */
+.buy{flex:1;display:flex;flex-direction:column;background:#F4F6FB;min-height:0}
+/* ── website buy flow (S8a) ── */
+.browser.sitebuy{display:flex;flex-direction:column;height:100%;background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.sb-h{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line);background:#fff;flex-shrink:0}
+.sb-logo{font-family:var(--fd);font-weight:800;font-size:15px;letter-spacing:-.4px;color:var(--ink)}
+.sb-logo b{font-weight:500;color:var(--grey)}
+.sb-h .bstep{font-family:var(--fm);font-size:9.5px;letter-spacing:1px;color:var(--grey-2);background:var(--blue-tint);padding:4px 9px;border-radius:6px}
+.sb-b{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:11px;min-height:0}
+.wmsg{font-size:13.5px;line-height:1.5;color:var(--ink);max-width:92%}
+.wpickrow{display:flex;flex-wrap:wrap;gap:8px}
+.wopt{font-family:var(--fb);font-size:12.5px;padding:9px 14px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);cursor:default;transition:all .2s}
+.wopt.chosen{border-color:var(--ink);background:var(--ink);color:#fff;font-weight:600}
+.wopt.faded{opacity:.4}
+.wplans{display:flex;gap:9px}
+.wplan{flex:1;position:relative;border:1.5px solid var(--line);border-radius:12px;padding:13px 12px;transition:all .25s}
+.wplan.pk{border-color:var(--ink);box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.wplan.faded{opacity:.4}
+.wplan b{display:block;font-family:var(--fd);font-size:13px;color:var(--ink)}
+.wplan .ws{display:block;font-size:10.5px;color:var(--grey);margin:3px 0 8px;line-height:1.35}
+.wplan .wpr{font-family:var(--fd);font-weight:800;font-size:17px;color:var(--ink)}
+.wplan .wpr i{font-style:normal;font-size:10px;color:var(--grey-2);font-weight:400}
+.wtag{position:absolute;top:-8px;left:12px;font-family:var(--fm);font-size:7.5px;letter-spacing:.5px;background:var(--ink);color:#fff;border-radius:4px;padding:2px 6px}
+.buy-h{padding:40px 16px 8px;flex-shrink:0;display:flex;align-items:center;gap:10px}
+.buy-h b{font-family:var(--fd);font-size:15.5px;letter-spacing:-.3px}
+.buy-h .bstep{margin-left:auto;font-family:var(--fm);font-size:8.5px;color:var(--grey-2);letter-spacing:.6px}
+.buy-b{flex:1;overflow-y:auto;padding:4px 12px 12px;display:flex;flex-direction:column;gap:9px;scroll-behavior:smooth;min-height:0}
+.buy .m.bot{max-width:92%}
+
+/* browser */
+.browser{width:min(880px,100%);height:min(610px,96%);background:#fff;border-radius:16px;border:1px solid var(--line);box-shadow:0 24px 60px rgba(14,27,58,.14);display:flex;flex-direction:column;overflow:hidden}
+.btop{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);background:#FAFBFE;flex-shrink:0}
+.bdots{display:flex;gap:6px}.bdots i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.burl{flex:1;font-family:var(--fm);font-size:11px;color:var(--grey);background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 12px}
+.bbody{flex:1;display:flex;min-height:0;position:relative}
+.site{flex:1;padding:22px 26px;overflow:hidden}
+.site .nav{display:flex;align-items:center;gap:18px;margin-bottom:20px}
+.site .logo{font-family:var(--fd);font-weight:800;font-size:15px}
+.site .logo b{color:var(--red)}
+.site .lnk{display:flex;gap:16px;font-size:12px;color:var(--grey)}
+.site h3{font-family:var(--fd);font-weight:800;font-size:22px;letter-spacing:-.5px;margin-bottom:5px}
+.site .sub{font-size:12px;color:var(--grey);margin-bottom:14px}
+.pc3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.pc{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff}
+.pc.hot{border-color:var(--red);box-shadow:0 0 0 3px #FDEDEE}
+.pc .t{font-family:var(--fm);font-size:8.5px;letter-spacing:1px;color:var(--red);text-transform:uppercase;margin-bottom:6px}
+.pc h4{font-family:var(--fd);font-weight:700;font-size:13.5px;margin-bottom:5px}
+.pc p{font-size:10.5px;color:var(--grey);line-height:1.5}
+.pc .pr{margin-top:8px;font-family:var(--fd);font-weight:800;font-size:14px}
+.pc .pr span{font-size:9.5px;font-weight:500;color:var(--grey)}
+.widget{position:absolute;right:14px;bottom:14px;width:326px;height:84%;background:#fff;border-radius:16px;box-shadow:0 18px 50px rgba(14,27,58,.28);display:flex;flex-direction:column;overflow:hidden;animation:wig .45s cubic-bezier(.2,.9,.3,1) both}
+@keyframes wig{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+.widget .wh{background:var(--red);color:#fff;padding:11px 13px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.widget .wh .av{background:rgba(255,255,255,.22)}
+.widget .wh .t b{font-family:var(--fd);font-size:13px;display:block}
+.widget .wh .t span{font-size:10px;color:#FFD9DA;display:flex;align-items:center;gap:5px}
+.widget .wh .t span i{width:6px;height:6px;border-radius:50%;background:#7CF2B4;display:inline-block}
+.widget .cbody{background:#FBFBFD}
+.widget .m.usr{background:var(--red)}
+.widget .qr i{border-color:var(--red);color:var(--red)}
+.widget .qr i.sel{background:var(--red);color:#fff}
+
+/* ── MARKETING PIPELINE (S3·S4·S5) ── */
+.mkt{flex:1;display:flex;gap:26px;align-items:stretch;align-self:stretch;min-width:0;min-height:0;height:100%}
+.pipe{flex:1;display:flex;flex-direction:column;gap:10px;justify-content:center;min-width:0;max-width:520px;margin:0 auto;align-self:stretch}
+.pstep{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 16px;display:flex;gap:13px;align-items:flex-start;opacity:.45;transition:opacity .4s,transform .4s,box-shadow .4s;transform:translateY(4px)}
+.pstep.lit{opacity:1;transform:none;box-shadow:0 10px 30px rgba(33,84,232,.10);border-color:#C8D6F9}
+.pstep .pn{width:40px;height:40px;border-radius:11px;background:var(--blue-tint);color:var(--blue-deep);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-weight:800;font-size:12px;flex-shrink:0}
+.pstep.lit .pn{background:var(--blue);color:#fff}
+.pstep .pt b{font-family:var(--fd);font-size:13.5px;letter-spacing:-.2px;display:block}
+.pstep .pt .pd{font-size:11px;color:var(--grey);line-height:1.5;margin-top:3px}
+.pstep .pt .pm{font-family:var(--fm);font-size:9px;color:var(--blue-deep);margin-top:6px;display:none}
+.pstep.lit .pt .pm{display:block;animation:up .3s ease both}
+.mkt .phone{width:290px;height:min(590px,96%);min-height:480px;align-self:center;flex-shrink:0}
+.pp-app{flex:1;display:flex;flex-direction:column;background:#5F259F;min-height:0}
+.pp-h{padding:42px 16px 10px;color:#fff;flex-shrink:0;display:flex;align-items:center;gap:8px}
+.pp-h b{font-family:var(--fd);font-size:15px;letter-spacing:-.2px}
+.pp-h span{margin-left:auto;font-size:14px}
+.pp-b{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:9px;min-height:0}
+.pp-tile{background:rgba(255,255,255,.1);border-radius:11px;padding:11px 12px;color:#EADFF7;font-size:11px;line-height:1.5}
+.pp-tile b{color:#fff;font-family:var(--fd);font-size:12px}
+.ad{background:#fff;border-radius:13px;overflow:hidden;opacity:0;transform:translateY(10px);transition:opacity .5s,transform .5s;position:relative}
+.ad.show{opacity:1;transform:none}
+.ad .adimg{background:linear-gradient(120deg,#173FBD,#2154E8);padding:16px 14px;color:#fff}
+.ad .adimg .as{font-family:var(--fm);font-size:7.5px;letter-spacing:1px;color:#C8D6F9;text-transform:uppercase}
+.ad .adimg b{font-family:var(--fd);font-size:14.5px;letter-spacing:-.2px;display:block;margin-top:4px;line-height:1.25}
+.ad .adimg p{font-size:10px;color:#D7E0F8;margin-top:5px}
+.ad .adcta{display:flex;align-items:center;justify-content:space-between;padding:9px 14px}
+.ad .adcta span{font-size:9.5px;color:var(--grey)}
+.ad .adcta b{background:var(--blue);color:#fff;font-family:var(--fd);font-size:11px;border-radius:8px;padding:6px 14px;position:relative}
+.tapring{position:absolute;right:22px;bottom:14px;width:34px;height:34px;border-radius:50%;border:3px solid var(--lime-deep);opacity:0;pointer-events:none}
+.tapring.go{animation:tap .7s ease-out 2}
+@keyframes tap{0%{opacity:0;transform:scale(.4)}30%{opacity:1}100%{opacity:0;transform:scale(1.5)}}
+
+/* ── TITLE + CLOSE ── */
+.hero{max-width:1140px;margin:0 auto;padding:28px 20px 40px}
+.herologo{height:40px;display:block;margin-bottom:22px}
+.kicker{font-family:var(--fm);font-size:11px;letter-spacing:2.2px;color:var(--blue);text-transform:uppercase;display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.kicker::before{content:"";width:30px;height:3px;background:var(--lime)}
+.hero h1{font-family:var(--fd);font-weight:800;font-size:clamp(32px,4.2vw,50px);letter-spacing:-1.7px;line-height:1.02;color:var(--blue);max-width:940px}
+.hero h1 .dk{color:var(--ink)}
+.hero .lede{margin-top:14px;font-size:15px;line-height:1.6;color:var(--grey);max-width:700px}
+.hero .row{display:flex;align-items:center;gap:18px;margin-top:20px;flex-wrap:wrap}
+.go{background:var(--blue);color:#fff;font-family:var(--fd);font-weight:700;font-size:14px;padding:12px 26px;border-radius:12px;display:inline-flex;gap:10px;align-items:center;transition:background .15s,transform .12s}
+.go:hover{background:var(--blue-deep);transform:translateY(-1px)}
+.hero .hint{font-family:var(--fm);font-size:10.5px;color:var(--grey)}
+.hero .hint kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 7px;background:#fff}
+.meet{margin-top:22px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 20px;display:flex;gap:16px;align-items:center;box-shadow:0 8px 28px rgba(14,27,58,.06)}
+.meet .pv{width:50px;height:50px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-weight:800;font-size:17px;flex-shrink:0}
+.meet b{font-family:var(--fd);font-size:15px;letter-spacing:-.2px}
+.meet p{font-size:12px;color:var(--grey);margin-top:2px;line-height:1.5}
+.meet .rt{margin-left:auto;text-align:right;font-family:var(--fm);font-size:9px;color:var(--grey-2);letter-spacing:.7px;line-height:1.8;text-transform:uppercase;flex-shrink:0}
+.strip{margin-top:16px;display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.sc{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px;text-align:left;transition:transform .15s,border-color .15s,box-shadow .15s}
+.sc:hover{transform:translateY(-3px);border-color:var(--blue);box-shadow:0 10px 30px rgba(33,84,232,.12)}
+.sc .st{display:inline-block;font-family:var(--fm);font-size:8px;letter-spacing:1px;background:var(--lime);border-radius:6px;padding:3px 7px;margin-bottom:8px;text-transform:uppercase}
+.sc h4{font-family:var(--fd);font-weight:800;font-size:13px;letter-spacing:-.3px;color:var(--blue)}
+.sc .ag{font-family:var(--fm);font-size:8.3px;color:var(--grey-2);margin-top:3px;letter-spacing:.4px}
+.sc p{font-size:10.3px;color:var(--grey);line-height:1.5;margin-top:6px}
+.stitchnote{margin-top:14px;display:flex;gap:10px;align-items:center;background:var(--ink);border-radius:14px;padding:12px 16px;color:#C4CEE6}
+.stitchnote .pl2{width:8px;height:8px;border-radius:50%;background:var(--lime);flex-shrink:0}
+.stitchnote p{font-size:12px;line-height:1.5}
+.stitchnote b{color:#fff}
+
+.close-grid{margin-top:24px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.big{background:#fff;border:1px solid var(--line);border-radius:16px;padding:19px 18px}
+.big .v{font-family:var(--fd);font-weight:800;font-size:30px;letter-spacing:-1px;color:var(--blue)}
+.big .l{font-family:var(--fd);font-weight:700;font-size:13px;margin-top:5px}
+.big p{font-size:11px;color:var(--grey);line-height:1.5;margin-top:4px}
+.provenance{margin-top:12px;font-family:var(--fm);font-size:10px;color:var(--grey-2);letter-spacing:.4px}
+.takeaways{margin-top:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.tk{background:var(--blue);border-radius:16px;padding:18px;color:#fff}
+.tk:nth-child(2){background:var(--blue-deep)}
+.tk:nth-child(3){background:var(--ink)}
+.tk .n{font-family:var(--fm);font-size:9px;letter-spacing:1.6px;color:var(--lime);text-transform:uppercase;margin-bottom:7px}
+.tk h4{font-family:var(--fd);font-weight:800;font-size:14.5px;letter-spacing:-.3px;line-height:1.28}
+.tk p{font-size:11px;line-height:1.55;color:#D7E0F8;margin-top:6px}
+
+/* ── bottom bar ── */
+.bar{flex-shrink:0;display:flex;align-items:center;gap:16px;padding:11px 50px;background:#fff;border-top:1px solid var(--line)}
+.bar .who{font-family:var(--fm);font-size:9px;letter-spacing:1px;color:var(--grey-2);text-transform:uppercase}
+.dots{display:flex;gap:7px;margin:0 auto}
+.dot{width:8px;height:8px;border-radius:99px;background:var(--line);transition:all .2s;cursor:pointer;border:none;padding:0}
+.dot.on{width:24px;background:var(--blue)}
+.bb{border:1px solid var(--line);border-radius:10px;padding:8px 14px;font-family:var(--fd);font-weight:600;font-size:12px;background:#fff;transition:border-color .12s,background .12s;display:inline-flex;align-items:center;gap:8px}
+.bb:hover{border-color:var(--blue)}
+.bb.next{background:var(--blue);color:#fff;border-color:var(--blue);padding:8px 18px}
+.bb.next:hover{background:var(--blue-deep)}
+.bb.snd.off{color:var(--grey-2)}
+.bb kbd{font-family:var(--fm);font-size:9px;border:1px solid currentColor;border-radius:4px;padding:1px 5px;opacity:.7}
+
+::-webkit-scrollbar{width:7px}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px}
+.crm .cbdy::-webkit-scrollbar-thumb,.tr::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18)}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.001s!important}}
+@media (max-width:1100px){
+  .slide{padding:20px 20px 14px}.slide.on{gap:20px}
+  .left{width:296px}.left h2{font-size:24px}
+  .strip{grid-template-columns:repeat(3,1fr)}
+  .close-grid{grid-template-columns:repeat(2,1fr)}
+  .takeaways{grid-template-columns:1fr}
+  .bar{padding:10px 20px}
+  .mkt{gap:14px}
+  .mkt .phone{width:232px;height:min(480px,96%);min-height:420px}
+  .pstep{padding:10px 12px}
+  .pstep .pt b{font-size:12px}
+  .pstep .pt .pd{font-size:10px}
+}
+@media (max-width:880px){
+  .mkt .phone{display:none}
+  .pstep{opacity:.6}
+}
+
+/* source screens (Google / Facebook / CRED) */
+.srclabel{position:absolute;top:33px;left:50%;transform:translateX(-50%);z-index:7;font-family:var(--fm);font-size:7.5px;letter-spacing:1.4px;color:#fff;background:rgba(14,27,58,.58);border-radius:999px;padding:3px 11px;pointer-events:none;white-space:nowrap}
+.src-scr{position:absolute;inset:0;opacity:0;transition:opacity .55s ease;display:flex;flex-direction:column;min-height:0}
+.src-scr.show{opacity:1}
+.gsrc{background:#fff;padding:44px 14px 14px}
+.g-h{text-align:center;margin-bottom:10px}
+.g-logo b{font-family:var(--fd);font-size:22px;font-weight:800}
+.g-bar{background:#fff;border:1px solid #DFE1E5;border-radius:999px;padding:9px 15px;font-size:11.5px;color:#202124;box-shadow:0 1px 5px rgba(32,33,36,.15)}
+.g-res{margin-top:14px;padding:0 4px}
+.g-sp{font-size:9px;font-weight:700;color:#202124;margin-bottom:2px}
+.g-url{font-size:9.5px;color:#202124}
+.g-title{font-size:13.5px;color:#1a0dab;margin-top:2px;line-height:1.3;font-weight:500}
+.g-title2{font-size:12.5px;color:#1a0dab;margin-top:2px}
+.g-desc{font-size:10px;color:#4d5156;line-height:1.5;margin-top:3px}
+.g-res.dim2{opacity:.45}
+.fsrc{background:#F0F2F5;padding-top:34px}
+.f-h{background:#fff;padding:10px 14px 8px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #E4E6EB}
+.f-h b{color:#1877F2;font-family:var(--fd);font-size:17px;letter-spacing:-.5px}
+.f-h span{font-size:12px}
+.f-card{background:#fff;margin-top:8px}
+.f-top{display:flex;gap:8px;align-items:center;padding:9px 12px 6px}
+.f-av{width:32px;height:32px;border-radius:50%;background:var(--red);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-family:var(--fd);font-weight:800;font-size:13px}
+.f-nm b{font-size:11.5px;display:block}
+.f-nm span{font-size:9px;color:#65676B}
+.f-txt{padding:0 12px 8px;font-size:11px;line-height:1.45;color:#050505}
+.f-img{background:linear-gradient(120deg,#173FBD,#2154E8);padding:20px 14px;color:#fff}
+.f-img .as{font-family:var(--fm);font-size:7px;letter-spacing:1px;color:#C8D6F9}
+.f-img b{font-family:var(--fd);font-size:14px;display:block;margin-top:4px;line-height:1.25}
+.f-img p{font-size:9.5px;color:#D7E0F8;margin-top:4px}
+.f-cta{display:flex;justify-content:space-between;align-items:center;background:#F0F2F5;padding:8px 12px}
+.f-cta span{font-size:9px;color:#65676B}
+.f-cta b{background:#E4E6EB;border-radius:6px;padding:6px 12px;font-size:10.5px}
+.f-row{padding:7px 12px;border-top:1px solid #E4E6EB;font-size:9.5px;color:#65676B;text-align:center}
+.psrc .pp-app{padding-top:0}
+
+.beatlbl{font-family:var(--fm);font-size:10px;color:var(--grey-2);min-width:110px;text-align:right;letter-spacing:.4px}
+.bb.playing{border-color:var(--blue);color:var(--blue-deep);background:var(--blue-tint)}
+
+/* WABA list-message bottom sheet */
+.sheet-wrap{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;justify-content:flex-end}
+.sheet-scrim{position:absolute;inset:0;background:rgba(11,20,26,.45);animation:up .25s ease both}
+.sheet{position:relative;background:#fff;border-radius:16px 16px 0 0;padding:6px 0 10px;animation:sheetup .32s cubic-bezier(.2,.9,.3,1) both;max-height:70%;overflow-y:auto}
+@keyframes sheetup{from{transform:translateY(100%)}to{transform:none}}
+.sheet.closing{transition:transform .25s ease;transform:translateY(100%)}
+.sheet.closing .sheet-scrim{opacity:0}
+.sheet-h{font-family:var(--fd);font-weight:700;font-size:13px;padding:12px 16px 8px;border-bottom:1px solid var(--line)}
+.sheet-row{display:flex;align-items:center;gap:11px;padding:11px 16px;font-size:12.5px;border-bottom:1px solid var(--line-2, #F0F2F5)}
+.sheet-row i{width:16px;height:16px;border-radius:50%;border:2px solid #8696A0;flex-shrink:0;transition:all .15s}
+.sheet-row.sel i{border-color:#00A884;background:#00A884;box-shadow:inset 0 0 0 3px #fff}
+.sheet-row.sel{background:#E7F8F2}
+.sheet-cancel{text-align:center;font-family:var(--fd);font-weight:700;font-size:11px;color:#00A884;letter-spacing:1px;padding:11px 0 4px}
+/* incoming document bubble */
+.doc-in{align-self:flex-start;max-width:86%;background:#fff;border:1px solid var(--line);border-radius:12px;border-bottom-left-radius:4px;padding:8px;animation:up .3s ease both;width:236px}
+.doc-in .af{display:flex;gap:9px;align-items:center;background:#F0F2F5;border-radius:9px;padding:9px 10px}
+.doc-in .pdf{width:32px;height:32px;border-radius:7px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-weight:800;font-size:9px;flex-shrink:0}
+.doc-in .an b{font-size:10.8px;display:block;word-break:break-all}
+.doc-in .an span{font-size:9.5px;color:var(--grey)}
+.doc-in .tick{display:block;text-align:right;font-size:8.5px;color:#8CA39B;margin-top:4px}
+.wa-doc{border:none;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+
+/* CRED partner app */
+.cf-app{flex:1;display:flex;flex-direction:column;background:#0E0E11;min-height:0}
+.cf-h{padding:42px 16px 10px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.cf-h b{font-family:var(--fd);font-weight:800;font-size:17px;color:#fff;letter-spacing:-.4px}
+.cf-h b span{color:#8E8E93}
+.cf-h .cf-ic{color:#9A9AA5;font-size:13px}
+.cf-b{flex:1;overflow-y:auto;padding:8px 12px 12px;display:flex;flex-direction:column;gap:9px;min-height:0}
+.cf-tile{background:#1A1A21;border:1px solid #26262E;border-radius:12px;padding:12px 13px;color:#B9B9C3;font-size:11px;line-height:1.5}
+.cf-tile b{color:#fff;font-family:var(--fd);font-size:12.5px}
+</style>
+</head>
+<body>
+<div id="deck">
+<main id="main">
+
+  <!-- ═══ 0 · TITLE ═══ -->
+  <section class="slide full on" data-i="0">
+    <div class="hero">
+      <img class="herologo" src="data:image/png;base64,__LOGO__" alt="Tata AIG Insurance">
+      <div class="kicker">Tata AIG Insurance × Nurix · Live concept demo</div>
+      <h1>__HERO_TITLE__<br><span class="dk">__HERO_SUBTITLE__</span></h1>
+      <p class="lede">The full system of agents, running: the AI marketing stack creates the lead, and five conversational agents carry it — across web chat, WhatsApp and voice — to a submitted application. One customer, one CRM record, end to end.</p>
+      <div class="row">
+        <button class="go" onclick="go(1)">Begin — Vikram's journey →</button>
+        <span class="hint">You are in control: <kbd>→</kbd> plays the <b>next step</b> (one message per press) · at stage end <kbd>→</kbd> moves to the next stage · <kbd>A</kbd> auto-run · <kbd>R</kbd> replay · <kbd>M</kbd> voice</span>
+      </div>
+
+      <div class="meet">
+        <div class="pv">A</div>
+        <div>
+          <b>Vikram — his car insurance renewal is two weeks away</b>
+          <p>2 years claim-free (25% NCB), but one small claim last year put that bonus at risk this renewal — a fact of the rules, not of switching. Tata AIG's NCB Protection add-on keeps the bonus fully intact even after a claim. Vikram doesn't know Tata AIG exists yet. The system is about to find him.</p>
+        </div>
+        <div class="rt">From the concept deck<br>"Interest to Issuance"<br>Illustrative data</div>
+      </div>
+
+      <div class="strip">
+        <button class="sc" onclick="go(1)"><span class="st">Marketing</span><h4>Lead is born</h4><div class="ag">S3 · S4 · S5 · MVP 4</div><p>Campaign planned, leads scored, cohorts built — ads serve on Google, Facebook &amp; CRED; captures flow in from all three.</p></button>
+        <button class="sc" onclick="go(2)"><span class="st">Engagement</span><h4>Vehicle Advisory</h4><div class="ag">S1 · CHAT + VOICE</div><p>Real questions about NCB &amp; renewal — trust before any sale.</p></button>
+        <button class="sc" onclick="go(3)"><span class="st">Lead Capture</span><h4>Policy Advisor</h4><div class="ag">S2 · D2C WEB CHAT</div><p>The conversation turns commercial — and becomes a consented lead in CRM.</p></button>
+        <button class="sc" onclick="go(4)"><span class="st">Outreach</span><h4>Outreach</h4><div class="ag">S6 · VOICE + WHATSAPP</div><p>Genesys outbound call at 10 AM with full context. Audible, live.</p></button>
+        <button class="sc" onclick="go(5)"><span class="st">Re-engagement</span><h4>Re-engagement</h4><div class="ag">S7 · WHATSAPP + VOICE</div><p>Application stalls at document upload — recovered in-chat, document verified.</p></button>
+        <button class="sc" onclick="go(6)"><span class="st">Conversion</span><h4>Buying Agent</h4><div class="ag">S8 · APP + WEB · PAS</div><p>Comparison → premium → disclosures → payment → submitted.</p></button>
+      </div>
+
+      <div class="stitchnote">
+        <span class="pl2"></span>
+        <p><b>The stitch:</b> every stage writes to the same CRM record — <b>Lead TATAAIG-40217</b> — visible in the dark panel on each stage. And every agent meets the customer on the channel he prefers: use the <b>channel buttons</b> on each stage to replay the same conversation on web chat, WhatsApp or voice, exactly as scoped in the SOW.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 1 · S3·S4·S5 MARKETING ═══ -->
+  <section class="slide" data-i="1">
+    <div class="left">
+      <span class="stagebadge">STAGE 0 · MARKETING — HOW THE LEAD IS BORN</span>
+      <div class="agentcode">S3 · S4 · S5 — AI MARKETING STACK</div>
+      <h2>Before any conversation, the system finds the right customer.</h2>
+      <p class="what">Three agents work before any human conversation: <b>find</b> the leads, <b>group</b> them, and <b>serve each group the right ad</b> — learning from results, with Tata AIG approving every step.</p>
+      <div class="sowchips">
+        <span class="sowchip b">MVP 4 · Milestone 1</span><span class="sowchip">Google &amp; Meta Ads</span><span class="sowchip">2 demand partners (SOW)</span><span class="sowchip">Tata AIG approves every step</span>
+      </div>
+      <div class="chain"><b>JOURNEY</b><span class="cs now">S3·4·5</span><span class="cs">S1</span><span class="cs">S2</span><span class="cs">S6</span><span class="cs">S7</span><span class="cs">S8</span></div>
+      <div class="crm"><div class="ch"><span class="pl"></span>CRM / UDP · Lead genesis</div><div class="cbdy" id="crm1"></div></div>
+    </div>
+    <div class="right">
+      <div class="mkt">
+        <div class="pipe">
+          <div class="pstep" id="mk1"><span class="pn">S5</span><div class="pt"><b>Plans the campaign</b><div class="pd">Goal, budget and guardrails set by AI — approved by Tata AIG.</div><div class="pm">CAMPAIGN CMP-2214 · APPROVED ✓</div></div></div>
+          <div class="pstep" id="mk2"><span class="pn">S3</span><div class="pt"><b>Collects &amp; scores every lead</b><div class="pd">Google, Meta and partner leads (PhonePe, CRED) — cleaned, enriched and renewal-scored into one profile.</div><div class="pm">2,40,318 INGESTED · UDP ENRICHED · SCORED</div></div></div>
+          <div class="pstep" id="mk3"><span class="pn">S4</span><div class="pt"><b>Groups them into micro-segments</b><div class="pd">Finds people like Vikram — car owners with renewal due and a strong NCB history. Tata AIG approves.</div><div class="pm">COHORT C-206 · 52,400 PROFILES · PROPENSITY 0.79 ✓</div></div></div>
+          <div class="pstep" id="mk4"><span class="pn">S5</span><div class="pt"><b>Serves the right ad, everywhere</b><div class="pd">One creative system across Google, Facebook/Instagram and partner apps — budget follows what converts.</div><div class="pm">GOOGLE · META · PARTNER APPS — LIVE · CTR +38% VS GENERIC</div></div></div>
+          <div class="pstep" id="mk5"><span class="pn">→</span><div class="pt"><b>Vikram sees it — and taps</b><div class="pd">Right person, right moment, inside CRED. A lead is born — with its full history attached.</div><div class="pm">3 SOURCES CAPTURING · VIKRAM → CRED TILE · ATTRIBUTION STORED</div></div></div>
+        </div>
+        <div class="phone"><div class="pscr"><div class="notch"></div>
+          <div class="srclabel" id="srclabel">CAMPAIGN PREVIEW</div>
+
+          <!-- A · Google Search ad -->
+          <div class="src-scr gsrc" id="scrG">
+            <div class="g-h"><span class="g-logo"><b style="color:#4285F4">G</b><b style="color:#EA4335">o</b><b style="color:#FBBC05">o</b><b style="color:#4285F4">g</b><b style="color:#34A853">l</b><b style="color:#EA4335">e</b></span></div>
+            <div class="g-bar">car insurance renewal online</div>
+            <div class="g-res">
+              <div class="g-sp">Sponsored</div>
+              <div class="g-url">tataaig.com › renew</div>
+              <div class="g-title">Switch &amp; Renew Your Car Insurance — Keep Your NCB</div>
+              <div class="g-desc">Comprehensive cover from ₹28,500/yr. Zero Depreciation available. NCB transfers from any insurer. Buy fully online.</div>
+            </div>
+            <div class="g-res dim2">
+              <div class="g-url">example-aggregator.in</div>
+              <div class="g-title2">Compare 20+ motor insurance plans online</div>
+            </div>
+          </div>
+
+          <!-- B · Facebook feed ad -->
+          <div class="src-scr fsrc" id="scrF">
+            <div class="f-h"><b>facebook</b><span>🔍 &nbsp;💬</span></div>
+            <div class="f-card">
+              <div class="f-top"><span class="f-av">P</span><div class="f-nm"><b>Tata AIG Insurance</b><span>Sponsored · 🌐</span></div></div>
+              <div class="f-txt">Renewal coming up? Don't let a claim quietly cost you more than it should. Switch to Tata AIG — your NCB comes with you. 🚗</div>
+              <div class="f-img"><span class="as">TATA AIG INSURANCE</span><b>Switch &amp; Renew — Keep Your No-Claim Bonus</b><p>Comprehensive from ₹28,500/yr</p></div>
+              <div class="f-cta"><span>tataaig.com</span><b>Learn more</b></div>
+              <div class="f-row">👍 Like&nbsp;&nbsp;&nbsp;💬 Comment&nbsp;&nbsp;&nbsp;↗ Share</div>
+            </div>
+          </div>
+
+          <!-- C · CRED partner tile -->
+          <div class="src-scr psrc" id="scrP">
+            <div class="cf-app">
+              <div class="cf-h"><b>CRED</b><span class="cf-ic">🔍 &nbsp;👤</span></div>
+              <div class="cf-b">
+                <div class="cf-tile"><b>Pay credit card bill</b><br>3 cards · due in 5 days</div>
+                <div class="ad" id="mkad">
+                  <div class="adimg"><span class="as">Sponsored · Tata AIG Insurance</span><b>Switch &amp; Renew — Keep Your No-Claim Bonus</b><p>Comprehensive cover from ₹28,500/yr. NCB transfers from any insurer.</p></div>
+                  <div class="adcta"><span>Tata AIG Insurance</span><b>Get a Quote</b><span class="tapring" id="mktap"></span></div>
+                </div>
+                <div class="cf-tile"><b>CRED rewards</b><br>Redeem coins on top brands</div>
+                <div class="cf-tile"><b>Insurance &amp; protect</b><br>Motor · health · travel</div>
+              </div>
+            </div>
+          </div>
+
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 2 · S1 ═══ -->
+  <section class="slide" data-i="2">
+    <div class="left">
+      <span class="stagebadge">STAGE 1 · ENGAGEMENT</span>
+      <div class="agentcode">S1 — AI VEHICLE ADVISORY AGENT</div>
+      <h2>Renewal questions build trust before any sale.</h2>
+      <p class="what">Ananya answers NCB &amp; renewal questions with responses <b>100% grounded in Tata AIG-approved motor content</b> — assessing risk indicators and pushing a vehicle profile summary to CRM after every meaningful interaction.</p>
+      <div class="sowchips">
+        <span class="sowchip b">MVP 5 · Milestone 2</span><span class="sowchip">1 core topic: NCB &amp; renewal (SOW)</span><span class="sowchip">Evidence-based · KB-grounded</span><span class="sowchip">Re-engages from conversation history</span><span class="sowchip">CRM: context + vehicle-profile summary</span>
+      </div>
+      <div class="chans"><div class="cl">SOW deliverables — Chat: Web · App · WhatsApp &nbsp;|&nbsp; Voice: Web · App</div><div class="cbtns2" id="ch2"></div></div>
+      <div class="chain"><b>JOURNEY</b><span class="cs done">S3·4·5</span><span class="cs now">S1</span><span class="cs">S2</span><span class="cs">S6</span><span class="cs">S7</span><span class="cs">S8</span></div>
+      <div class="crm"><div class="ch"><span class="pl"></span>CRM · Building lead record</div><div class="cbdy" id="crm2"></div></div>
+    </div>
+    <div class="right" id="stage2"></div>
+  </section>
+
+  <!-- ═══ 3 · S2 ═══ -->
+  <section class="slide" data-i="3">
+    <div class="left">
+      <span class="stagebadge">STAGE 2 · LEAD CAPTURE</span>
+      <div class="agentcode">S2 — AI POLICY ADVISOR AGENT</div>
+      <h2>Intent becomes a qualified lead — in the moment.</h2>
+      <p class="what">Ananya clarifies cover options, premium trade-offs and claim scenarios in real time from the Tata AIG knowledge base — and converts the conversation into a consented, sales-qualified lead via the bi-directional CRM API.</p>
+      <div class="sowchips">
+        <span class="sowchip b">MVP 3 · Milestone 1</span><span class="sowchip">Chat Agent · D2C website (SOW)</span><span class="sowchip">Intent detection · anonymous → qualified lead</span><span class="sowchip">Human handoff · warm transfer + summary</span><span class="sowchip">CRM: lead capture &amp; handoff</span><span class="sowchip">DPDP consent</span>
+      </div>
+      <div class="chans"><div class="cl">SOW deliverable — D2C website chat · other channels shown for omni-channel continuity</div><div class="cbtns2" id="ch3"></div></div>
+      <div class="chain"><b>JOURNEY</b><span class="cs done">S3·4·5</span><span class="cs done">S1</span><span class="cs now">S2</span><span class="cs">S6</span><span class="cs">S7</span><span class="cs">S8</span></div>
+      <div class="crm"><div class="ch"><span class="pl"></span>CRM · Lead TATAAIG-40217</div><div class="cbdy" id="crm3"></div></div>
+    </div>
+    <div class="right" id="stage3"></div>
+  </section>
+
+  <!-- ═══ 4 · S6 ═══ -->
+  <section class="slide" data-i="4">
+    <div class="left">
+      <span class="stagebadge">STAGE 3 · OUTREACH</span>
+      <div class="agentcode">S6 — AI OUTREACH AGENT</div>
+      <h2>The follow-up that always happens, on time, on his channel.</h2>
+      <p class="what">Ananya picks the lead from the CRM queue with full context, dials through <b>Genesys telephony</b> at the promised hour, resolves the premium objection, and writes a clean disposition back to CRM. <b>Turn sound on 🔊 — the call is audible.</b></p>
+      <div class="sowchips">
+        <span class="sowchip b">MVP 3 · Milestone 1</span><span class="sowchip">Outbound voice + WhatsApp (SOW)</span><span class="sowchip">SMS · link delivery</span><span class="sowchip">Callback scheduling</span><span class="sowchip">Multilingual · Hindi/English</span><span class="sowchip">CRM: ingestion · logging · outcome sync</span>
+      </div>
+      <div class="chans"><div class="cl">SOW deliverables — Outbound Voice · WhatsApp · SMS link delivery</div><div class="cbtns2" id="ch4"></div></div>
+      <div class="chain"><b>JOURNEY</b><span class="cs done">S3·4·5</span><span class="cs done">S1</span><span class="cs done">S2</span><span class="cs now">S6</span><span class="cs">S7</span><span class="cs">S8</span></div>
+      <div class="crm"><div class="ch"><span class="pl"></span>CRM · Lead TATAAIG-40217</div><div class="cbdy" id="crm4"></div></div>
+    </div>
+    <div class="right" id="stage4"></div>
+  </section>
+
+  <!-- ═══ 5 · S7 ═══ -->
+  <section class="slide" data-i="5">
+    <div class="left">
+      <span class="stagebadge">STAGE 4 · RE-ENGAGEMENT</span>
+      <div class="agentcode">S7 — AI RE-ENGAGEMENT AGENT</div>
+      <h2>Drop-offs don't stay dropped.</h2>
+      <p class="what">Ananya detects the stalled application, carries its complete context, and re-activates the journey where the customer actually is — multilingual, across voice and text — even verifying his prior-year policy document right inside the chat.</p>
+      <div class="sowchips">
+        <span class="sowchip b">MVP 3 · Milestone 1</span><span class="sowchip">Drop-off detection · CRM + platform signals</span><span class="sowchip">Voice re-engagement (SOW deliverable)</span><span class="sowchip">Abandonment diagnosis</span><span class="sowchip">High-value case escalation</span><span class="sowchip">Multilingual</span>
+      </div>
+      <div class="chans"><div class="cl">SOW deliverable — Voice re-engagement · WhatsApp shown as illustrative extension</div><div class="cbtns2" id="ch5"></div></div>
+      <div class="chain"><b>JOURNEY</b><span class="cs done">S3·4·5</span><span class="cs done">S1</span><span class="cs done">S2</span><span class="cs done">S6</span><span class="cs now">S7</span><span class="cs">S8</span></div>
+      <div class="crm"><div class="ch"><span class="pl"></span>CRM · Lead TATAAIG-40217</div><div class="cbdy" id="crm5"></div></div>
+    </div>
+    <div class="right" id="stage5"></div>
+  </section>
+
+  <!-- ═══ 6 · S8a WEBSITE ═══ -->
+  <section class="slide" data-i="6">
+    <div class="left">
+      <span class="stagebadge">STAGE 5 · CONVERSION — WEBSITE</span>
+      <div class="agentcode">S8a — AI BUYING AGENT · WEBSITE (PRIMARY)</div>
+      <h2>The primary buy channel: reg number in, policy out — four steps.</h2>
+      <p class="what">The website is Tata AIG's main buy journey — a lean, unassisted flow: <b>registration number up front</b> auto-pulls the car and prior NCB, plans are filtered to what's relevant, and friction like the phone number is <b>deferred until after the quote</b>. Assisted channels are the backup.</p>
+      <div class="sowchips">
+        <span class="sowchip b">MVP 5 · Milestone 2</span><span class="sowchip">Website = primary buy channel</span><span class="sowchip">Reg-first · registry auto-pull</span><span class="sowchip">"Talk to filter" — only relevant options</span><span class="sowchip">Progressive disclosure of details</span><span class="sowchip">NCB Protection applied in-quote</span>
+      </div>
+      <div class="chans"><div class="cl">Website (unassisted) · Voice assist available as backup</div><div class="cbtns2" id="ch6"></div></div>
+      <div class="chain"><b>JOURNEY</b><span class="cs done">S3·4·5</span><span class="cs done">S1</span><span class="cs done">S2</span><span class="cs done">S6</span><span class="cs done">S7</span><span class="cs now">S8a</span><span class="cs">S8b</span></div>
+      <div class="crm"><div class="ch"><span class="pl"></span>CRM · Lead TATAAIG-40217</div><div class="cbdy" id="crm6"></div></div>
+    </div>
+    <div class="right" id="stage6"></div>
+  </section>
+
+  <!-- ═══ 7 · S8b WHATSAPP ═══ -->
+  <section class="slide" data-i="7">
+    <div class="left">
+      <span class="stagebadge">STAGE 5 · CONVERSION — ASSISTED</span>
+      <div class="agentcode">S8b — AI BUYING AGENT · WHATSAPP / APP (ASSISTED)</div>
+      <h2>The assisted path: same purchase, hand-held end to end.</h2>
+      <p class="what">When a customer wants help — or drops off — the assisted flow carries the full context into WhatsApp or the app: Ananya confirms details, handles KYC and nominee, re-rates add-ons live, and activates the policy. This is where the three Tata AIG USPs — <b>NCB Protection, Flexi Repair, Claim Specialist</b> — come to life.</p>
+      <div class="sowchips">
+        <span class="sowchip b">MVP 5 · Milestone 2</span><span class="sowchip">Chat + Voice Agents · Web &amp; App (SOW)</span><span class="sowchip">Objection handling · checkout nudges</span><span class="sowchip">KYC · nominee · e-consent</span><span class="sowchip">NCB Protection · Flexi Repair · Claim Specialist</span><span class="sowchip">KB: product/pricing/policy</span>
+      </div>
+      <div class="chans"><div class="cl">SOW deliverables — Chat &amp; Voice on Web/App · WhatsApp shown as illustrative extension</div><div class="cbtns2" id="ch7"></div></div>
+      <div class="chain"><b>JOURNEY</b><span class="cs done">S3·4·5</span><span class="cs done">S1</span><span class="cs done">S2</span><span class="cs done">S6</span><span class="cs done">S7</span><span class="cs done">S8a</span><span class="cs now">S8b</span></div>
+      <div class="crm"><div class="ch"><span class="pl"></span>CRM · Lead TATAAIG-40217</div><div class="cbdy" id="crm7"></div></div>
+    </div>
+    <div class="right" id="stage7"></div>
+  </section>
+
+  <!-- ═══ 8 · CLOSE ═══ -->
+  <section class="slide full" data-i="8">
+    <div class="hero">
+      <div class="kicker">Why AI-first</div>
+      <h1 style="font-size:clamp(28px,3.6vw,44px)">Eight agents. One CRM record.<br><span class="dk">Every channel. Zero customers left behind.</span></h1>
+      <p class="lede">Traditional models scale linearly with people. AI-agent models scale exponentially with data — and the numbers already exist in production.</p>
+
+      <div class="close-grid">
+        <div class="big"><div class="v">10%</div><div class="l">Higher conversion</div><p>vs human-led calls, with 8× better engagement than IVR systems</p></div>
+        <div class="big"><div class="v">&lt;800ms</div><div class="l">Response time</div><p>Minimising drop-offs and keeping conversations human-paced</p></div>
+        <div class="big"><div class="v">24/7</div><div class="l">Lead engagement</div><p>Without increasing support team size or cost</p></div>
+        <div class="big"><div class="v">Zero</div><div class="l">Additional hiring</div><p>While scaling instantly across campaigns and geographies</p></div>
+      </div>
+      <div class="provenance">In production today · Nurix AI voice agents with a leading Indian BFSI group</div>
+
+      <div class="takeaways">
+        <div class="tk"><div class="n">Reach</div><h4>Every visitor gets our best advisor, on their channel — web, WhatsApp, voice, app.</h4><p>24×7, multilingual, no queues, no capacity ceiling, no linear headcount. The missing middle becomes addressable.</p></div>
+        <div class="tk"><div class="n">Revenue</div><h4>Marketing to conversion is one closed loop — the funnel stops leaking.</h4><p>S3–S5 find and score the customer; S1–S8 convert; outcomes feed back into targeting. Every stall becomes a second chance.</p></div>
+        <div class="tk"><div class="n">Control</div><h4>Governed and auditable by design — humans stay in command.</h4><p>Tata AIG approves campaigns, cohorts and creatives. Every interaction logged, transcribed, QA-scored — IRDAI, DPDP and TRAI aligned, India-only data residency.</p></div>
+      </div>
+
+      <div class="row" style="display:flex;align-items:center;gap:18px;margin-top:24px">
+        <button class="go" onclick="go(0)">↺ Replay the journey</button>
+        <span class="hint">Interactive prototype · Illustrative persona, plans &amp; figures · Tata AIG Insurance × Nurix</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="bar">
+  <span class="who">Tata AIG × Nurix · Board preview</span>
+  <div class="dots" id="dots"></div>
+  <span class="beatlbl" id="beatlbl"></span>
+  <div style="display:flex;gap:9px;align-items:center">
+    <button class="bb snd" id="sndbtn" onclick="toggleSound()">🔊 Voice on</button>
+    <button class="bb" id="autobtn" onclick="toggleAuto()">▶ Auto</button>
+    <button class="bb" onclick="replay()">⟲ <kbd>R</kbd></button>
+    <button class="bb" onclick="go(cur-1)">‹ Stage</button>
+    <button class="bb" onclick="go(cur+1)">Stage ›</button>
+    <button class="bb next" id="stepbtn" onclick="nextStep()">Next step <kbd>→</kbd></button>
+  </div>
+</footer>
+</div>
+
+<script>
+/* ═════════ SCRIPTS (channel-neutral; adapted per channel at runtime) ═════════ */
+const SCRIPTS = {
+2:[ /* S1 */
+  {t:'note',x:'Arjun tapped the campaign ad on PhonePe · landed on PHI website · chat opened · attribution: CMP-2214',crm:{x:'<b>Session started</b> · source: PhonePe · campaign CMP-2214 attributed',cls:''}},
+  {t:'usr',x:'Hi, I have a question before anything else. My father is 58 and has had diabetes for 8 years. What should we be careful about?'},
+  {t:'bot',x:'Hi Arjun 👋 That\'s an important question — happy to help. Diabetes at his age should be monitored for:'},
+  {t:'card',voice:'Kiara shares a care-rhythm summary: HbA1c every 3 to 6 months, kidney function yearly, and regular foot and eye care.',html:`<div class="ih"><i></i>Care rhythm · Type-2 diabetes · 60+</div>
+    <div class="rowic"><span class="ri">🩸</span><div><b>HbA1c every 3–6 months</b><span>Tracks long-term sugar control</span></div></div>
+    <div class="rowic"><span class="ri">🫘</span><div><b>Kidney function yearly</b><span>Creatinine &amp; urine albumin</span></div></div>
+    <div class="rowic"><span class="ri">🦶</span><div><b>Foot &amp; eye care</b><span>Prevents neuropathy complications</span></div></div>`,
+    crm:{x:'Query classified: <b>chronic condition · T2D · senior parent</b>',cls:''}},
+  {t:'bot',x:'Has he had any recent hospitalisation or insulin dependency?',btns:{opts:['No — oral medication','Yes, recently','Not sure'],pick:0}},
+  {t:'bot',x:'That\'s good to hear. Controlled diabetes without recent hospitalisation typically indicates <b>moderate risk</b>.',crm:{x:'Risk indicators: 58 · oral meds · no hospitalisation → <b>moderate</b>',cls:''}},
+  {t:'usr',x:'His last HbA1c was 7.2 — is that okay?'},
+  {t:'bot',x:'7.2% generally reflects fair control for his age group — though targets are individual; his doctor may aim for ≤7% or slightly higher depending on overall health. Worth confirming at the next review. 📋<span class="fine">General guidance from PHI\'s doctor-approved health library — not a diagnosis.</span>',src:'Source · PHI medical corpus · Diabetes Care Guide §2.3'},
+  {t:'bot',x:'Since you\'re planning his long-term care — financial protection becomes important at this stage. Want to see what coverage for him could look like?',btns:{opts:['Yes, show me','Maybe later'],pick:0},crm:{x:'Health profile → CRM · <b>3 attributes enriched</b>',cls:'ok'}},
+  {t:'note',x:'Health profile saved · handing over with full context → S2 Policy Advisor',crm:{x:'<b>Handoff → S2 Policy Advisor</b> · context carried, nothing re-asked',cls:'ok'}},
+],
+3:[ /* S2 */
+  {t:'bot',x:'Great — picking up right where we left off 🙂 You want cover for your father: 58, managing type-2 diabetes on oral medication. Two quick questions to recommend well.',crm:{x:'S2 engaged · <b>context inherited from S1</b> · no re-qualification',cls:''}},
+  {t:'bot',x:'Who should the plan cover?',btns:{opts:['Father only 👴','Whole family + father','Not sure yet'],pick:0}},
+  {t:'bot',x:'And any hospitalisation for him in the past 2 years?',btns:{opts:['No','Yes'],pick:0}},
+  {t:'bot',x:'Thank you. For his profile, two plans fit well:'},
+  {t:'card',voice:'Kiara shares two options on screen: Secure Senior, fifteen lakhs at eighteen and a half thousand a year — and Comprehensive Care, twenty lakhs at twenty-two thousand a year.',html:`<div class="ih"><i></i>Recommended for Arjun's father · 58 · T2D</div>
+    <div class="planrow">
+      <div class="plancol"><b>Secure Senior</b><div class="cv">₹15L</div><div class="pp">₹18,500 <span>/ yr</span></div><span class="tg">OPTIMISED PREMIUM</span></div>
+      <div class="plancol pick"><b>Comprehensive Care</b><div class="cv">₹20L</div><div class="pp">₹22,000 <span>/ yr</span></div><span class="tg">BEST VALUE</span></div>
+    </div>`,crm:{x:'Recommendation served: Secure Senior / <b>Comprehensive Care</b>',cls:''}},
+  {t:'usr',x:'Honest question — will his diabetes actually be covered? That\'s my real worry.'},
+  {t:'bot',x:'A fair question, and I\'ll be precise: yes, with a <b>pre-existing condition waiting period of 36 months — reduced to 24 months</b> with the Chronic Care rider. New illnesses and accidents are covered from day one. I only quote what the policy wording says.',src:'PHI knowledge base · Policy wording v1.4 §4.1',crm:{x:'Objection handled: <b>PED coverage</b> · cited from policy wording',cls:'hot'}},
+  {t:'usr',x:'Okay, that\'s clearer than I expected. What\'s the next step?'},
+  {t:'bot',x:'I\'ll have Kiara call you with a personalised comparison — no forms, nothing to repeat. Sharing your number means you consent to be contacted for this purpose, per our Privacy Policy (DPDP Act, 2023). When suits you?',btns:{opts:['Tomorrow 10 AM ☎️','This evening','WhatsApp me instead'],pick:0}},
+  {t:'card',voice:'A qualified lead is created in CRM — with the callback booked and consent recorded.',html:`<div class="ih grn"><i></i>Created in CRM · real-time</div>
+    <table><tr><td>Lead ID</td><td>PHI-88412 · SQL</td></tr>
+    <tr><td>Cohort</td><td>Senior parent · chronic care</td></tr>
+    <tr><td>Callback</td><td>Tomorrow · 10:00 AM</td></tr>
+    <tr><td>Consent</td><td>✓ Recorded · purpose-bound (DPDP)</td></tr></table>`,
+    crm:{x:'<b>Lead PHI-88412 created · SQL</b> · consent artefact stored ✓',cls:'ok'}},
+  {t:'bot',x:'Booked ✅ Kiara will call at 10 AM with everything we discussed. I\'ve also WhatsApp\'d you a one-page plan summary. Good night, Arjun!',crm:{x:'<b>Assigned → S6 outbound queue</b> · window 10:00 AM',cls:'ok'}},
+],
+4:[ /* S6 — voice-native */
+  {t:'sys',x:'Genesys outbound · queue pick 09:59 AM · DND ✓ · consent ✓',crm:{x:'Queue pick 09:59 AM · <b>Genesys dial</b> · preferred window matched · DND ✓',cls:''}},
+  {t:'ai',x:'Good morning Arjun, this is Kiara from Kiwi Insurance — this call is recorded for quality. Is this a good time to talk about your father\'s cover?'},
+  {t:'cu',x:'Yes — I have ten minutes on my way to work.'},
+  {t:'ai',x:'Perfect. Yesterday you shortlisted two plans for your father — Secure Senior at fifteen lakhs, and Comprehensive Care at twenty lakhs. Any first thoughts?',crm:{x:'Context recap delivered · <b>zero re-qualification</b>',cls:''}},
+  {t:'cu',x:'Honestly, the premium felt high. Twenty-two thousand in one go is a stretch this quarter.'},
+  {t:'ai',x:'Completely understandable — premiums can feel high for senior parents. Two clean ways to soften it: a ten-thousand-rupee deductible brings it down by around fifteen to twenty percent — or monthly instalments of about nineteen hundred and forty rupees, with cover unchanged.',crm:{x:'Objection: <b>premium (lump sum)</b> → options: deductible / EMI',cls:'hot'}},
+  {t:'cu',x:'Monthly works much better. And the diabetes waiting period — twenty-four months, right?'},
+  {t:'ai',x:'Correct — twenty-four months with the Chronic Care rider, and his annual diabetes health-check is covered from day one.'},
+  {t:'cu',x:'Alright. Send me everything — I\'ll finish it on the app tonight.'},
+  {t:'ai',x:'Done — the app link with your details pre-filled is on your WhatsApp. One request as per I-R-D-A-I guidelines: never share OTPs with anyone, including us. Have a great day, Arjun!',crm:{x:'<b>Disposition: Interested · EMI preferred</b> · write-back to CRM · QA 98/100',cls:'ok'}},
+  {t:'sys',x:'Transcript stored · sentiment positive · explainability trace logged',crm:{x:'Transcript + <b>AI decision trace</b> stored · watching app events',cls:''}},
+],
+5:[ /* S7 */
+  {t:'note',x:'🔒 Messages are end-to-end encrypted'},
+  {t:'note',x:'Last night 9:14 PM — Arjun started the application on the PHI app and stopped at document upload',crm:{x:'<b>Drop-off detected</b> · APP-2026-08814 · step: document upload · 9:14 PM',cls:'hot'}},
+  {t:'bot',x:'Good morning Arjun, Kiara from Kiwi Insurance 👋<br><br>I noticed you were completing your father\'s application last night but faced some issue at the <b>document upload</b> step. Can I assist you?',k:'9:38 AM',btns:{opts:['Yes, help me','I\'ll do it later','Talk to a human'],pick:0},crm:{x:'S7 re-activation · channel: WhatsApp · <b>reason-aware, not generic</b>',cls:''}},
+  {t:'bot',x:'No problem at all. For diabetes, you can upload <b>either</b>:<br><br>🩸 The most recent <b>HbA1c report</b>, or<br>💊 A <b>prescription</b> showing ongoing medication<br><br>If you don\'t have it handy, your father\'s doctor can provide a copy quickly.',k:'9:39 AM'},
+  {t:'usr',x:'I have last month\'s HbA1c report as a PDF. Sending it here 👇',k:'9:41 AM'},
+  {t:'upload',name:'HbA1c_Report_Jun2026.pdf',size:'412 KB',k:'9:41 AM',crm:{x:'Document received in-chat · <b>routing to verification</b>',cls:''}},
+  {t:'bot',x:'Received — verifying it now… ⏳',k:'9:41 AM'},
+  {t:'card',voice:'Kiara confirms: document verified instantly — a clear HbA1c report matching the declared condition, attached to the application.',html:`<div class="ih grn"><i></i>Document verified · instant</div>
+    <table><tr><td>Type</td><td>HbA1c lab report ✓</td></tr>
+    <tr><td>Readability</td><td>Clear · Jun 2026</td></tr>
+    <tr><td>Matches declaration</td><td>✓ T2D · oral medication</td></tr>
+    <tr><td>Attached to</td><td>APP-2026-08814</td></tr></table>`,
+    crm:{x:'<b>Document verified ✓</b> · application now 92% complete',cls:'ok'}},
+  {t:'bot',x:'All done ✅ Your application is <b>92% complete</b> — only plan confirmation left. It takes about two minutes. Finish now?',k:'9:42 AM',btns:{opts:['Finish now →','Tonight'],pick:0}},
+  {t:'bot',x:'Taking you to the app 📲 Everything is carried forward — nothing to re-enter. See you there!',k:'9:43 AM',crm:{x:'<b>Journey resumed → S8 Buying Agent</b> · deep link issued',cls:'ok'}},
+],
+6:[ /* S8 */
+  {t:'bot',x:'Welcome back, Arjun! 👋 Everything\'s carried forward — here\'s your application at a glance:',crm:{x:'S8 session · deep link verified · <b>proposal reopened at 92%</b>',cls:''}},
+  {t:'card',voice:'On screen: application eight-eight-one-four, ninety-two percent complete — insured details, KYC and medical document all verified.',html:`<div class="ih"><i></i>Application APP-2026-08814 · 92% complete</div>
+    <table><tr><td>Insured</td><td>Father · 58 · T2D (managed)</td></tr>
+    <tr><td>Proposer</td><td>Arjun · KYC ✓ (CKYC)</td></tr>
+    <tr><td>Medical document</td><td>HbA1c ✓ verified</td></tr>
+    <tr><td>Remaining</td><td>Plan confirmation + payment</td></tr></table>
+    <div class="progressline"><i style="width:92%"></i></div>`},
+  {t:'bot',x:'The final decision — I\'ve compared both plans against his profile:'},
+  {t:'card',voice:'Both plans side by side: Secure Senior at fifteen lakhs, and Comprehensive Care at twenty lakhs.',html:`<div class="planrow">
+    <div class="plancol"><b>Secure Senior</b><div class="cv">₹15L</div><div class="pp">₹18,500 <span>/ yr</span></div><span class="tg">OPTIMISED PREMIUM</span></div>
+    <div class="plancol pick"><b>Comprehensive Care</b><div class="cv">₹20L</div><div class="pp">₹22,000 <span>/ yr</span></div><span class="tg">BEST VALUE</span></div></div>`},
+  {t:'card',voice:'Kiara\'s analysis, grounded in his profile: higher coverage reduces long-term hospitalisation risk, no room-rent limit prevents surprise expenses, and a better buffer for chronic care.',html:`<div class="ih"><i></i>Kiara's analysis · grounded in your profile</div>
+    <div class="rowic"><span class="ri">🛡️</span><div><b>Higher coverage reduces long-term hospitalisation risk</b><span>Based on his age (58) and diabetes history</span></div></div>
+    <div class="rowic"><span class="ri">🏥</span><div><b>No room-rent limit</b><span>Prevents unexpected out-of-pocket expenses</span></div></div>
+    <div class="rowic"><span class="ri">💰</span><div><b>Better financial buffer for chronic care</b><span>Annual diabetes health-check covered from day 1</span></div></div>`,
+    crm:{x:'Recommendation: <b>Comprehensive Care ₹20L</b> · rationale logged',cls:''}},
+  {t:'card',voice:'The live PAS quote: base premium plus Chronic Care rider plus GST — nineteen hundred and forty rupees a month.',html:`<div class="ih"><i></i>Premium · live quote from PAS · QTE-77120</div>
+    <table><tr><td>Base premium</td><td>₹15,950 / yr</td></tr>
+    <tr><td>Chronic Care rider</td><td>₹2,700 / yr</td></tr>
+    <tr><td>GST (18%)</td><td>₹3,357</td></tr>
+    <tr class="tot"><td>Monthly instalment</td><td>₹1,940 / month</td></tr></table>`,
+    crm:{x:'<b>PAS quote returned · 340 ms</b> · QTE-77120 · EMI schedule generated',cls:''}},
+  {t:'bot',x:'Before payment — the essentials, in plain language:'},
+  {t:'card',voice:'The mandatory disclosures, plainly: twenty-four month waiting period for pre-existing conditions, thirty-day initial waiting period, a thirty-day free-look period — regulated by IRDAI.',html:`<div class="ih"><i></i>Key facts · mandatory disclosures</div>
+    <div class="rowic"><span class="ri">⏳</span><div><b>Pre-existing conditions: 24-month waiting period</b><span>Reduced from 36 with Chronic Care rider</span></div></div>
+    <div class="rowic"><span class="ri">📅</span><div><b>30-day initial waiting period</b><span>Except accidental hospitalisation</span></div></div>
+    <div class="rowic"><span class="ri">↩️</span><div><b>30-day free-look period</b><span>Full refund if you change your mind</span></div></div>
+    <div class="rowic"><span class="ri">📜</span><div><b>Regulated by IRDAI</b><span>UIN stated on policy document · T&amp;C apply</span></div></div>`,
+    crm:{x:'<b>Disclosures served pre-payment</b> · IRDAI-aligned · logged',cls:''}},
+  {t:'cta',x:'Pay ₹1,940 · UPI · Start cover'},
+  {t:'press'},
+  {t:'card',cls:'issuedcard',voice:'Payment received — application submitted successfully. Policy issuance is under review, confirmation sent on WhatsApp and email.',html:`<div class="ic">✓</div><b>Application Submitted Successfully</b>
+    <span>Comprehensive Care · ₹20L · Chronic Care rider<br>APP-2026-08814 · payment ₹1,940 (UPI) received<br>Policy issuance under review — typically 24–48 hrs<br>Confirmation sent on WhatsApp &amp; email</span>`,
+    crm:{x:'<b>Payment ✓ · Application submitted</b> · issuance in review',cls:'ok'}},
+  {t:'bot',x:'Congratulations, Arjun 🎉 Your father\'s cover is on its way. I\'m here 24×7 — health questions, claims, or his annual check-up bookings. Take care!',crm:{x:'<b>Journey complete</b> · ad click → application in 3 days · 0 human touches',cls:'ok'}},
+],
+};
+
+/* ═════════ DEVICE BUILDERS ═════════ */
+function devPhoneChat(title,sub,{skin='',hstyle='',avStyle=''}={}){
+  const root=document.createElement('div');
+  root.innerHTML=`<div class="phone"><div class="pscr ${skin}"><div class="notch"></div>
+    <div class="chat-h" ${hstyle?`style="${hstyle}"`:''}><span class="av" ${avStyle?`style="${avStyle}"`:''}>R</span><div class="t"><b>${title}</b><span><i></i>${sub}</span></div></div>
+    <div class="cbody js-chat"></div>
+    <div class="comply js-comply"></div>
+    <div class="cinput"><span class="f">Type your message</span><span class="s js-send">➤</span></div>
+  </div></div>`;
+  return {root:root.firstChild,chat:root.querySelector('.js-chat'),comply:root.querySelector('.js-comply'),send:root.querySelector('.js-send'),mode:'chat',skin};
+}
+function devBrowser(){
+  const root=document.createElement('div');
+  root.innerHTML=`<div class="browser">
+    <div class="btop"><div class="bdots"><i></i><i></i><i></i></div><div class="burl">🔒 prudentialhealth.in / health-plans</div></div>
+    <div class="bbody">
+      <div class="site">
+        <div class="nav"><span class="logo">PRUDENTIAL <b>Health</b></span><span class="lnk"><span>Plans</span><span>Claims</span><span>Wellness</span><span>Help</span></span></div>
+        <h3>Health plans built around your family</h3>
+        <p class="sub">Long-term cover for every life stage — including senior parents with chronic conditions.</p>
+        <div class="pc3">
+          <div class="pc"><div class="t">Essential</div><h4>Health Start</h4><p>₹5L cover · cashless network · day-care procedures</p><div class="pr">₹11,900 <span>/ yr</span></div></div>
+          <div class="pc hot"><div class="t">For senior parents</div><h4>Secure Senior</h4><p>₹15L cover · chronic condition support · restore benefit</p><div class="pr">₹18,500 <span>/ yr</span></div></div>
+          <div class="pc"><div class="t">Comprehensive</div><h4>Comprehensive Care</h4><p>₹20L cover · no room-rent limit · OPD &amp; wellness</p><div class="pr">₹22,000 <span>/ yr</span></div></div>
+        </div>
+      </div>
+      <div class="widget">
+        <div class="wh"><span class="av">R</span><div class="t"><b>Kiara · AI Policy Advisor</b><span><i></i>Online</span></div></div>
+        <div class="cbody js-chat"></div>
+        <div class="comply js-comply">Kiwi Insurance · Regulated by IRDAI · T&amp;C apply · Product details in policy wording (illustrative)</div>
+      </div>
+    </div></div>`;
+  return {root:root.firstChild,chat:root.querySelector('.js-chat'),comply:root.querySelector('.js-comply'),mode:'chat',skin:''};
+}
+function devCall(sub){
+  const root=document.createElement('div');
+  root.innerHTML=`<div class="phone"><div class="pscr"><div class="notch"></div>
+    <div class="call">
+      <div class="top"><div class="cb">${sub}</div><h4>Kiara</h4><div class="ct js-timer">00:00</div></div>
+      <div class="wave js-wave">${'<i></i>'.repeat(22)}</div>
+      <div class="tr-h">Live call transcript</div>
+      <div class="tr js-chat"></div>
+      <div class="callnote">Recorded for quality &amp; compliance · Consent verified · DND-checked · TRAI compliant</div>
+      <div class="cbtns"><span class="cbtn">🔇</span><span class="cbtn end">✕</span><span class="cbtn">⋯</span></div>
+    </div></div></div>`;
+  return {root:root.firstChild,chat:root.querySelector('.js-chat'),wave:root.querySelector('.js-wave'),timer:root.querySelector('.js-timer'),mode:'call',skin:'call'};
+}
+function devBuy(title){
+  const root=document.createElement('div');
+  root.innerHTML=`<div class="phone"><div class="pscr"><div class="notch"></div>
+    <div class="buy">
+      <div class="buy-h"><b>${title}</b><span class="bstep js-bstep">STEP 4 OF 5</span></div>
+      <div class="buy-b js-chat"></div>
+      <div class="comply">Kiwi Insurance · Regulated by IRDAI · UIN on policy document · T&amp;C apply (illustrative)</div>
+    </div></div></div>`;
+  return {root:root.firstChild,chat:root.querySelector('.js-chat'),bstep:root.querySelector('.js-bstep'),mode:'chat',skin:'buy'};
+}
+
+/* ═════════ CHANNEL CONFIG (per SOW) ═════════ */
+const CH = {
+2:{def:'web',list:[
+  {id:'web',label:'💬 Web chat',mk:()=>devPhoneChat('Kiara','AI Health Advisory Agent · Online'),comply:'General wellness guidance, not medical advice · Please consult a doctor'},
+  {id:'wa',label:'🟢 WhatsApp',mk:()=>devPhoneChat('Kiara · Kiwi Insurance ✓','Official business account',{skin:'wa',avStyle:'background:#128C7E'}),comply:'WhatsApp Business API · End-to-end encrypted · Not medical advice'},
+  {id:'app',label:'📱 App chat',mk:()=>devPhoneChat('Kiara','PHI App · Health Advisor',{skin:'appc',hstyle:'background:var(--blue)'}),comply:'PHI App · General wellness guidance, not medical advice'},
+  {id:'voice',label:'🎙 Voice',mk:()=>devCall('PHI Web · Voice session'),voice:true},
+]},
+3:{def:'web',list:[
+  {id:'web',label:'🌐 Website widget',mk:devBrowser},
+  {id:'app',label:'📱 App chat',mk:()=>devPhoneChat('Kiara · AI Policy Advisor','PHI App · Online',{skin:'appc',hstyle:'background:var(--blue)'}),comply:'Kiwi Insurance · Regulated by IRDAI · T&amp;C apply (illustrative)'},
+  {id:'wa',label:'🟢 WhatsApp',mk:()=>devPhoneChat('Kiara · Kiwi Insurance ✓','Official business account',{skin:'wa',avStyle:'background:#128C7E'}),comply:'WhatsApp Business API · End-to-end encrypted · IRDAI-regulated product info'},
+]},
+4:{def:'voice',list:[
+  {id:'voice',label:'🎙 Voice call (Genesys)',mk:()=>devCall('Kiwi Insurance · Verified caller'),voice:true},
+  {id:'wa',label:'🟢 WhatsApp',mk:()=>devPhoneChat('Kiara · Kiwi Insurance ✓','Official business account',{skin:'wa',avStyle:'background:#128C7E'}),comply:'WhatsApp Business API · End-to-end encrypted · Opt-out anytime: reply STOP'},
+]},
+5:{def:'wa',list:[
+  {id:'wa',label:'🟢 WhatsApp',mk:()=>devPhoneChat('Kiara · Kiwi Insurance ✓','Official business account',{skin:'wa',avStyle:'background:#128C7E'}),comply:'WhatsApp Business API · Messages secured with end-to-end encryption'},
+  {id:'voice',label:'🎙 Voice call',mk:()=>devCall('Kiwi Insurance · Verified caller'),voice:true},
+]},
+6:{def:'app',list:[
+  {id:'app',label:'📱 In-app assistant',mk:()=>devBuy('Complete Your Application')},
+  {id:'web',label:'🌐 Web chat',mk:()=>devPhoneChat('Kiara · AI Buying Agent','prudentialhealth.in · Online'),comply:'Kiwi Insurance · Regulated by IRDAI · UIN on policy document · T&amp;C apply (illustrative)'},
+  {id:'voice',label:'🎙 Voice',mk:()=>devCall('PHI App · Voice session'),voice:true},
+]},
+};
+const CRM_ID = {2:'crm2',3:'crm3',4:'crm4',5:'crm5',6:'crm6'};
+const chosen = {}; Object.keys(CH).forEach(k=>chosen[k]=CH[k].def);
+
+/* ═════════ VOICE ADAPTER — turn any chat script into a call ═════════ */
+function toVoice(steps){
+  const out=[];
+  for(const st of steps){
+    if(st.t==='note'){out.push({t:'sys',x:st.x.replace(/<[^>]+>/g,''),crm:st.crm});continue;}
+    if(st.t==='sys'||st.t==='ai'||st.t==='cu'){out.push(st);continue;}
+    if(st.t==='bot'){
+      const plain=st.x.replace(/<br\s*\/?>/g,' ').replace(/<span class="fine">.*?<\/span>/g,'').replace(/<[^>]+>/g,'');
+      out.push({t:'ai',x:plain,crm:st.crm});
+      if(st.btns) out.push({t:'cu',x:st.btns.opts[st.btns.pick].replace(/[👴☎️→👇]/g,'').trim()+'.'});
+      continue;
+    }
+    if(st.t==='usr'){out.push({t:'cu',x:st.x.replace(/<[^>]+>/g,''),crm:st.crm});continue;}
+    if(st.t==='card'){out.push({t:'sys',x:'📄 '+(st.voice?'Shared on screen':'Card shared'),crm:st.crm});if(st.voice)out.push({t:'ai',x:st.voice});continue;}
+    if(st.t==='upload'){out.push({t:'cu',x:'I\'m sending the report on WhatsApp right now.'});out.push({t:'sys',x:'📎 Document received via WhatsApp · verified ✓',crm:st.crm});continue;}
+    if(st.t==='cta'){out.push({t:'sys',x:'💳 Secure payment link sent · ₹1,940 UPI'});continue;}
+    if(st.t==='press'){continue;}
+  }
+  return out;
+}
+
+/* ═════════ ENGINE ═════════ */
+let cur=0, runId=0, secTimer=null, soundOn=true;
+const N=8;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const el=h=>{const d=document.createElement('div');d.innerHTML=h.trim();return d.firstChild;};
+const $=id=>document.getElementById(id);
+
+const dots=$('dots');
+for(let i=0;i<N;i++){const d=document.createElement('button');d.className='dot'+(i===0?' on':'');d.onclick=()=>go(i);dots.appendChild(d);}
+
+/* channel buttons */
+Object.keys(CH).forEach(n=>{
+  const holder=$('ch'+n); if(!holder)return;
+  CH[n].list.forEach(c=>{
+    const b=document.createElement('button');
+    b.className='chbtn'+(c.id===CH[n].def?' on':'');
+    b.textContent=c.label;
+    b.onclick=()=>{chosen[n]=c.id;holder.querySelectorAll('.chbtn').forEach(x=>x.classList.toggle('on',x===b));if(cur===+n)startScene(+n);};
+    holder.appendChild(b);
+  });
+});
+
+function stopAll(){
+  runId++;
+  if(secTimer){clearInterval(secTimer);secTimer=null;}
+  if(window.speechSynthesis) speechSynthesis.cancel();
+}
+function go(n){
+  if(n<0||n>N-1)return;
+  stopAll();
+  cur=n;
+  document.querySelectorAll('.slide').forEach(s=>s.classList.toggle('on',+s.dataset.i===n));
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===n));
+  if(n===1) playMkt();
+  else if(SCRIPTS[n]) startScene(n);
+}
+function replay(){ stopAll(); if(cur===1)playMkt(); else if(SCRIPTS[cur])startScene(cur); }
+
+function toggleSound(){
+  soundOn=!soundOn;
+  const b=$('sndbtn');
+  b.classList.toggle('off',!soundOn);
+  b.textContent=soundOn?'🔊 Voice on':'🔇 Voice off';
+  if(!soundOn&&window.speechSynthesis)speechSynthesis.cancel();
+}
+
+let vKiara=null,vRaj=null;
+function pickVoices(){
+  if(!window.speechSynthesis)return;
+  const vs=speechSynthesis.getVoices();
+  const inV=vs.filter(v=>/en[-_]IN/i.test(v.lang));
+  const enV=vs.filter(v=>/^en/i.test(v.lang));
+  vKiara=inV.find(v=>/female|woman|Heera|Kalpana|Veena|Neerja/i.test(v.name))||inV[0]||enV.find(v=>/female|Zira|Samantha/i.test(v.name))||enV[0]||null;
+  vRaj=inV.find(v=>/male|man|Ravi|Hemant|Prabhat/i.test(v.name))||inV[1]||enV.find(v=>/male|David|Daniel/i.test(v.name))||enV[1]||vKiara;
+}
+if(window.speechSynthesis){pickVoices();speechSynthesis.onvoiceschanged=pickVoices;}
+
+function speak(text,who){
+  return new Promise(res=>{
+    if(!soundOn||!window.speechSynthesis){res(false);return;}
+    const u=new SpeechSynthesisUtterance(text.replace(/<[^>]+>/g,''));
+    u.voice=who==='ai'?vKiara:vRaj;
+    u.rate=1.04;u.pitch=who==='ai'?1.12:0.86;
+    let done=false;const fin=()=>{if(!done){done=true;res(true);}};
+    u.onend=fin;u.onerror=fin;
+    setTimeout(fin,Math.min(16000,900+text.length*58));
+    speechSynthesis.speak(u);
+  });
+}
+
+function crmRow(crmEl,c){
+  if(!c||!crmEl)return;
+  crmEl.appendChild(el(`<div class="crow ${c.cls||''}">${c.x}</div>`));
+  crmEl.scrollTop=1e6;
+}
+function bubble(st,skin){
+  const src=st.src?`<span class="src">⛨ ${st.src}</span>`:'';
+  const tick=(skin==='wa'&&st.k)?`<span class="tick">${st.k} ✓✓</span>`:'';
+  return el(`<div class="m ${st.t==='bot'?'bot':'usr'}">${st.x}${src}${tick}</div>`);
+}
+
+function startScene(n){
+  stopAll();
+  const id=runId;
+  const cfg=CH[n], chId=chosen[n];
+  const chan=cfg.list.find(c=>c.id===chId);
+  const stage=$('stage'+n);
+  stage.innerHTML='';
+  const dev=chan.mk();
+  stage.appendChild(dev.root);
+  if(dev.comply&&chan.comply)dev.comply.innerHTML=chan.comply;
+  const crmEl=$(CRM_ID[n]); crmEl.innerHTML='';
+  let steps=SCRIPTS[n];
+  if(chan.voice) steps=toVoice(steps);
+  runScene(steps,dev,crmEl,id,n);
+}
+
+async function runScene(steps,dev,crmEl,id,n){
+  const box=dev.chat;
+  if(dev.mode==='call'){startClock(dev.timer,id);}
+  await sleep(500); if(id!==runId)return;
+  for(const st of steps){
+    if(id!==runId)return;
+    await doStep(st,dev,box,crmEl,id);
+    if(id!==runId)return;
+  }
+  if(dev.wave)dev.wave.classList.remove('on');
+}
+
+async function doStep(st,dev,box,crmEl,id){
+  const skin=dev.skin;
+  if(st.t==='note'){
+    box.appendChild(el(`<div class="note">${st.x}</div>`));box.scrollTop=1e6;
+    crmRow(crmEl,st.crm);await sleep(1000);return;
+  }
+  if(st.t==='sys'){
+    box.appendChild(el(`<div class="tl sy"><p>${st.x}</p></div>`));box.scrollTop=1e6;
+    crmRow(crmEl,st.crm);await sleep(1100);return;
+  }
+  if(st.t==='bot'){
+    const ty=el('<div class="typing"><i></i><i></i><i></i></div>');
+    box.appendChild(ty);box.scrollTop=1e6;
+    await sleep(650); if(id!==runId){ty.remove();return;}
+    ty.remove();
+    const b=bubble(st,skin);
+    box.appendChild(b);box.scrollTop=1e6;
+    crmRow(crmEl,st.crm);
+    if(st.btns){await sleep(600);if(id!==runId)return;await playBtns(st.btns,b,box,skin,id);}
+    else await sleep(1250);
+    return;
+  }
+  if(st.t==='usr'){
+    await sleep(450);if(id!==runId)return;
+    box.appendChild(bubble(st,skin));box.scrollTop=1e6;
+    crmRow(crmEl,st.crm);await sleep(950);return;
+  }
+  if(st.t==='card'){
+    box.appendChild(el(`<div class="icard ${st.cls||''}">${st.html}</div>`));box.scrollTop=1e6;
+    crmRow(crmEl,st.crm);await sleep(1700);return;
+  }
+  if(st.t==='upload'){
+    const a=el(`<div class="attach"><div class="af"><span class="pdf">PDF</span><div class="an"><b>${st.name}</b><span>${st.size} · PDF</span></div></div><div class="abar"><i></i></div><span class="tick">${st.k} 🕓</span></div>`);
+    box.appendChild(a);box.scrollTop=1e6;
+    const bar=a.querySelector('.abar i'),tick=a.querySelector('.tick');
+    for(let p=0;p<=100;p+=10){if(id!==runId)return;bar.style.width=p+'%';await sleep(95);}
+    a.querySelector('.abar').style.display='none';
+    tick.textContent=`${st.k} ✓✓`;
+    crmRow(crmEl,st.crm);await sleep(800);return;
+  }
+  if(st.t==='ai'||st.t==='cu'){
+    const isAI=st.t==='ai';
+    box.appendChild(el(`<div class="tl ${st.t}"><div class="w">${isAI?'RIYA · AI':'RAJESH'}</div><p>${st.x}</p></div>`));
+    box.scrollTop=1e6;
+    crmRow(crmEl,st.crm);
+    if(dev.wave)dev.wave.classList.toggle('on',isAI);
+    const spoke=await speak(st.x,st.t);
+    if(id!==runId)return;
+    if(!spoke)await sleep(Math.min(6000,700+st.x.length*34));
+    if(dev.wave)dev.wave.classList.remove('on');
+    await sleep(300);return;
+  }
+  if(st.t==='cta'){
+    box.appendChild(el(`<div class="icard" style="padding:8px"><div class="cta js-pay">${st.x}</div></div>`));
+    box.scrollTop=1e6;await sleep(1200);return;
+  }
+  if(st.t==='press'){
+    const b=box.querySelector('.js-pay');
+    if(b){b.classList.add('pressed');b.textContent='Processing payment…';}
+    if(dev.bstep)dev.bstep.textContent='STEP 5 OF 5';
+    await sleep(1300);
+    if(b)b.closest('.icard').remove();
+    return;
+  }
+}
+
+async function playBtns(cfg,botBubble,box,skin,id){
+  const qr=el(`<div class="qr">${cfg.opts.map(o=>`<i>${o}</i>`).join('')}</div>`);
+  botBubble.appendChild(qr);box.scrollTop=1e6;
+  await sleep(1050);if(id!==runId)return;
+  qr.querySelectorAll('i').forEach((it,ix)=>it.classList.add(ix===cfg.pick?'sel':'dim'));
+  await sleep(450);if(id!==runId)return;
+  const label=cfg.opts[cfg.pick].replace(/\s*(👴|☎️|→|👇)\s*$/,'');
+  box.appendChild(el(`<div class="m usr">${label}${skin==='wa'?'<span class="tick">✓✓</span>':''}</div>`));
+  box.scrollTop=1e6;
+  await sleep(800);
+}
+
+function startClock(nEl,id){
+  let s=0;nEl.textContent='00:00';
+  secTimer=setInterval(()=>{
+    if(id!==runId){clearInterval(secTimer);return;}
+    s++;nEl.textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+  },1000);
+}
+
+/* ═════════ MARKETING SCENE (S3·S4·S5) ═════════ */
+async function playMkt(){
+  stopAll();
+  const id=runId;
+  ['mk1','mk2','mk3','mk4','mk5'].forEach(m=>$(m).classList.remove('lit'));
+  $('mkad').classList.remove('show');
+  const crmEl=$('crm1');crmEl.innerHTML='';
+  const seq=[
+    {m:'mk1',crm:{x:'<b>Campaign CMP-2214 approved</b> · objective: senior-parent cover · budget split Google/Meta/partners',cls:''}},
+    {m:'mk2',crm:{x:'2 demand partners ingested · deduped → <b>unified lead profiles (UDP)</b> · health + intent scored',cls:''}},
+    {m:'mk3',crm:{x:'<b>Cohort C-118</b> · adult children of senior parents · 48,200 · propensity 0.81 · PHI approved ✓',cls:'ok'}},
+    {m:'mk4',crm:{x:'Creative v3 live · compliance-checked · <b>closed-loop monitoring on</b>',cls:''},ad:true},
+    {m:'mk5',crm:{x:'Impression → <b>CLICK</b> · Arjun · attribution CMP-2214/C-118 stored → funnel',cls:'ok'},tap:true},
+  ];
+  await sleep(500);if(id!==runId)return;
+  for(const s of seq){
+    if(id!==runId)return;
+    $(s.m).classList.add('lit');
+    crmRow(crmEl,s.crm);
+    if(s.ad){await sleep(400);$('mkad').classList.add('show');}
+    if(s.tap){
+      await sleep(500);
+      const t=$('mktap');t.classList.remove('go');void t.offsetWidth;t.classList.add('go');
+    }
+    await sleep(1900);
+  }
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(cur+1);}
+  if(e.key==='ArrowLeft'){e.preventDefault();go(cur-1);}
+  if(e.key.toLowerCase()==='r'){replay();}
+  if(e.key.toLowerCase()==='m'){toggleSound();}
+  if(e.key>='0'&&e.key<='7'){go(+e.key);}
+});
+</script>
+</body>
+</html>

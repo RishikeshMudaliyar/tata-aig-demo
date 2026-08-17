@@ -1,0 +1,464 @@
+# gen_data.py — Tata AIG (Motor) — builds chat_scripts.json, voice_scripts.json, lines.json
+import json, re, html as H
+
+# ───────────────────────── CHAT SCRIPTS ─────────────────────────
+S1 = [
+ {"t":"note","x":"Vikram tapped the campaign ad inside the CRED app · click-to-WhatsApp opened the Tata AIG chat · attribution: CMP-2214",
+  "crm":{"x":"<b>Session started</b> · source: CRED · campaign CMP-2214 attributed","cls":""}},
+ {"t":"usr","x":"Hi — my policy renewal is coming up in a couple weeks and I'm honestly confused about No-Claim Bonus. Can you explain it simply?",
+  "v":"Hi — my policy renewal is coming up in a couple weeks and I'm honestly confused about No Claim Bonus. Can you explain it simply?"},
+ {"t":"bot","x":"Of course 👋 <b>NCB</b> is a discount on your own-damage premium for every year you don't make a claim. It builds up like this:",
+  "v":"Of course. N C B is a discount on your own-damage premium for every year you don't make a claim. It builds up like this:"},
+ {"t":"card","voice":"On screen: the standard N C B ladder — twenty percent after year one, climbing toward fifty percent by year five, as long as you stay claim-free.",
+  "html":"""<div class="ih"><i></i>Standard NCB ladder</div>
+    <table><tr><td>Year 1 claim-free</td><td>20%</td></tr>
+    <tr><td>Year 2 claim-free</td><td>25%</td></tr>
+    <tr><td>Year 3 claim-free</td><td>35%</td></tr>
+    <tr><td>Year 4 claim-free</td><td>45%</td></tr>
+    <tr><td>Year 5+ claim-free</td><td>50%</td></tr></table>""",
+  "crm":{"x":"Query classified: <b>NCB literacy · renewal-stage prospect</b> · quality-conscious signal","cls":""}},
+ {"t":"bot","x":"Where are you on that ladder right now?","btns":{"opts":["2 years claim-free (25%)","Not sure","This is my first renewal"],"pick":0}},
+ {"t":"bot","x":"Nice — 25% is a solid position. Quick honest check: did you raise any claim in the last policy year?","btns":{"opts":["Yes, one small one","No claims"],"pick":0}},
+ {"t":"usr","x":"Yeah — a small parking scrape last year, maybe ₹8,000 in repairs.",
+  "v":"Yeah — a small parking scrape last year, maybe eight thousand rupees in repairs."},
+ {"t":"bot","x":"Thanks for being upfront 🙏 Here's some good news most people don't expect: with most insurers, one claim wipes your <b>entire</b> NCB back to zero. Tata AIG has an add-on called <b>NCB Protection</b> — it lets you make a claim without losing your No-Claim Bonus discount at all. Your 25% stays 25%, not zero.",
+  "v":"Thanks for being upfront. Here's some good news most people don't expect: with most insurers, one claim wipes your entire N C B back to zero. Tata AIG has an add-on called N C B Protection — it lets you make a claim without losing your No Claim Bonus discount at all. Your twenty-five percent stays twenty-five percent, not zero.",
+  "src":"Source · Tata AIG NCB Protection · add-on covers page",
+  "crm":{"x":"USP surfaced: <b>NCB Protection — bonus stays fully intact, not reset</b> · retained 25% vs 0%","cls":"ok"}},
+ {"t":"usr","x":"Wait, really? Every other quote I've seen assumed my bonus was gone. That's actually a big deal. Any tips before monsoon hits?"},
+ {"t":"bot","x":"Good timing to ask 🌧️ Three quick ones: check your <b>wiper blades</b>, <b>tyre tread depth</b> (should clear the ₹1-coin test), and get <b>electricals water-proofed</b>. Takes about 20 minutes at any service centre.",
+  "v":"Good timing to ask. Three quick ones: check your wiper blades, tyre tread depth, and get electricals water-proofed. Takes about twenty minutes at any service centre."},
+ {"t":"bot","x":"Since your renewal's close — want to see what a Tata AIG quote could look like for your car?","btns":{"opts":["Yes, show me","Maybe later"],"pick":0},
+  "crm":{"x":"Vehicle profile → CRM · <b>4 attributes enriched</b>","cls":"ok"}},
+ {"t":"note","x":"Renewal profile saved · handing over with full context → Policy Advisor",
+  "crm":{"x":"<b>Handoff → S2 Policy Advisor</b> · context carried, nothing re-asked","cls":"ok"}},
+]
+
+S2 = [
+ {"t":"bot","x":"Good to see you again 🙂 So — renewing cover for your car, and thanks to NCB Protection you're keeping your full bonus despite last year's claim. Let me pull your car up.",
+  "v":"Good to see you again. So — renewing cover for your car, and thanks to N C B Protection you're keeping your full bonus despite last year's claim. Let me pull your car up.",
+  "crm":{"x":"S2 engaged · <b>context inherited from S1</b> · no re-qualification","cls":""}},
+ {"t":"bot","x":"Just pop in your <b>registration number</b> — I'll pull the rest automatically, no forms.","btns":{"opts":["KA-03-JH-8821","Type manually"],"pick":0}},
+ {"t":"card","voice":"Fetched straight from the vehicle registry: a twenty twenty-two Hyundai Creta, petrol — no details to type in.",
+  "html":"""<div class="ih grn"><i></i>Auto-fetched from registry · 0 fields typed</div>
+    <table><tr><td>Registration</td><td>KA-03-JH-8821</td></tr>
+    <tr><td>Make / model</td><td>2022 Hyundai Creta</td></tr>
+    <tr><td>Engine</td><td>Petrol</td></tr>
+    <tr><td>Prior NCB (with NCB Protection)</td><td>25% retained</td></tr></table>""",
+  "crm":{"x":"<b>Vehicle auto-pulled</b> · KA-03-JH-8821 · registry + prior-policy NCB · <b>zero manual entry</b>","cls":"ok"}},
+ {"t":"bot","x":"That's everything I need to quote — no phone number yet, we'll only ask for that once you've seen the price and want to go ahead. Two ways to go:"},
+ {"t":"card","voice":"Two options on screen: Third-Party Only at seven thousand eight hundred and ninety rupees a year, and Comprehensive — with Zero Depreciation cover — at roughly twenty-eight thousand five hundred rupees a year.",
+  "html":"""<div class="ih"><i></i>Recommended for your car · 2022 · KA-03-JH-8821</div>
+    <div class="planrow">
+      <div class="plancol"><b>Third-Party Only</b><div class="cv">Mandatory</div><div class="pp">₹7,890 <span>/ yr</span></div><span class="tg">MINIMUM COVER</span></div>
+      <div class="plancol pick"><b>Comprehensive</b><div class="cv">+ Zero Dep</div><div class="pp">₹28,500 <span>/ yr</span></div><span class="tg">RECOMMENDED</span></div>
+    </div>""",
+  "crm":{"x":"Recommendation served: Third-Party Only / <b>Comprehensive (Zero Dep)</b>","cls":""}},
+ {"t":"usr","x":"Does this price already include my retained bonus? I want to make sure I'm getting the NCB Protection benefit.",
+  "v":"Does this price already include my retained bonus? I want to make sure I'm getting the N C B Protection benefit."},
+ {"t":"bot","x":"It does — this quote already applies your <b>retained 25% NCB</b>. With most insurers this same cover would have assumed 0% after your claim, costing you about <b>₹7,100 more</b>. That saving is the NCB Protection benefit, already in the number.",
+  "v":"It does — this quote already applies your retained twenty-five percent N C B. With most insurers this same cover would have assumed zero percent after your claim, costing you about seven thousand one hundred rupees more. That saving is the N C B Protection benefit, already in the number.",
+  "src":"Tata AIG add-on covers · NCB Protection",
+  "crm":{"x":"USP reinforced: <b>NCB Protection saving ~₹7,100 vs reset-to-zero</b> · in-quote","cls":"hot"}},
+ {"t":"usr","x":"Appreciate the honesty. Is roadside assistance included in comprehensive?"},
+ {"t":"bot","x":"Not by default — it's a smart optional add-on, about <b>₹500 a year</b>, 24×7 breakdown cover anywhere in India.",
+  "src":"Tata AIG add-on covers · Roadside Assistance"},
+ {"t":"usr","x":"And if I ever need one — how do cashless garage repairs actually work?"},
+ {"t":"bot","x":"At any of our <b>10,000+ network garages</b>, show your e-policy and ID, we pre-authorise directly with the garage, and approval for straightforward repairs is typically quick — complex or disputed cases naturally take longer.",
+  "src":"Tata AIG garage locator · Aug 2026"},
+ {"t":"usr","x":"Looks good. Let's go ahead.","v":"Looks good. Let's go ahead."},
+ {"t":"bot","x":"Great — <b>now</b> I'll take your mobile number, just so Ananya can call with the final breakdown. Sharing it means consent to be contacted for this, per our Privacy Policy (DPDP Act 2023). When suits you?",
+  "v":"Great — now I'll take your mobile number, just so Ananya can call with the final breakdown. Sharing it means consent to be contacted for this, as per our privacy policy under the D P D P Act. When suits you?",
+  "btns":{"opts":["Tomorrow 10 AM ☎️","This evening","WhatsApp me instead"],"pick":0},
+  "crm":{"x":"<b>Phone captured now</b> (progressive disclosure — deferred until post-quote &amp; committed)","cls":"ok"}},
+ {"t":"card","voice":"A qualified lead is created in CRM in real time — callback booked for ten A M, consent recorded and purpose-bound.",
+  "html":"""<div class="ih grn"><i></i>Created in CRM · real-time</div>
+    <table><tr><td>Lead ID</td><td>TATAAIG-40217 · SQL</td></tr>
+    <tr><td>Cohort</td><td>Renewal · NCB rebuild</td></tr>
+    <tr><td>Callback</td><td>Tomorrow · 10:00 AM</td></tr>
+    <tr><td>Consent</td><td>✓ Recorded · purpose-bound (DPDP)</td></tr></table>""",
+  "crm":{"x":"<b>Lead TATAAIG-40217 created · SQL</b> · consent artefact stored ✓","cls":"ok"}},
+ {"t":"bot","x":"Booked ✅ Ananya will call at 10 AM with your numbers ready. I've also sent a one-page summary on WhatsApp. Talk soon, Vikram!",
+  "v":"Booked! Ananya will call at ten A M with your numbers ready. I've also sent a one-page summary on WhatsApp. Talk soon, Vikram!",
+  "crm":{"x":"<b>Assigned → S6 outbound queue</b> · window 10:00 AM","cls":"ok"}},
+]
+
+S6_CHAT = [
+ {"t":"note","x":"10:00 AM — preferred window · Ananya follows up on WhatsApp with full context",
+  "crm":{"x":"Queue pick 10:00 AM · channel: WhatsApp · <b>context loaded</b> · DND ✓","cls":""}},
+ {"t":"bot","x":"Good morning Vikram, Ananya from Tata AIG 👋 Following up as promised — Comprehensive with Zero Dep came to about <b>₹28,500</b> for the year. Any first thoughts?","k":"10:00 AM",
+  "crm":{"x":"Context recap delivered · <b>zero re-qualification</b>","cls":""}},
+ {"t":"usr","x":"Honestly, paying that in one shot feels like a lot right now.","k":"10:02 AM"},
+ {"t":"bot","x":"Completely fair. Two ways to soften it:","k":"10:02 AM",
+  "crm":{"x":"Objection: <b>premium (lump sum)</b> → options: instalments / full","cls":"hot"}},
+ {"t":"card","html":"""<div class="ih"><i></i>Ways to spread it out · same cover</div>
+    <div class="rowic"><span class="ri">📅</span><div><b>3 instalments · ₹9,500 each</b><span>Via our payment partner · cover starts immediately</span></div></div>
+    <div class="rowic"><span class="ri">💳</span><div><b>Pay in full · small early saving</b><span>₹28,500 · one payment</span></div></div>"""},
+ {"t":"bot","x":"Which should I set up?","k":"10:03 AM","btns":{"opts":["3 instalments ₹9,500","Pay in full","Keep thinking"],"pick":0}},
+ {"t":"usr","x":"One more thing — will someone need to physically inspect my car?","k":"10:05 AM"},
+ {"t":"bot","x":"Good question. For a standard renewal transfer like yours, a few photos in the app are usually enough — a physical visit only happens if the policy's lapsed a while or something looks unclear.","k":"10:05 AM","src":"Tata AIG underwriting guidelines · v2.1"},
+ {"t":"usr","x":"Alright. Send me everything — I'll finish it tonight.","k":"10:06 AM"},
+ {"t":"bot","x":"Done ✅ App link below — also sent by SMS. As per IRDAI guidelines, never share OTPs with anyone, including us. Have a good day, Vikram! 🙌","k":"10:06 AM",
+  "crm":{"x":"<b>Disposition: Interested · 3-instalment preferred</b> · write-back to CRM · QA 97/100","cls":"ok"}},
+ {"t":"note","x":"Transcript stored · sentiment positive · AI decision trace logged",
+  "crm":{"x":"Transcript + <b>AI decision trace</b> stored · watching app events","cls":""}},
+]
+
+S6_VOICE = [
+ {"t":"sys","x":"Genesys outbound · queue pick 09:59 AM · DND ✓ · consent ✓",
+  "crm":{"x":"Queue pick 09:59 AM · <b>Genesys dial</b> · preferred window matched · DND ✓","cls":""}},
+ {"t":"ai","x":"Good morning Vikram, this is Ananya from Tata AIG — this call is recorded for quality. Is now still okay to talk about your car's renewal?"},
+ {"t":"cu","x":"Yes, I've got about ten minutes."},
+ {"t":"ai","x":"Perfect. Yesterday we landed on Comprehensive cover with Zero Depreciation — about twenty-eight thousand five hundred rupees for the year. Any first thoughts?",
+  "crm":{"x":"Context recap delivered · <b>zero re-qualification</b>","cls":""}},
+ {"t":"cu","x":"Honestly, paying that in one shot feels like a lot right now."},
+ {"t":"ai","x":"Totally fair. Two ways to soften it: three instalments of about nine thousand five hundred rupees each through our payment partner, or the full amount for a small early-payment saving. Which suits you better?",
+  "crm":{"x":"Objection: <b>premium (lump sum)</b> → options: 3-instalment / full payment","cls":"hot"}},
+ {"t":"cu","x":"Instalments work better for me. One more thing — will someone need to physically inspect my car?"},
+ {"t":"ai","x":"Good question — for a standard renewal transfer like yours, usually a few photos uploaded in the app are enough. We call that a pre-insurance inspection. A physical visit only happens if the policy has lapsed a while, or something looks unclear in the photos.",
+  "crm":{"x":"FAQ: pre-purchase inspection → <b>photo-based PIV explained</b>","cls":""}},
+ {"t":"cu","x":"Okay, that's easy enough. Send me everything — I'll finish it tonight."},
+ {"t":"ai","x":"Done — the app link is on your WhatsApp, and by SMS as well. One thing as per I R D A I guidelines: never share your O T P with anyone, including us. Have a good day, Vikram!",
+  "crm":{"x":"<b>Disposition: Interested · 3-instalment preferred</b> · write-back to CRM · QA 97/100","cls":"ok"}},
+ {"t":"sys","x":"Transcript stored · sentiment positive · explainability trace logged",
+  "crm":{"x":"Transcript + <b>AI decision trace</b> stored · watching app events","cls":""}},
+]
+
+S7 = [
+ {"t":"note","x":"🔒 Messages are end-to-end encrypted"},
+ {"t":"note","x":"Last night 9:20 PM — Vikram started the switch on the Tata AIG app and stopped at document upload",
+  "crm":{"x":"<b>Drop-off detected</b> · APP-2026-08814 · step: document upload · 9:20 PM","cls":"hot"}},
+ {"t":"bot","x":"Good morning Vikram, Ananya from Tata AIG 👋<br><br>I noticed you were switching your cover last night but paused at the <b>document upload</b> step. Can I help?","k":"9:38 AM",
+  "v":"Good morning Vikram, Ananya from Tata AIG. I noticed you were switching your cover last night but paused at the document upload step. Can I help?",
+  "btns":{"opts":["Yes, help me","I'll do it later","Talk to a human"],"pick":0},
+  "crm":{"x":"S7 re-activation · channel: WhatsApp · <b>reason-aware, not generic</b>","cls":""}},
+ {"t":"bot","x":"No problem. To verify and transfer your NCB, I just need <b>either</b>:<br><br>📄 Your previous year's <b>policy copy</b>, or<br>📋 An <b>NCB retention certificate</b> from your current insurer<br><br>Either one works fine.","k":"9:39 AM",
+  "v":"No problem. To verify and transfer your N C B, I just need either your previous year's policy copy, or an N C B retention certificate from your current insurer. Either one works fine."},
+ {"t":"usr","x":"I've got last year's policy as a PDF. Sending it now 👇","k":"9:41 AM",
+  "v":"I've got last year's policy as a P D F. Sending it to you now."},
+ {"t":"upload","name":"Previous_Policy_2025.pdf","size":"380 KB","k":"9:41 AM",
+  "crm":{"x":"Document received in-chat · <b>routing to verification</b>","cls":""}},
+ {"t":"bot","x":"Received — verifying now… ⏳","k":"9:41 AM","v":"Received — verifying now."},
+ {"t":"card","voice":"Verified instantly: a valid prior policy showing twenty-five percent N C B — and with N C B Protection, last year's claim doesn't touch it at all, fully retained rather than reset.",
+  "html":"""<div class="ih grn"><i></i>Document verified · instant</div>
+    <table><tr><td>Type</td><td>Prior motor policy ✓</td></tr>
+    <tr><td>NCB shown</td><td>25% (pre-claim)</td></tr>
+    <tr><td>NCB Protection this renewal</td><td>25% fully retained</td></tr>
+    <tr><td>Attached to</td><td>APP-2026-08814</td></tr></table>""",
+  "crm":{"x":"<b>Document verified ✓</b> · NCB Protection 25% retained · application now 88% complete","cls":"ok"}},
+ {"t":"usr","x":"Quick one — will my premium change now that you've seen this?","k":"9:42 AM"},
+ {"t":"bot","x":"No surprises here — this quote already includes your fully retained 25% NCB, so nothing changes. If anything ever needs adjusting, you'll always see the revised figure and reason before paying.","k":"9:42 AM",
+  "v":"No surprises here — this quote already includes your fully retained twenty-five percent N C B, so nothing changes. If anything ever needs adjusting, you'll always see the revised figure and reason before paying.",
+  "src":"Tata AIG underwriting guidelines · v2.1",
+  "crm":{"x":"FAQ: premium revision → <b>transparency confirmed, no change</b>","cls":""}},
+ {"t":"usr","x":"And is my data safe with you?","k":"9:43 AM"},
+ {"t":"bot","x":"Fully — encrypted in transit and at rest, stored only in India, used solely for this policy, as per the DPDP Act. Never for marketing.","k":"9:43 AM",
+  "v":"Fully — encrypted in transit and at rest, stored only in India, used solely for this policy, as per the D P D P Act. Never for marketing.",
+  "crm":{"x":"FAQ: data safety → <b>DPDP assurance</b> · India-only residency","cls":""}},
+ {"t":"bot","x":"You're at <b>88% complete</b> — just plan confirmation, add-ons and a quick KYC left, about three minutes. Finish now?","k":"9:44 AM","btns":{"opts":["Finish now →","Tonight"],"pick":0}},
+ {"t":"bot","x":"Taking you to the app 📲 Everything's carried forward — nothing to re-enter. See you there!","k":"9:44 AM",
+  "v":"Taking you to the app. Everything's carried forward — nothing to re-enter. See you there!",
+  "crm":{"x":"<b>Journey resumed → S8 Buying Agent</b> · deep link issued","cls":"ok"}},
+]
+
+S8B = [
+ {"t":"bot","x":"Welcome back, Vikram! 👋 Everything's carried forward — here's where you stand:",
+  "v":"Welcome back, Vikram! Everything's carried forward — here's where you stand.",
+  "crm":{"x":"S8 session · deep link verified · <b>proposal reopened at 88%</b>","cls":""}},
+ {"t":"card","voice":"On screen: application 0 8 8 1 4, eighty-eight percent complete — prior policy verified; vehicle confirmation, add-ons, K Y C and payment remain.",
+  "html":"""<div class="ih"><i></i>Application APP-2026-08814 · 88% complete</div>
+    <table><tr><td>Vehicle</td><td>KA-03-JH-8821 · 2022</td></tr>
+    <tr><td>Prior policy</td><td>✓ verified</td></tr>
+    <tr><td>Proposer KYC</td><td>Pending verification</td></tr>
+    <tr><td>Remaining</td><td>Vehicle confirm · add-ons · KYC · payment</td></tr></table>
+    <div class="progressline"><i style="width:88%"></i></div>"""},
+ {"t":"bot","x":"First, please confirm your vehicle &amp; owner details — pre-filled from our chats, nothing to re-type:"},
+ {"t":"card","voice":"The vehicle and owner details, pre-filled from the journey: registration K A zero three J H eight eight two one, a twenty twenty-two Hyundai Creta, owner Vikram Rao, with last year's policy attached.",
+  "html":"""<div class="ih"><i></i>Vehicle &amp; owner · pre-filled from CRM</div>
+    <table><tr><td>Registration</td><td>KA-03-JH-8821</td></tr>
+    <tr><td>Vehicle</td><td>2022 Hyundai Creta · Petrol</td></tr>
+    <tr><td>Owner</td><td>Vikram Rao</td></tr>
+    <tr><td>Mobile</td><td>97•••• ••42</td></tr>
+    <tr><td>Prior policy</td><td>✓ attached</td></tr></table>""",
+  "crm":{"x":"Vehicle &amp; owner details served for confirmation · <b>pre-filled, zero re-entry</b>","cls":""}},
+ {"t":"bot","x":"All correct?","btns":{"opts":["Confirm details ✓","Edit details"],"pick":0},
+  "crm":{"x":"<b>Vehicle &amp; owner details confirmed</b> · Vikram Rao · KA-03-JH-8821 locked","cls":"ok"}},
+ {"t":"bot","x":"Your policy includes a mandatory <b>₹15 lakh Personal Accident cover</b> for you as the owner-driver. Who should be the nominee for this?",
+  "v":"Your policy includes a mandatory fifteen lakh rupee Personal Accident cover for you as the owner-driver. Who should be the nominee for this?",
+  "sheet":{"title":"Select nominee","opts":["Anjali Rao · Spouse","Suresh Rao · Father","Other family member","Other — type a name"],"pick":0},
+  "crm":{"x":"Nominee options served · WABA list message","cls":""}},
+ {"t":"snote","crm":{"x":"<b>Nominee recorded · Anjali Rao (Spouse) · 100%</b> → proposal","cls":"ok"}},
+ {"t":"bot","x":"And the last formality — a quick <b>KYC verification</b> for you as the policyholder, as required by IRDAI. Pick a method:",
+  "v":"And the last formality — a quick K Y C verification for you as the policyholder, as required by I R D A I. Pick a method.",
+  "btns":{"opts":["CKYC · PAN lookup","eKYC · Aadhaar OTP","DigiLocker"],"pick":0},
+  "crm":{"x":"KYC initiated · method: <b>CKYC · PAN lookup</b>","cls":""}},
+ {"t":"card","voice":"K Y C verified in one point eight seconds: PAN matched, C K Y C record found for Vikram Rao — no documents to upload.",
+  "html":"""<div class="ih grn"><i></i>KYC verified · CKYC registry · 1.8s</div>
+    <table><tr><td>PAN</td><td>AB•••••2K ✓ matched</td></tr>
+    <tr><td>CKYC record</td><td>Found · Vikram Rao</td></tr>
+    <tr><td>CKYC number</td><td>••••••9042</td></tr>
+    <tr><td>Documents needed</td><td>None — verified digitally</td></tr></table>""",
+  "crm":{"x":"<b>KYC verified ✓</b> · CKYC fetch 1.8s · audit artefact stored","cls":"ok"}},
+ {"t":"bot","x":"The final decision — here's how the two options compare for your car:"},
+ {"t":"card","voice":"Both options side by side: Third-Party Only, and Comprehensive with Zero Depreciation cover.",
+  "html":"""<div class="planrow">
+    <div class="plancol"><b>Third-Party Only</b><div class="cv">Mandatory</div><div class="pp">₹7,890 <span>/ yr</span></div><span class="tg">MINIMUM COVER</span></div>
+    <div class="plancol pick"><b>Comprehensive</b><div class="cv">+ Zero Dep</div><div class="pp">₹28,500 <span>/ yr</span></div><span class="tg">RECOMMENDED</span></div></div>"""},
+ {"t":"bot","x":"Ananya's analysis, based on your profile:"},
+ {"t":"card","voice":"Ananya's analysis: comprehensive protects your own vehicle given daily city driving; Engine Secure covers monsoon-season water damage; and Zero Depreciation means no surprise repair bill after a knock.",
+  "html":"""<div class="ih"><i></i>Ananya's analysis · grounded in your profile</div>
+    <div class="rowic"><span class="ri">🚗</span><div><b>Protects your own vehicle</b><span>Daily city driving carries real dent-and-scrape risk</span></div></div>
+    <div class="rowic"><span class="ri">🛠️</span><div><b>Engine Secure for monsoon risk</b><span>Covers engine damage from water ingress &amp; oil leaks</span></div></div>
+    <div class="rowic"><span class="ri">💰</span><div><b>No surprise repair bills</b><span>Zero Depreciation pays the full repair cost, no deductions</span></div></div>""",
+  "crm":{"x":"Recommendation: <b>Comprehensive (Zero Dep)</b> · rationale logged","cls":""}},
+ {"t":"card","voice":"The live quote from the Tata AIG pricing engine: own-damage plus third-party plus Zero Depreciation plus G S T — twenty-eight thousand five hundred rupees for the year.",
+  "html":"""<div class="ih"><i></i>Premium · live quote · QTE-77120</div>
+    <table><tr><td>Own-damage premium</td><td>₹11,480 / yr</td></tr>
+    <tr><td>Third-party premium</td><td>₹7,890 / yr</td></tr>
+    <tr><td>Zero Depreciation add-on</td><td>₹4,760 / yr</td></tr>
+    <tr><td>GST (18%)</td><td>₹4,370</td></tr>
+    <tr class="tot"><td>Total</td><td>₹28,500 / yr</td></tr></table>""",
+  "crm":{"x":"<b>Quote QTE-77120 returned · 280ms</b> · Tata AIG Pricing Engine","cls":""}},
+ {"t":"bot","x":"Before the final number — would you like to strengthen your cover with add-ons?"},
+ {"t":"card","voice":"Three items on screen: Zero Depreciation, already included — Engine Secure at fifteen hundred rupees a year, and Roadside Assistance at five hundred rupees a year.",
+  "html":"""<div class="ih"><i></i>Add-ons · recommended for your profile</div>
+    <div class="rowic"><span class="ri">🛡️</span><div><b>Zero Depreciation — included &nbsp;<span class="tg" style="display:inline-block;font-family:var(--fm);font-size:7.5px;letter-spacing:.5px;background:var(--green-tint);color:var(--green);border-radius:4px;padding:2px 6px">SELECTED</span></b><span>Full repair cost, no depreciation deducted</span></div></div>
+    <div class="rowic"><span class="ri">⚙️</span><div><b>Engine Secure — ₹1,500/yr</b><span>Covers engine damage from water ingress &amp; oil leaks</span></div></div>
+    <div class="rowic"><span class="ri">🚙</span><div><b>Roadside Assistance — ₹500/yr</b><span>24×7 breakdown cover, anywhere in India</span></div></div>""",
+  "crm":{"x":"Add-ons served · Zero Dep included by default","cls":""}},
+ {"t":"bot","x":"Which would you like?","btns":{"opts":["Add Engine Secure","Add Roadside too","Keep Zero Dep only"],"pick":0},
+  "crm":{"x":"<b>Add-on selected: Engine Secure</b> · +₹1,500/yr → re-rate","cls":"ok"}},
+ {"t":"card","voice":"Updated quote: with Engine Secure added, the total comes to thirty thousand rupees for the year.",
+  "html":"""<div class="ih"><i></i>Updated premium · with Engine Secure</div>
+    <table><tr><td>Comprehensive + Zero Dep</td><td>₹28,500 / yr</td></tr>
+    <tr><td>Engine Secure add-on</td><td>₹1,500 / yr</td></tr>
+    <tr class="tot"><td>New total</td><td>₹30,000 / yr (₹2,500 / mo equivalent)</td></tr></table>""",
+  "crm":{"x":"Re-rated · <b>₹30,000/yr</b> · Zero Dep + Engine Secure","cls":"ok"}},
+ {"t":"usr","x":"Just to confirm — my NCB stays at 25% even with the claim?",
+  "v":"Just to confirm — my N C B stays at twenty-five percent even with the claim?"},
+ {"t":"bot","x":"Correct — NCB Protection keeps it fully intact at 25%, not reset to zero. Stay claim-free going forward and it keeps climbing the ladder toward the 50% cap over the years.",
+  "v":"Correct — N C B Protection keeps it fully intact at twenty-five percent, not reset to zero. Stay claim-free going forward and it keeps climbing the ladder toward the fifty percent cap over the years.",
+  "src":"Tata AIG add-on covers · NCB Protection",
+  "crm":{"x":"FAQ: NCB Protection → stays fully intact, no step-down","cls":""}},
+ {"t":"usr","x":"Can I add my wife as a named driver later?"},
+ {"t":"bot","x":"Yes — anytime, via a simple endorsement, with a small pro-rated fee if it changes your risk profile. I can start that whenever you're ready.",
+  "crm":{"x":"FAQ: add named driver → endorsement path explained","cls":""}},
+ {"t":"usr","x":"And what's the window to report a claim if something happens?"},
+ {"t":"bot","x":"As soon as possible after the incident — most insurers, us included, expect it within a matter of days. Sooner is always better, and it's the single biggest thing you control if the timing of the incident is ever questioned later. I'm here 24×7 to help you file it the moment it happens.",
+  "src":"Tata AIG knowledge centre · claim intimation guidance",
+  "crm":{"x":"FAQ: claim intimation window → explained","cls":""}},
+ {"t":"bot","x":"Before payment — the essentials, in plain language:"},
+ {"t":"card","voice":"The mandatory disclosures, plainly: I D V is the maximum claim basis and reduces with vehicle age each renewal; claims should be reported as soon as possible after the incident; and with N C B Protection a claim doesn't touch your bonus at all — all regulated by I R D A I.",
+  "html":"""<div class="ih"><i></i>Key facts · mandatory disclosures</div>
+    <div class="rowic"><span class="ri">📉</span><div><b>IDV is the maximum claim basis</b><span>Reduces with vehicle age at every renewal</span></div></div>
+    <div class="rowic"><span class="ri">⏱️</span><div><b>Report claims as soon as possible</b><span>Prompt reporting protects your claim from timing disputes</span></div></div>
+    <div class="rowic"><span class="ri">🔁</span><div><b>NCB Protection: bonus stays fully intact</b><span>A claim doesn't reset it to zero</span></div></div>
+    <div class="rowic"><span class="ri">📜</span><div><b>Regulated by IRDAI</b><span>Policy wording is the final word · T&amp;C apply</span></div></div>""",
+  "crm":{"x":"<b>Disclosures served pre-payment</b> · IRDAI-aligned · logged","cls":""}},
+ {"t":"bot","x":"To e-sign these declarations, I've sent a 4-digit OTP to your mobile ending ••42 — please share it here 🔐",
+  "v":"To e-sign these declarations, I've sent a four digit O T P to your mobile ending four-two — please share it here.",
+  "crm":{"x":"Declaration e-sign initiated · OTP dispatched (IRDAI e-consent)","cls":""}},
+ {"t":"usr","x":"7734","v":"Seven seven three four."},
+ {"t":"card","voice":"Declarations e-signed: O T P verified, consent artefact stored with timestamp — fully compliant electronic consent.",
+  "html":"""<div class="ih grn"><i></i>Declarations e-signed · IRDAI e-consent</div>
+    <table><tr><td>OTP</td><td>✓ Verified · 09:14 IST</td></tr>
+    <tr><td>Signed by</td><td>Vikram Rao (policyholder)</td></tr>
+    <tr><td>Covers</td><td>Declarations · T&amp;C · disclosures</td></tr>
+    <tr><td>Consent artefact</td><td>Stored · timestamp + device logged</td></tr></table>""",
+  "crm":{"x":"<b>Declarations e-signed ✓</b> · OTP verified · artefact stored","cls":"ok"}},
+ {"t":"cta","x":"Pay ₹30,000 · UPI · Activate policy"},
+ {"t":"press"},
+ {"t":"card","cls":"issuedcard","voice":"Payment received — policy activated instantly. E-policy and welcome kit sent on WhatsApp.",
+  "html":"""<div class="ic">✓</div><b>Policy Activated Successfully</b>
+    <span>Comprehensive · Zero Dep + Engine Secure<br>APP-2026-08814 · payment ₹30,000 (UPI) received<br>Cover is active immediately — no waiting period<br>Confirmation sent on WhatsApp &amp; email</span>""",
+  "crm":{"x":"<b>Payment ✓ · Policy activated instantly</b>","cls":"ok"}},
+ {"t":"doc","name":"TataAIG_Policy_APP-08814.pdf","size":"1.1 MB","k":"9:52 PM",
+  "crm":{"x":"<b>e-Policy + welcome kit delivered in-chat</b>","cls":"ok"}},
+ {"t":"bot","x":"Two things that come with your policy 👇 First, keep documentation ready as a habit — if you're ever in an incident, note the time, place and any police reference immediately, even before you call us. It's the one thing that protects a genuine claim from being second-guessed later.",
+  "v":"Two things that come with your policy. First, keep documentation ready as a habit — if you're ever in an incident, note the time, place and any police reference immediately, even before you call us. It's the one thing that protects a genuine claim from being second-guessed later.",
+  "src":"Tata AIG claims guidance"},
+ {"t":"card","voice":"On screen: a quick reference card — what to capture at the scene, so nothing is missing if a claim is ever needed.",
+  "html":"""<div class="ih"><i></i>If something happens · quick reference</div>
+    <div class="rowic"><span class="ri">🕐</span><div><b>Note the time &amp; place immediately</b><span>Timing details matter most in the first hours</span></div></div>
+    <div class="rowic"><span class="ri">📱</span><div><b>Call us the same day</b><span>We're reachable 24×7 to start the claim right away</span></div></div>
+    <div class="rowic"><span class="ri">🧾</span><div><b>Any police reference, however small</b><span>Even a delayed FIR is fine — just tell us the delay wasn't yours</span></div></div>""",
+  "crm":{"x":"<b>Claims-readiness reference card delivered</b>","cls":"ok"}},
+ {"t":"usr","x":"That's genuinely useful. And if I do have a real claim someday?",
+  "v":"That's genuinely useful. And if I do have a real claim someday?"},
+ {"t":"bot","x":"You get a <b>Claim Specialist</b> — one named person who handles your claim end to end. No repeating your story to a different agent every day. Meet Rajiv 👇",
+  "v":"You get a Claim Specialist — one named person who handles your claim end to end. No repeating your story to a different agent every day. Meet Rajiv.",
+  "src":"Tata AIG claims service charter"},
+ {"t":"card","voice":"On screen: your dedicated Claim Specialist, Rajiv Menon — a single point of contact reachable directly, who owns your claim from first notice to final settlement.",
+  "html":"""<div class="ih grn"><i></i>Your Claim Specialist · assigned</div>
+    <table><tr><td>Specialist</td><td>Rajiv Menon</td></tr>
+    <tr><td>Role</td><td>Single point of contact · your claim only</td></tr>
+    <tr><td>Handles</td><td>First notice → survey → settlement</td></tr>
+    <tr><td>Reachable</td><td>Direct line + WhatsApp · no queues</td></tr></table>""",
+  "crm":{"x":"<b>Claim Specialist assigned: Rajiv Menon</b> · SPOC bound to policy","cls":"ok"}},
+ {"t":"bot","x":"Congratulations, Vikram 🎉 You're covered from right now — with your NCB fully protected and Rajiv as your Claim Specialist. Drive safe!",
+  "v":"Congratulations, Vikram! You're covered from right now — with your N C B fully protected and Rajiv as your Claim Specialist. Drive safe!",
+  "crm":{"x":"<b>Journey complete</b> · 3 USPs delivered · ad click → policy · 0 human touches","cls":"ok"}},
+]
+
+
+# ═══ S8A — WEBSITE buy journey (primary channel · lean, reg-first, progressive disclosure) ═══
+S8A = [
+ {"t":"wstep","x":"STEP 1 OF 4 · Your car"},
+ {"t":"wbot","x":"Let's start with your <b>registration number</b> — I'll pull everything else automatically."},
+ {"t":"wpick","opts":["KA-03-JH-8821","Enter manually"],"pick":0,
+  "crm":{"x":"Website buy · <b>reg entered first</b> · KA-03-JH-8821","cls":""}},
+ {"t":"wcard","html":"""<div class="ih grn"><i></i>Fetched from registry · 0 fields typed</div>
+    <table><tr><td>Vehicle</td><td>2022 Hyundai Creta · Petrol</td></tr>
+    <tr><td>Registration</td><td>KA-03-JH-8821</td></tr></table>""",
+  "crm":{"x":"Vehicle auto-pulled from registry · <b>zero manual entry</b>","cls":"ok"}},
+ {"t":"wstep","x":"STEP 2 OF 4 · Your bonus"},
+ {"t":"wbot","x":"Now your <b>previous policy</b> — I'll pull it to work out your No-Claim Bonus."},
+ {"t":"wcard","html":"""<div class="ih grn"><i></i>Prior policy found · NCB Protection applied</div>
+    <table><tr><td>Prior NCB</td><td>25% (pre-claim)</td></tr>
+    <tr><td>1 claim last year</td><td>NCB Protection: fully retained</td></tr>
+    <tr><td>Applies now</td><td><b>25% retained</b> (not reset to 0%)</td></tr></table>""",
+  "crm":{"x":"Prior policy auto-pulled · <b>NCB Protection 25% retained</b> vs 0% elsewhere","cls":"ok"}},
+ {"t":"wstep","x":"STEP 3 OF 4 · Choose your plan"},
+ {"t":"wbot","x":"Pick your cover — I've only shown what's relevant to your car:"},
+ {"t":"wplans","opts":[
+    {"name":"Third-Party Only","sub":"Mandatory liability cover","price":"₹7,890","tag":""},
+    {"name":"Comprehensive","sub":"Own-damage + third-party · Zero Dep","price":"₹28,500","tag":"RECOMMENDED"},
+    {"name":"OD-Only","sub":"If you hold a valid TP policy","price":"₹18,200","tag":""}],
+  "pick":1,
+  "crm":{"x":"Plan chosen: <b>Comprehensive (Zero Dep)</b> · \"talk to filter\" — only relevant options shown","cls":"ok"}},
+ {"t":"wstep","x":"STEP 4 OF 4 · Add-ons &amp; details"},
+ {"t":"wbot","x":"Strengthen your cover — Zero Depreciation is already in. Engine Secure is popular for monsoon."},
+ {"t":"wpick","opts":["+ Engine Secure ₹1,500","Skip add-ons"],"pick":0,
+  "crm":{"x":"Add-on: <b>Engine Secure</b> · re-rate → ₹30,000/yr","cls":"ok"}},
+ {"t":"wbot","x":"Almost done — <b>now</b> a mobile number (only what compliance needs), then straight to review."},
+ {"t":"wpick","opts":["Use 97•••• ••42","Enter another"],"pick":0,
+  "crm":{"x":"<b>Phone captured at the end</b> · progressive disclosure — deferred until committed","cls":"ok"}},
+ {"t":"wcard","html":"""<div class="ih"><i></i>Review · Tata AIG Comprehensive</div>
+    <table><tr><td>Vehicle</td><td>KA-03-JH-8821 · 2022</td></tr>
+    <tr><td>Cover</td><td>Comprehensive + Zero Dep + Engine Secure</td></tr>
+    <tr><td>NCB Protection</td><td>25% retained</td></tr>
+    <tr class="tot"><td>Total</td><td>₹30,000 / yr</td></tr></table>""",
+  "crm":{"x":"Review page served · single screen · <b>4 steps end to end</b>","cls":""}},
+ {"t":"wcta","x":"Pay ₹30,000 · UPI · Activate"},
+ {"t":"wpress"},
+ {"t":"wcard","cls":"issuedcard","html":"""<div class="ic">✓</div><b>Policy Activated</b>
+    <span>Comprehensive · Zero Dep + Engine Secure<br>Cover active immediately · e-policy emailed<br>Your Claim Specialist is ready in-app</span>""",
+  "crm":{"x":"<b>Website purchase complete</b> · unassisted · reg-to-pay in 4 steps","cls":"ok"}},
+ {"t":"wnote","x":"Unassisted web purchase · assisted (WhatsApp/voice) available as backup — scales as volumes grow",
+  "crm":{"x":"Channel note: <b>unassisted-first</b>, assisted backup · per Tata AIG D2C plan","cls":""}},
+]
+
+CHAT = {"2":S1, "3":S2, "4":S6_CHAT, "5":S7, "6":S8A, "7":S8B}
+
+# ───────────────────────── VOICE ADAPTER ─────────────────────────
+TAG = re.compile(r"<[^>]+>")
+FINE = re.compile(r"<span class=\"fine\">.*?</span>", re.S)
+EMOJI = re.compile(r"[\U0001F000-\U0001FAFF☀-➿️]")
+
+def plain(s):
+    s = FINE.sub("", s)
+    s = s.replace("<br>", " ").replace("<br/>", " ").replace("<br />", " ")
+    s = TAG.sub("", s)
+    s = H.unescape(s)
+    s = EMOJI.sub("", s)
+    s = s.replace("NCB", "N C B").replace("KYC", "K Y C").replace("CKYC", "C K Y C")
+    s = s.replace("IDV", "I D V").replace("₹", " rupees ")
+    return re.sub(r"\s+", " ", s).strip()
+
+def spoken(st, field_x="x"):
+    return plain(st.get("v") or st.get(field_x, ""))
+
+def to_voice(steps):
+    out = []
+    for st in steps:
+        t = st["t"]
+        if t == "note":
+            out.append({"t":"sys","x":plain(st["x"]), **({"crm":st["crm"]} if "crm" in st else {})})
+        elif t in ("sys","ai","cu"):
+            o = {"t":t, "x":st["x"]}
+            if "crm" in st: o["crm"] = st["crm"]
+            out.append(o)
+        elif t == "bot":
+            o = {"t":"ai","x":spoken(st)}
+            if "crm" in st: o["crm"] = st["crm"]
+            out.append(o)
+            if "btns" in st:
+                pick = st["btns"]["opts"][st["btns"]["pick"]]
+                out.append({"t":"cu","x":plain(pick).rstrip(".")+"."})
+            if "sheet" in st:
+                pick = st["sheet"]["opts"][st["sheet"]["pick"]]
+                out.append({"t":"cu","x":plain(pick).replace("·",",").rstrip(".")+"."})
+        elif t == "usr":
+            o = {"t":"cu","x":spoken(st)}
+            if "crm" in st: o["crm"] = st["crm"]
+            out.append(o)
+        elif t == "card":
+            o = {"t":"sys","x":"📄 Shared on screen"}
+            if "crm" in st: o["crm"] = st["crm"]
+            out.append(o)
+            if st.get("voice"): out.append({"t":"ai","x":st["voice"]})
+        elif t == "snote":
+            o = {"t":"sys","x":"Nominee recorded · Anjali Rao (Spouse)"}
+            if "crm" in st: o["crm"] = st["crm"]
+            out.append(o)
+        elif t == "doc":
+            o = {"t":"sys","x":"📄 e-Policy PDF delivered on WhatsApp"}
+            if "crm" in st: o["crm"] = st["crm"]
+            out.append(o)
+        elif t == "upload":
+            out.append({"t":"cu","x":"I'm sending the policy copy on WhatsApp right now."})
+            o = {"t":"sys","x":"📎 Document received via WhatsApp · verified ✓"}
+            if "crm" in st: o["crm"] = st["crm"]
+            out.append(o)
+        elif t == "wstep":
+            out.append({"t":"sys","x":plain(st["x"])})
+        elif t == "wbot":
+            o = {"t":"ai","x":spoken(st)}
+            if "crm" in st: o["crm"] = st["crm"]
+            out.append(o)
+        elif t == "wpick":
+            o = {"t":"sys","x":"🖱️ " + plain(st["opts"][st["pick"]])}
+            if "crm" in st: o["crm"] = st["crm"]
+            out.append(o)
+        elif t == "wplans":
+            o = {"t":"sys","x":"📄 Plans shown on screen"}
+            if "crm" in st: o["crm"] = st["crm"]
+            out.append(o)
+        elif t == "wcard":
+            o = {"t":"sys","x":"📄 Shown on screen"}
+            if "crm" in st: o["crm"] = st["crm"]
+            out.append(o)
+        elif t == "wcta":
+            out.append({"t":"sys","x":"💳 Secure payment · ₹30,000 UPI"})
+        elif t == "wnote":
+            o = {"t":"sys","x":plain(st["x"])}
+            if "crm" in st: o["crm"] = st["crm"]
+            out.append(o)
+        elif t == "wpress":
+            continue
+        elif t == "cta":
+            out.append({"t":"sys","x":"💳 Secure payment link sent · ₹30,000 UPI"})
+        elif t == "press":
+            continue
+    return out
+
+VOICE = {n: to_voice(steps) for n, steps in CHAT.items()}
+VOICE["4"] = S6_VOICE  # S6 uses the hand-written call script
+
+# assign audio keys + collect TTS lines
+lines = {}
+for n, steps in VOICE.items():
+    i = 0
+    for st in steps:
+        if st["t"] in ("ai","cu"):
+            key = f"sc{n}_{i}"
+            st["key"] = key
+            lines[key] = {"text": plain(st["x"]), "who": st["t"]}
+            i += 1
+
+json.dump(CHAT,  open("chat_scripts.json","w"),  ensure_ascii=False)
+json.dump(VOICE, open("voice_scripts.json","w"), ensure_ascii=False)
+json.dump(lines, open("lines.json","w"),         ensure_ascii=False)
+tot = sum(len(v["text"]) for v in lines.values())
+print("scenes:", {k: len(v) for k, v in VOICE.items()})
+print("tts lines:", len(lines), "· total chars:", tot, "· est audio ~", round(tot/15/60,1), "min")
