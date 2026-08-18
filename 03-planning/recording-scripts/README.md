@@ -10,8 +10,8 @@ lines, and the audio filename every clip must be saved as.
 | **S6** | AI Outreach Agent (outbound call) | 9 | 5 | 4 | [S6-Outreach.md](S6-Outreach.md) |
 | **S7** | AI Re-engagement Agent | 14 | 8 | 6 | [S7-Re-engagement.md](S7-Re-engagement.md) |
 | **S8a** | Website Buy Journey (voice assist) | 5 | 5 | 0 | [S8a-Web-Voice-Assist.md](S8a-Web-Voice-Assist.md) |
-| **S8b** | AI Assisted-Close Agent (+ claims-readiness handoff) | 39 | 30 | 9 | [S8b-Assisted-Close.md](S8b-Assisted-Close.md) |
-| | **Total** | **97** | **66** | **31** | |
+| **S8b** | AI Assisted-Close Agent (+ claims-readiness handoff) | 42 | 29 | 13 | [S8b-Assisted-Close.md](S8b-Assisted-Close.md) |
+| | **Total** | **100** | **65** | **35** | |
 
 ## The method
 

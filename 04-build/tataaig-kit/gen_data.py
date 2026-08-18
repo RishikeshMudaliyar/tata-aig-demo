@@ -199,18 +199,19 @@ S8B = [
     <tr><td>CKYC number</td><td>••••••9042</td></tr>
     <tr><td>Documents needed</td><td>None — verified digitally</td></tr></table>""",
   "crm":{"x":"<b>KYC verified ✓</b> · CKYC fetch 1.8s · audit artefact stored","cls":"ok"}},
+ {"t":"usr","x":"Great, what's next?"},
  {"t":"bot","x":"The final decision — here's how the two options compare for your car:"},
  {"t":"card","voice":"Both options side by side: Third-Party Only, and Comprehensive with Zero Depreciation cover.",
   "html":"""<div class="planrow">
     <div class="plancol"><b>Third-Party Only</b><div class="cv">Mandatory</div><div class="pp">₹7,890 <span>/ yr</span></div><span class="tg">MINIMUM COVER</span></div>
     <div class="plancol pick"><b>Comprehensive</b><div class="cv">+ Zero Dep</div><div class="pp">₹28,500 <span>/ yr</span></div><span class="tg">RECOMMENDED</span></div></div>"""},
- {"t":"bot","x":"Ananya's analysis, based on your profile:"},
  {"t":"card","voice":"Ananya's analysis: comprehensive protects your own vehicle given daily city driving; Engine Secure covers monsoon-season water damage; and Zero Depreciation means no surprise repair bill after a knock.",
   "html":"""<div class="ih"><i></i>Ananya's analysis · grounded in your profile</div>
     <div class="rowic"><span class="ri">🚗</span><div><b>Protects your own vehicle</b><span>Daily city driving carries real dent-and-scrape risk</span></div></div>
     <div class="rowic"><span class="ri">🛠️</span><div><b>Engine Secure for monsoon risk</b><span>Covers engine damage from water ingress &amp; oil leaks</span></div></div>
     <div class="rowic"><span class="ri">💰</span><div><b>No surprise repair bills</b><span>Zero Depreciation pays the full repair cost, no deductions</span></div></div>""",
   "crm":{"x":"Recommendation: <b>Comprehensive (Zero Dep)</b> · rationale logged","cls":""}},
+ {"t":"usr","x":"Makes sense. What's the price?"},
  {"t":"card","voice":"The live quote from the Tata AIG pricing engine: own-damage plus third-party plus Zero Depreciation plus G S T — twenty-eight thousand five hundred rupees for the year.",
   "html":"""<div class="ih"><i></i>Premium · live quote · QTE-77120</div>
     <table><tr><td>Own-damage premium</td><td>₹11,480 / yr</td></tr>
@@ -266,12 +267,14 @@ S8B = [
     <tr><td>Covers</td><td>Declarations · T&amp;C · disclosures</td></tr>
     <tr><td>Consent artefact</td><td>Stored · timestamp + device logged</td></tr></table>""",
   "crm":{"x":"<b>Declarations e-signed ✓</b> · OTP verified · artefact stored","cls":"ok"}},
+ {"t":"usr","x":"Okay."},
  {"t":"cta","x":"Pay ₹30,000 · UPI · Activate policy"},
  {"t":"press"},
  {"t":"card","cls":"issuedcard","voice":"Payment received — policy activated instantly. E-policy and welcome kit sent on WhatsApp.",
   "html":"""<div class="ic">✓</div><b>Policy Activated Successfully</b>
     <span>Comprehensive · Zero Dep + Engine Secure<br>APP-2026-08814 · payment ₹30,000 (UPI) received<br>Cover is active immediately — no waiting period<br>Confirmation sent on WhatsApp &amp; email</span>""",
   "crm":{"x":"<b>Payment ✓ · Policy activated instantly</b>","cls":"ok"}},
+ {"t":"usr","x":"Great, thank you."},
  {"t":"doc","name":"TataAIG_Policy_APP-08814.pdf","size":"1.1 MB","k":"9:52 PM",
   "crm":{"x":"<b>e-Policy + welcome kit delivered in-chat</b>","cls":"ok"}},
  {"t":"bot","x":"Two things that come with your policy 👇 First, keep documentation ready as a habit — if you're ever in an incident, note the time, place and any police reference immediately, even before you call us. It's the one thing that protects a genuine claim from being second-guessed later.",

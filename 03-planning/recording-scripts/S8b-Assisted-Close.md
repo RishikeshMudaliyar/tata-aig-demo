@@ -3,11 +3,13 @@
 **Agent:** `TataAIG-Motor-S8b-Assisted-Close`  
 **Agent ID:** `6d16937a-6d4a-4e85-8a9a-51b350752d13`  
 **Call direction:** inbound  
-**Clips to produce:** 39  —  ANANYA 30 · VIKRAM 9
+**Clips to produce:** 42  —  ANANYA 29 · VIKRAM 13
 
 **The scene.** Vikram resumes mid-journey: vehicle/owner confirmation, nominee, KYC, add-ons, disclosures, e-signature, payment, and the claims-readiness handoff at the end.
 
 **Who speaks first.** ANANYA opens.
+
+**Updated 2026-08-18:** this script was revised to break up long unbroken Ananya monologues (the previous version had a 9-line and a 4-line run with no customer turn in between, which caused a rushed/robotic delivery and one real bug — the claims-readiness "documentation ready as a habit" line was being dropped in the 4-line run). 3 short new VIKRAM acknowledgement lines were added (`sc7_11`, `sc7_15`, `sc7_33`, `sc7_35`) to break those two runs into natural back-and-forth exchanges. Clip count went from 39 to 42. **This is a full re-recording — clip numbering shifted throughout, do not reuse old sc7_*.mp3 files.**
 
 ---
 
@@ -70,118 +72,130 @@
 
 > K Y C verified in one point eight seconds: PAN matched, C K Y C record found for Vikram Rao — no documents to upload.
 
-**ANANYA** · `sc7_11.mp3`
+**VIKRAM** · `sc7_11.mp3`
 
-> The final decision — here's how the two options compare for your car:
+> Great, what's next?
 
 **ANANYA** · `sc7_12.mp3`
 
-> Both options side by side: Third-Party Only, and Comprehensive with Zero Depreciation cover.
+> The final decision — here's how the two options compare for your car:
 
 **ANANYA** · `sc7_13.mp3`
 
-> Ananya's analysis, based on your profile:
+> Both options side by side: Third-Party Only, and Comprehensive with Zero Depreciation cover.
 
 **ANANYA** · `sc7_14.mp3`
 
 > Ananya's analysis: comprehensive protects your own vehicle given daily city driving; Engine Secure covers monsoon-season water damage; and Zero Depreciation means no surprise repair bill after a knock.
 
-**ANANYA** · `sc7_15.mp3`
+**VIKRAM** · `sc7_15.mp3`
 
-> The live quote from the Tata AIG pricing engine: own-damage plus third-party plus Zero Depreciation plus G S T — twenty-eight thousand five hundred rupees for the year.
+> Makes sense. What's the price?
 
 **ANANYA** · `sc7_16.mp3`
 
-> Before the final number — would you like to strengthen your cover with add-ons?
+> The live quote from the Tata AIG pricing engine: own-damage plus third-party plus Zero Depreciation plus G S T — twenty-eight thousand five hundred rupees for the year.
 
 **ANANYA** · `sc7_17.mp3`
 
-> Three items on screen: Zero Depreciation, already included — Engine Secure at fifteen hundred rupees a year, and Roadside Assistance at five hundred rupees a year.
+> Before the final number — would you like to strengthen your cover with add-ons?
 
 **ANANYA** · `sc7_18.mp3`
 
+> Three items on screen: Zero Depreciation, already included — Engine Secure at fifteen hundred rupees a year, and Roadside Assistance at five hundred rupees a year.
+
+**ANANYA** · `sc7_19.mp3`
+
 > Which would you like?
 
-**VIKRAM** · `sc7_19.mp3`
+**VIKRAM** · `sc7_20.mp3`
 
 > Add Engine Secure.
 
-**ANANYA** · `sc7_20.mp3`
+**ANANYA** · `sc7_21.mp3`
 
 > Updated quote: with Engine Secure added, the total comes to thirty thousand rupees for the year.
 
-**VIKRAM** · `sc7_21.mp3`
+**VIKRAM** · `sc7_22.mp3`
 
 > Just to confirm — my N C B stays at twenty-five percent even with the claim?
 
-**ANANYA** · `sc7_22.mp3`
+**ANANYA** · `sc7_23.mp3`
 
 > Correct — N C B Protection keeps it fully intact at twenty-five percent, not reset to zero. Stay claim-free going forward and it keeps climbing the ladder toward the fifty percent cap over the years.
 
-**VIKRAM** · `sc7_23.mp3`
+**VIKRAM** · `sc7_24.mp3`
 
 > Can I add my wife as a named driver later?
 
-**ANANYA** · `sc7_24.mp3`
+**ANANYA** · `sc7_25.mp3`
 
 > Yes — anytime, via a simple endorsement, with a small pro-rated fee if it changes your risk profile. I can start that whenever you're ready.
 
-**VIKRAM** · `sc7_25.mp3`
+**VIKRAM** · `sc7_26.mp3`
 
 > And what's the window to report a claim if something happens?
 
-**ANANYA** · `sc7_26.mp3`
+**ANANYA** · `sc7_27.mp3`
 
 > As soon as possible after the incident — most insurers, us included, expect it within a matter of days. Sooner is always better, and it's the single biggest thing you control if the timing of the incident is ever questioned later. I'm here 24×7 to help you file it the moment it happens.
 
-**ANANYA** · `sc7_27.mp3`
+**ANANYA** · `sc7_28.mp3`
 
 > Before payment — the essentials, in plain language:
 
-**ANANYA** · `sc7_28.mp3`
+**ANANYA** · `sc7_29.mp3`
 
 > The mandatory disclosures, plainly: I D V is the maximum claim basis and reduces with vehicle age each renewal; claims should be reported as soon as possible after the incident; and with N C B Protection a claim doesn't touch your bonus at all — all regulated by I R D A I.
 
-**ANANYA** · `sc7_29.mp3`
+**ANANYA** · `sc7_30.mp3`
 
 > To e-sign these declarations, I've sent a four digit O T P to your mobile ending four-two — please share it here.
 
-**VIKRAM** · `sc7_30.mp3`
+**VIKRAM** · `sc7_31.mp3`
 
 > Seven seven three four.
 
-**ANANYA** · `sc7_31.mp3`
+**ANANYA** · `sc7_32.mp3`
 
 > Declarations e-signed: O T P verified, consent artefact stored with timestamp — fully compliant electronic consent.
 
-**ANANYA** · `sc7_32.mp3`
+**VIKRAM** · `sc7_33.mp3`
 
-> Payment received — policy activated instantly. E-policy and welcome kit sent on WhatsApp.
-
-**ANANYA** · `sc7_33.mp3`
-
-> Two things that come with your policy. First, keep documentation ready as a habit — if you're ever in an incident, note the time, place and any police reference immediately, even before you call us. It's the one thing that protects a genuine claim from being second-guessed later.
+> Okay.
 
 **ANANYA** · `sc7_34.mp3`
 
-> On screen: a quick reference card — what to capture at the scene, so nothing is missing if a claim is ever needed.
+> Payment received — policy activated instantly. E-policy and welcome kit sent on WhatsApp.
 
 **VIKRAM** · `sc7_35.mp3`
 
-> That's genuinely useful. And if I do have a real claim someday?
+> Great, thank you.
 
 **ANANYA** · `sc7_36.mp3`
 
-> You get a Claim Specialist — one named person who handles your claim end to end. No repeating your story to a different agent every day. Meet Rajiv.
+> Two things that come with your policy. First, keep documentation ready as a habit — if you're ever in an incident, note the time, place and any police reference immediately, even before you call us. It's the one thing that protects a genuine claim from being second-guessed later.
 
 **ANANYA** · `sc7_37.mp3`
 
+> On screen: a quick reference card — what to capture at the scene, so nothing is missing if a claim is ever needed.
+
+**VIKRAM** · `sc7_38.mp3`
+
+> That's genuinely useful. And if I do have a real claim someday?
+
+**ANANYA** · `sc7_39.mp3`
+
+> You get a Claim Specialist — one named person who handles your claim end to end. No repeating your story to a different agent every day. Meet Rajiv.
+
+**ANANYA** · `sc7_40.mp3`
+
 > On screen: your dedicated Claim Specialist, Rajiv Menon — a single point of contact reachable directly, who owns your claim from first notice to final settlement.
 
-**ANANYA** · `sc7_38.mp3`
+**ANANYA** · `sc7_41.mp3`
 
 > Congratulations, Vikram! You're covered from right now — with your N C B fully protected and Rajiv as your Claim Specialist. Drive safe!
 
 ---
 
-**Done when:** all 39 files above exist in `04-build/tataaig-kit/audio/`.
+**Done when:** all 42 files above exist in `04-build/tataaig-kit/audio/`.

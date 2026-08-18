@@ -12,3 +12,7 @@ __pycache__/
 
 # Railway local state (project link is machine-specific, not something to share)
 .railway/
+
+# Raw recording session scratch (recordings, transcripts, split working clips) —
+# the deliverable is 04-build/tataaig-kit/audio/, embedded into the built HTML.
+03-planning/recording-scripts/drop-here/
