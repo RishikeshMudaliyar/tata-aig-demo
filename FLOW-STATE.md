@@ -1,15 +1,7 @@
 # Tata AIG Flow — Current State
 
-**As of 2026-08-17.** This document is the single source of truth for what's done and
-what's pending on the Flow (board demo) track. Read this before touching anything —
-it's meant to answer "what's left?" in one look.
-
----
-
-## The one pending item
-
-**Voice recordings.** Everything else is built, verified, deployed, and pushed. Once
-recordings are dropped in and the kit is rebuilt/redeployed, Flow is fully done.
+**As of 2026-08-18. FLOW IS 100% COMPLETE.** All voice recordings are in, the demo is
+rebuilt with real audio, deployed live, and pushed to GitHub. Nothing pending.
 
 ---
 
@@ -18,22 +10,24 @@ recordings are dropped in and the kit is rebuilt/redeployed, Flow is fully done.
 | Area | Status |
 |---|---|
 | Persona, story, product facts | Locked — Vikram Rao / Ananya, NCB Protection (real, verified Tata AIG product), Hyundai Creta 2022 `KA-03-JH-8821`, CRM `TATAAIG-40217` |
-| Dialogue (6 scenes) | Written, English-only, no fabricated numbers — 97 TTS lines, ~11.8 min |
+| Dialogue (6 scenes) | Written, English-only, no fabricated numbers — 100 TTS lines, ~11.9 min |
 | Kit rebrand | `base_v9.html` + `engine.js` + `gen_data.py` fully rebranded, zero leftover Kiwi/PHI/LTF strings |
 | Landing page | Logo embedded, title editable via `build.py` constants, "SOW V1.4" text removed |
-| Build pipeline | Reproducible — `gen_data.py` → `build.py` → single-file HTML, verified twice |
+| Build pipeline | Reproducible — `gen_data.py` → `build.py` → single-file HTML, verified repeatedly |
 | NuPlay voice agents | All 6 built, published, independently audited — clean |
-| Railway deploy | Live, byte-identical to local build, verified via HTTP + logs |
-| End-to-end sanity check | Passed in full — build, deploy, and all 6 agents cross-verified |
-| Git / GitHub | Pushed to https://github.com/RishikeshMudaliyar/tata-aig-demo |
-| Recording-script docs | Generated per agent, in sync with live agent scripts |
+| **S8b prompt fix (2026-08-18)** | Fixed a real bug: the old prompt had a 9-line and a 4-line unbroken Ananya monologue with no customer turns, which silently dropped the claims-readiness "documentation ready as a habit" line and made delivery feel robotic. Rewrote as 14 clean STEPs (max 3 Ananya lines per beat in the two worst spots), republished live. Script grew 39→42 clips. |
+| **Real voice recordings** | **All 100 clips recorded and split** across all 6 agents (S1: 13, S2: 17, S6: 9, S7: 14, S8a: 5, S8b: 42), verified line-by-line against script text using local Whisper transcription. |
+| Build with real audio | Rebuilt — 4.39 MB, 100 real audio clips embedded (up from 0.22 MB / 0 clips) |
+| Railway deploy | **Live with real audio**, byte-identical to local build, verified via HTTP headers + full diff |
+| Git / GitHub | Pushed to https://github.com/RishikeshMudaliyar/tata-aig-demo (commit `2018bef`) |
+| Recording-script docs | Regenerated per agent, in sync with live agent scripts and `lines.json` |
 
 **Live demo:** https://tata-aig-insurance-demo-production.up.railway.app
 **Repo:** https://github.com/RishikeshMudaliyar/tata-aig-demo
 
 ---
 
-## The 6 voice agents (ready for recording)
+## The 6 voice agents (all recorded)
 
 Workspace `360956ac-5963-4626-98d7-01a529d26e34` (shared with Kiwi/PHI/LTF, named
 distinctly). Recording scripts: `03-planning/recording-scripts/`.
@@ -45,27 +39,19 @@ distinctly). Recording scripts: `03-planning/recording-scripts/`.
 | S6 | TataAIG-Motor-S6-Outreach | `d48dc8ca-7156-454d-9f2f-30a322740b8c` | outbound | 9 |
 | S7 | TataAIG-Motor-S7-Re-engagement | `62619591-4c04-4d97-be00-073ded1569b3` | outbound | 14 |
 | S8a | TataAIG-Motor-S8a-Web-Voice-Assist | `11790784-ec96-461f-b1e5-0e5776b5281a` | inbound | 5 |
-| S8b | TataAIG-Motor-S8b-Assisted-Close | `6d16937a-6d4a-4e85-8a9a-51b350752d13` | inbound | 39 |
+| S8b | TataAIG-Motor-S8b-Assisted-Close | `6d16937a-6d4a-4e85-8a9a-51b350752d13` | inbound | 42 |
 
-**Total: 97 clips (66 Ananya / 31 Vikram).**
+**Total: 100 clips (65 Ananya / 35 Vikram).**
 
 ---
 
-## What happens when recordings arrive
+## One known cosmetic gap (not blocking)
 
-1. You send the recordings (raw call recording per agent, or already-split clips).
-2. I split per turn if needed (mono MP3, ~32kbps), name each exactly
-   `sc<scene>_<index>.mp3` per the recording-script docs, drop into
-   `04-build/tataaig-kit/audio/`.
-3. Rebuild: `python3 gen_data.py && python3 build.py` — this embeds the real audio
-   into the single-file HTML (currently 0 clips embedded, will become 97).
-4. Redeploy: copy the new build into `06-deploy/index.html`,
-   `railway up --detach --service tata-aig-insurance-demo`.
-5. Commit + push to GitHub (per the "maintain both" instruction — every rebuild/
-   redeploy cycle should also sync to the repo).
-6. Re-verify: confirm the live site plays real audio, not silence, across all 6 scenes.
-
-**At that point Flow is 100% complete.**
+`sc7_40` (S8b, "On screen: your dedicated Claim Specialist, Rajiv Menon...") — the
+recorded take drops the "On screen:" lead-in phrase and starts directly at "Your
+dedicated Claim Specialist...". Content is otherwise complete and correct; this is a
+narration cue pointing at a screen-share card, not story content. Optional to
+re-record, not launch-blocking.
 
 ---
 
@@ -81,12 +67,40 @@ distinctly). Recording scripts: `03-planning/recording-scripts/`.
 - No specific claim-settlement day count is quoted anywhere in the demo — this was a
   deliberate correction after an earlier research pass turned out to be wrong; the
   language is intentionally non-numeric ("as soon as possible", "typically quick").
+- `03-planning/recording-scripts/drop-here/` (raw recordings/transcripts, ~19MB) is
+  gitignored — the deliverable is the audio already copied into
+  `04-build/tataaig-kit/audio/`, which is what's tracked and embedded in the build.
+
+---
+
+## If Flow ever needs touching again
+
+- **To change dialogue:** edit `04-build/tataaig-kit/gen_data.py` (the source of
+  truth — has a `CHAT = {"2":S1, "3":S2, "4":S6_CHAT, "5":S7, "6":S8A, "7":S8B}` dict
+  mapping Python variable names to scene keys; note `S7` the variable is NOT the
+  S7-Re-engagement agent, it's scene `"5"` — check the dict before assuming). Never
+  hand-edit `lines.json`/`voice_scripts.json`/`chat_scripts.json` — they're fully
+  regenerated by `python3 gen_data.py` and any hand-edit is silently lost.
+- **To re-record an agent:** update its live NuPlay prompt if the script changed,
+  regenerate the recording-script `.md`, record a new call, drop the recording +
+  transcript into `03-planning/recording-scripts/drop-here/<Agent>/`, split into
+  clips (silencedetect + local Whisper verification — see Claude memory file
+  `tata-aig-flow-recording-notes.md` for the full proven method and known failure
+  modes), copy into `04-build/tataaig-kit/audio/`, rebuild, redeploy, commit, push.
+- **Full rebuild/redeploy/push cycle:**
+  1. `cd 04-build/tataaig-kit && python3 gen_data.py && python3 build.py`
+  2. `cp 04-build/tataaig-kit/TataAIG_Motor_Board_Demo.html 06-deploy/index.html`
+  3. `cd 06-deploy && railway up --detach --service tata-aig-insurance-demo`
+  4. Verify: `curl -sI <live-url>` content-length matches local file size
+  5. `git add` the changed/new files (never `git add -A` — `drop-here/` must stay
+     out), commit, `git push`
 
 ---
 
 ## Reference docs (for more detail than this summary)
 
-- Full build history/decisions: Claude memory file `tata-aig-flow-build.md`
+- Full build history/decisions: Claude memory files `tata-aig-flow-build.md` and
+  `tata-aig-flow-recording-notes.md`
 - Agent prompts + verbatim scripts: `03-planning/TataAIG_Agent_Prompts_and_Scripts.md`
 - Recording instructions: `03-planning/recording-scripts/README.md`
 - Repo orientation: `README.md` (top level)
