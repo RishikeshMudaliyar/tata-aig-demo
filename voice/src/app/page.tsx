@@ -33,30 +33,32 @@ export default function Home() {
   return (
     <div className="min-h-dvh flex flex-col lg:flex-row">
       {/* LEFT — brand panel */}
-      <div className="relative lg:w-[45%] lg:min-h-dvh overflow-hidden flex flex-col justify-between p-8 lg:p-12" style={{ background: "var(--brand)" }}>
+      <div className="relative lg:w-[45%] lg:min-h-dvh overflow-hidden flex flex-col justify-between p-8 lg:p-12" style={{ background: "linear-gradient(180deg, var(--brand-2) 0%, var(--brand) 45%, var(--brand-dark-900) 100%)" }}>
         <div className="mesh absolute inset-0" style={{ opacity: 0.1 }} />
         <div className="relative flex items-center gap-3">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/tata-aig-logo.png" alt="Tata AIG" style={{ height: 56, width: "auto" }} />
-          <div className="micro-cap pl-3" style={{ color: "rgba(255,255,255,0.75)", borderLeft: "1px solid rgba(255,255,255,0.3)" }}>Unified Sales Platform</div>
+          <div className="rounded-lg" style={{ background: "#fff", padding: "8px 14px" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/tata-aig-logo.png" alt="Tata AIG" style={{ height: 40, width: "auto", display: "block" }} />
+          </div>
+          <div className="micro-cap pl-3" style={{ color: "#fff", fontWeight: 700, borderLeft: "1px solid rgba(255,255,255,0.4)" }}>Unified Sales Platform</div>
         </div>
 
         <div className="relative py-10 lg:py-0">
-          <h1 className="display-xl text-white" style={{ maxWidth: 480 }}>
+          <h1 className="display-xl text-white" style={{ maxWidth: 480, fontWeight: 700 }}>
             One intelligent layer over your existing systems.
           </h1>
-          <p className="text-[15px] leading-relaxed mt-4" style={{ color: "rgba(255,255,255,0.7)", maxWidth: 400 }}>
+          <p className="text-[15px] leading-relaxed mt-4" style={{ color: "#fff", fontWeight: 500, maxWidth: 400 }}>
             A composed workspace for every role — from first call to issued policy.
           </p>
           <a href="/architecture"
             className="inline-flex items-center gap-2 mt-8 rounded-lg text-[15px] transition"
-            style={{ background: "rgba(255,255,255,0.12)", color: "#fff", padding: "12px 20px", border: "1px solid rgba(255,255,255,0.35)" }}>
+            style={{ background: "rgba(255,255,255,0.16)", color: "#fff", fontWeight: 700, padding: "12px 20px", border: "1px solid rgba(255,255,255,0.5)" }}>
             See the platform architecture <ArrowRight size={17} />
           </a>
         </div>
 
         <div className="relative">
-          <span className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Working demo · synthetic data</span>
+          <span className="text-[11px]" style={{ color: "#fff", fontWeight: 600 }}>Working demo · synthetic data</span>
         </div>
       </div>
 
