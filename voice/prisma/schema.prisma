@@ -1,0 +1,190 @@
+// Bajaj Life — Sales Enablement & Orchestration Platform (demo)
+// SQLite for zero-friction local run; schema kept Postgres-portable for Railway.
+// "enum" fields are String, "json" fields are stringified String — SQLite-safe & portable.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// A platform user / persona. role in: FLS, ADVISOR, MANAGER, ANALYST, UNDERWRITER, OPS, LEADERSHIP
+model Persona {
+  id        String    @id @default(cuid())
+  name      String
+  role      String
+  title     String
+  initials  String
+  region    String?
+  branch    String?
+  managerId String?
+  manager   Persona?  @relation("Hierarchy", fields: [managerId], references: [id])
+  reports   Persona[] @relation("Hierarchy")
+
+  leads        Lead[]
+  applications Application[]
+  policies     Policy[]
+  activities   ActivityEvent[]
+}
+
+/// The customer / prospect.
+model Customer {
+  id           String  @id @default(cuid())
+  name         String
+  phone        String
+  email        String?
+  language     String  @default("Hindi")
+  city         String?
+  dob          String?
+  occupation   String?
+  incomeAnnual Int? // ₹ per year
+  panName      String?
+  aadhaarName  String?
+  segment      String?
+  sourceModule String  @default("CustMgmt")
+
+  policies     Policy[]
+  leads        Lead[]
+  applications Application[]
+  tickets      ServicingTicket[]
+}
+
+/// A sales lead (Lead Management module). Carries the AI copilot brief.
+model Lead {
+  id              String    @id @default(cuid())
+  name            String
+  phone           String
+  source          String // PolicyBazaar / Branch / Referral / Website
+  productInterest String
+  city            String?
+  language        String?
+  occupation      String?
+  incomeAnnual    Int?
+  ageHours        Int       @default(0)
+  score           Int       @default(0)
+  status          String    @default("NEW") // NEW / CALLBACK / CONVERTED / CLOSED
+  closedReason    String?
+  copilot         String    @default("{}") // JSON: whyScored[], product, cover, premium, talkTrack, objections[]
+  ownerId         String?
+  owner           Persona?  @relation(fields: [ownerId], references: [id])
+  customerId      String?
+  customer        Customer? @relation(fields: [customerId], references: [id])
+  sourceModule    String    @default("LeadMgmt")
+  createdAt       DateTime  @default(now())
+}
+
+/// A policy (Policy Admin). advisorId null => orphan policy.
+model Policy {
+  id             String   @id @default(cuid())
+  policyNo       String   @unique
+  customerId     String
+  customer       Customer @relation(fields: [customerId], references: [id])
+  product        String
+  plan           String // ULIP / Term / Par / NonPar / Annuity
+  status         String   @default("IN_FORCE") // IN_FORCE / GRACE / LAPSED / DISCONTINUED / REVIVED
+  issueDate      String?
+  premium        Int
+  mode           String   @default("ANNUAL")
+  sumAssured     Int
+  fundValue      Int?
+  surrenderValue Int?
+  dueDate        String?
+  cohortMonth    Int?
+  advisorId      String?
+  advisor        Persona? @relation(fields: [advisorId], references: [id])
+  sourceModule   String   @default("CustMgmt")
+
+  riskSignals RiskSignal[]
+  tickets     ServicingTicket[]
+}
+
+/// An application on the unified issuance journey.
+/// status: DOC_COLLECTION → (submit → AI scrutiny) → ANALYST_REVIEW → UW_REVIEW → ISSUED
+/// Any level can send back: status SENT_BACK, sentBackTo = level to return to on resolve.
+model Application {
+  id             String    @id @default(cuid())
+  refNo          String    @unique
+  customerId     String
+  customer       Customer  @relation(fields: [customerId], references: [id])
+  leadId         String?
+  product        String
+  plan           String
+  sumAssured     Int
+  premium        Int
+  status         String    @default("DOC_COLLECTION") // DOC_COLLECTION / ANALYST_REVIEW / UW_REVIEW / SENT_BACK / ISSUED / DECLINED
+  sentBackTo     String? // AI / ANALYST / UW — level that raised the open send-back
+  ownerId        String? // salesperson
+  owner          Persona?  @relation(fields: [ownerId], references: [id])
+  analystId      String?
+  underwriterId  String?
+  docs           String    @default("[]") // JSON [{key,label,status:PENDING|RECEIVED,via:CUSTOMER|SALES,at}]
+  caseFile       String    @default("{}") // JSON: aiScrutiny{result,notes[]}, analystNote, hlv, aggregateCover, authorityBand, teleMer{status,scheduledAt,report}
+  sendBacks      String    @default("[]") // JSON [{id,level,reasons[],note,status:OPEN|RESOLVED,at,resolvedNote,resolvedAt}]
+  createdAt      DateTime  @default(now())
+  submittedAt    DateTime?
+  stageChangedAt DateTime  @default(now())
+}
+
+/// Customer servicing ticket.
+model ServicingTicket {
+  id           String   @id @default(cuid())
+  customerId   String
+  customer     Customer @relation(fields: [customerId], references: [id])
+  policyId     String?
+  policy       Policy?  @relation(fields: [policyId], references: [id])
+  type         String
+  detail       String
+  status       String   @default("OPEN")
+  sourceModule String   @default("CustMgmt")
+  openedAt     DateTime @default(now())
+}
+
+/// Lapse-propensity signal (retention cohort).
+model RiskSignal {
+  id           String   @id @default(cuid())
+  policyId     String
+  policy       Policy   @relation(fields: [policyId], references: [id])
+  score        Int
+  reasons      String   @default("[]")
+  status       String   @default("AT_RISK") // AT_RISK / IN_PROGRESS / SAVED / LAPSED
+  sourceModule String   @default("Intelligence")
+  detectedAt   DateTime @default(now())
+}
+
+/// Cross-role notification — the hand-off made audible.
+model Notification {
+  id        String    @id @default(cuid())
+  personaId String
+  text      String
+  href      String?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+}
+
+/// Live activity timeline.
+model ActivityEvent {
+  id         String   @id @default(cuid())
+  actorId    String?
+  actor      Persona? @relation(fields: [actorId], references: [id])
+  verb       String
+  targetType String?
+  targetId   String?
+  note       String?
+  createdAt  DateTime @default(now())
+}
+
+/// Audited BALIC public metrics (kept for pitch material; not shown in-app).
+model MetricSnapshot {
+  id          String  @id @default(cuid())
+  key         String  @unique
+  label       String
+  value       String
+  unit        String?
+  fy          String?
+  sourceLabel String?
+  category    String
+  sortOrder   Int     @default(0)
+}

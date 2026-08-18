@@ -1,0 +1,277 @@
+@import "tailwindcss";
+
+/* ============================================================
+   BAJAJ LIFE design system — Stripe-derived language, Bajaj palette.
+   primary CTA = Bajaj orange #FF6F00 (one filled pill per band)
+   ink & dark chrome = deep Bajaj blue; brand/link = Bajaj blue #005EAC
+   type = Inter 300, negative tracking on display, ss01 global, tnum on numerics
+   ============================================================ */
+
+:root {
+  /* surfaces */
+  --canvas: #ffffff;
+  --canvas-soft: #eef7fc;         /* bajajlife page canvas — sampled */
+  --canvas-cream: #fdf3e3;        /* warm interlude */
+  --hairline: #e3e8ee;
+  --hairline-input: #a8c3de;
+
+  /* text */
+  --ink: #0d2b4a;                 /* deep bajaj-blue ink — never pure black */
+  --ink-secondary: #27415e;
+  --ink-mute: #64748d;
+
+  /* brand & accent */
+  --primary: #ff6f00;             /* bajaj CTA orange — the filled pill */
+  --primary-press: #d95e00;
+  --brand: #005dac;               /* bajaj blue — sampled from bajajlifeinsurance.com */
+  --brand-2: #117bd6;             /* bright bajaj blue — sampled secondary chips */
+  --brand-dark-900: #0a2e52;      /* dark chrome / featured surfaces */
+  --pink: #ef328b;                /* gradient stop + chart accent, never a button */
+  --good: #0c8934;
+  --warn: #c77700;
+  --bad: #d32f2f;
+
+  /* legacy aliases (existing components reference these) */
+  --bg: var(--canvas-soft);
+  --surface: var(--canvas);
+  --muted: var(--ink-mute);
+  --line: var(--hairline);
+  --navy: var(--brand-dark-900);
+  --accent: var(--primary);
+
+  --radius: 12px;
+
+  /* elevation */
+  --shadow-1: rgba(0, 55, 112, 0.08) 0 1px 3px;
+  --shadow-2: rgba(0, 55, 112, 0.08) 0 8px 24px, rgba(0, 55, 112, 0.04) 0 2px 6px;
+}
+
+@theme inline {
+  --color-background: var(--canvas-soft);
+  --color-foreground: var(--ink);
+  --font-sans: var(--font-rubik);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--canvas-soft);
+  color: var(--ink);
+  font-family: var(--font-rubik), "SF Pro Display", system-ui, sans-serif;
+  font-weight: 300;
+  font-feature-settings: "ss01";
+  font-size: 15px;
+  line-height: 1.4;
+  min-height: 100dvh;
+}
+
+* { box-sizing: border-box; }
+
+/* ---- typographic tiers (Sohne-substitute: Inter 300, negative tracking) ---- */
+.display-xxl { font-size: 56px; font-weight: 300; line-height: 1.03; letter-spacing: -1.4px; }
+.display-xl  { font-size: 48px; font-weight: 300; line-height: 1.15; letter-spacing: -0.96px; }
+.display-lg  { font-size: 32px; font-weight: 300; line-height: 1.1;  letter-spacing: -0.64px; }
+.display-md  { font-size: 26px; font-weight: 300; line-height: 1.12; letter-spacing: -0.26px; }
+.heading-lg  { font-size: 22px; font-weight: 300; line-height: 1.1;  letter-spacing: -0.22px; }
+.heading-md  { font-size: 20px; font-weight: 300; line-height: 1.4;  letter-spacing: -0.2px; }
+@media (max-width: 767px) {
+  .display-xxl { font-size: 36px; letter-spacing: -0.9px; }
+  .display-xl  { font-size: 32px; letter-spacing: -0.64px; }
+  .display-lg  { font-size: 26px; letter-spacing: -0.26px; }
+}
+.micro-cap {
+  font-size: 10px; font-weight: 400; line-height: 1.15; letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.tnum { font-feature-settings: "ss01", "tnum"; letter-spacing: -0.42px; }
+
+/* keep product-UI emphasis lighter than tailwind defaults — editorial air */
+.font-semibold { font-weight: 500; }
+.font-bold { font-weight: 500; letter-spacing: -0.2px; }
+.font-extrabold { font-weight: 400; letter-spacing: -0.5px; }
+.font-black { font-weight: 500; }
+
+/* ---- cards & containers ---- */
+.card {
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-1);
+}
+.card-flat { background: var(--canvas); border: 1px solid var(--hairline); border-radius: var(--radius); }
+.card-float { box-shadow: var(--shadow-2); }
+.card-cream { background: var(--canvas-cream); border: 1px solid #f0e2c8; border-radius: var(--radius); }
+.card-dark { background: var(--brand-dark-900); color: #fff; border-radius: var(--radius); box-shadow: var(--shadow-2); }
+
+/* ---- buttons: pill geometry, tight 8/16 padding ---- */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem; justify-content: center;
+  font-weight: 400; font-size: 15px; line-height: 1; padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--hairline);
+  background: var(--canvas); color: var(--ink);
+  cursor: pointer; transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+}
+.btn:hover { border-color: var(--hairline-input); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: #fff; border-color: transparent; }
+.btn-primary:hover { background: var(--primary-press); border-color: transparent; }
+.btn-accent { background: var(--brand); color: #fff; border-color: transparent; }
+.btn-accent:hover { background: #004b8a; }
+.btn-dark { background: var(--brand-dark-900); color: #fff; border-color: transparent; }
+.btn-ghost { background: transparent; border-color: transparent; }
+.btn-sm { padding: 7px 12px; font-size: 13px; }
+
+/* ---- pills, tags, chips ---- */
+.chip {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  font-size: 11px; font-weight: 400; letter-spacing: 0;
+  padding: 3px 9px; border-radius: 9999px;
+  border: 1px solid var(--hairline); background: var(--canvas-soft); color: var(--ink-mute);
+  line-height: 1.3;
+}
+
+.pulse-dot { width: 8px; height: 8px; border-radius: 999px; background: var(--good); box-shadow: 0 0 0 0 rgba(12,137,52,0.5); animation: pulse 2s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(12,137,52,0.45);} 70% { box-shadow: 0 0 0 8px rgba(12,137,52,0);} 100% { box-shadow: 0 0 0 0 rgba(12,137,52,0);} }
+
+.fade-in { animation: fadeIn 0.4s ease both; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: none;} }
+.slide-in { animation: slideIn 0.35s ease both; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(12px);} to { opacity: 1; transform: none;} }
+
+.hairline { border-top: 1px solid var(--hairline); }
+.mono { font-family: var(--font-mono), monospace; font-feature-settings: "tnum"; }
+
+/* ---- the gradient mesh (bajaj stops: cream → sherbet → sky → bajaj blue → pink) ---- */
+.mesh {
+  position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+}
+.mesh::before {
+  content: ""; position: absolute; inset: -20% -10%;
+  background:
+    radial-gradient(38% 55% at 8% 20%, #fdeed3 0%, transparent 70%),
+    radial-gradient(34% 60% at 30% 10%, #ffc98f 0%, transparent 65%),
+    radial-gradient(30% 55% at 52% 28%, #ffddb8 0%, transparent 60%),
+    radial-gradient(36% 62% at 68% 8%, #a8d4f5 0%, transparent 65%),
+    radial-gradient(40% 66% at 88% 26%, #4a90d9 0%, transparent 62%),
+    radial-gradient(26% 44% at 97% 60%, #ef328b 0%, transparent 68%),
+    linear-gradient(180deg, #fef8ef 0%, #fdf3e3 100%);
+  filter: blur(28px) saturate(1.08);
+}
+.mesh::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 55%, var(--canvas-soft) 98%);
+}
+
+.scrollbar-thin::-webkit-scrollbar { height: 8px; width: 8px; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+
+/* ---- live platform-page animations ---- */
+.flow-lane { position: relative; width: 2px; height: 34px; background: var(--hairline); border-radius: 2px; overflow: hidden; }
+.flow-lane::after {
+  content: ""; position: absolute; left: -1px; width: 4px; height: 10px; border-radius: 4px;
+  background: var(--brand); animation: flowDown 1.8s linear infinite; animation-delay: var(--d, 0s);
+}
+.flow-lane.up::after { background: var(--primary); animation-name: flowUp; }
+@keyframes flowDown { 0% { top: -12px; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { top: 36px; opacity: 0; } }
+@keyframes flowUp { 0% { top: 36px; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { top: -12px; opacity: 0; } }
+
+.tile-live { animation: tileBreath 3.2s ease-in-out infinite; animation-delay: var(--d, 0s); }
+@keyframes tileBreath {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 94, 172, 0); }
+  50% { box-shadow: 0 0 0 4px rgba(0, 94, 172, 0.08); }
+}
+
+.tick-in { animation: tickIn 0.4s ease both; }
+@keyframes tickIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+/* ---- animated end-to-end journey (Platform page) ---- */
+.journey-track { position: relative; height: 3px; background: var(--hairline); border-radius: 3px; }
+.journey-dot {
+  position: absolute; top: -5px; width: 13px; height: 13px; border-radius: 999px;
+  background: var(--brand); box-shadow: 0 0 0 4px rgba(0, 94, 172, 0.15);
+  animation: journeyDot 14s linear infinite; margin-left: -6px;
+}
+@keyframes journeyDot {
+  0% { left: 0%; } 8% { left: 0%; }
+  16% { left: 20%; } 23% { left: 20%; }
+  31% { left: 40%; } 38% { left: 40%; }
+  46% { left: 60%; } 53% { left: 60%; }
+  61% { left: 80%; } 70% { left: 80%; }
+  78% { left: 100%; background: var(--good); box-shadow: 0 0 0 4px rgba(12,137,52,0.18); }
+  100% { left: 100%; background: var(--good); box-shadow: 0 0 0 4px rgba(12,137,52,0.18); }
+}
+.journey-node {
+  position: absolute; top: -4.5px; width: 12px; height: 12px; border-radius: 999px;
+  background: #fff; border: 2.5px solid var(--hairline-input); margin-left: -6px;
+  animation: nodeGlow 14s linear infinite;
+}
+@keyframes nodeGlow {
+  0%, 100% { border-color: var(--hairline-input); transform: scale(1); }
+  2% { border-color: var(--brand); transform: scale(1.35); }
+  9% { border-color: var(--brand); transform: scale(1.35); }
+  13% { border-color: var(--hairline-input); transform: scale(1); }
+}
+.journey-return { position: relative; height: 0; border-top: 1.5px dashed #f0c896; }
+.journey-return-dot {
+  position: absolute; top: -6px; width: 10px; height: 10px; border-radius: 999px;
+  background: var(--primary); margin-left: -5px;
+  animation: journeyReturn 7s linear infinite;
+}
+@keyframes journeyReturn {
+  0% { left: 80%; opacity: 0; } 8% { opacity: 1; }
+  42% { left: 0%; opacity: 1; } 50% { left: 0%; opacity: 0; }
+  100% { left: 80%; opacity: 0; }
+}
+
+/* ---- AI layer bars grow (share of work AI carries increases over time) ---- */
+.ai-grow { animation: aiGrow 3.6s ease-in-out infinite alternate; transform-origin: bottom; }
+@keyframes aiGrow { from { transform: scaleY(0.82); } to { transform: scaleY(1); } }
+
+/* ---- flywheel ring rotates slowly ---- */
+.flywheel-ring { animation: ringSpin 14s linear infinite; }
+@keyframes ringSpin { to { transform: rotate(360deg); } }
+
+/* ---- face-to-face call stage ---- */
+.call-stage {
+  background:
+    radial-gradient(80% 60% at 50% 12%, #16406f 0%, transparent 70%),
+    linear-gradient(180deg, #0a2e52 0%, #061c33 100%);
+  /* Deliberately NOT animated. A paused/backgrounded tab freezes CSS animations
+     mid-flight, which stranded this overlay at partial opacity and let the page
+     behind show through. A call screen should appear instantly regardless. */
+}
+
+/* a slow breathing sway so the character never looks frozen between turns */
+.avatar-sway { animation: sway 6.5s ease-in-out infinite; transform-origin: 50% 85%; }
+@keyframes sway {
+  0%, 100% { transform: translateY(0) rotate(-0.5deg); }
+  50%      { transform: translateY(-4px) rotate(0.5deg); }
+}
+
+.listening-ring { animation: listenPulse 1.8s ease-out infinite; }
+@keyframes listenPulse {
+  0%   { transform: scale(0.98); opacity: 0.55; }
+  70%  { transform: scale(1.06); opacity: 0; }
+  100% { transform: scale(1.06); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar-sway, .listening-ring { animation: none; }
+}
+
+/* Blink lives in CSS, not rAF: a backgrounded tab pauses requestAnimationFrame, which
+   could strand the eyelids closed. The resting keyframe here is open. */
+.eyelid { transform-box: fill-box; transform-origin: center; transform: scaleY(0); animation: blink 5.4s infinite; }
+@keyframes blink {
+  0%, 95.5%, 100% { transform: scaleY(0); }
+  97%             { transform: scaleY(1); }
+}
+@media (prefers-reduced-motion: reduce) { .eyelid { animation: none; } }
+
+/* signal travelling between the two handsets, in the direction of speech */
+.signal-right { animation: signalR 1s linear infinite; }
+.signal-left  { animation: signalL 1s linear infinite; }
+@keyframes signalR { from { left: 0; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } to { left: 64px; opacity: 0; } }
+@keyframes signalL { from { left: 64px; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } to { left: 0; opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .signal-right, .signal-left { animation: none; } }

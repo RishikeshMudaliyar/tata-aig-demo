@@ -1,0 +1,17 @@
+{
+  "name": "Bajaj Life — Unified Sales Platform",
+  "short_name": "Bajaj Life",
+  "description": "Orchestration & intelligence layer over Bajaj Life's digital assets.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a2e52",
+  "theme_color": "#0a2e52",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%23005eac'/%3E%3Ctext x='96' y='126' font-size='96' font-family='Arial' font-weight='bold' fill='%23ffffff' text-anchor='middle'%3EB%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
