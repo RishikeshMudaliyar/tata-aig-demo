@@ -56,7 +56,7 @@ export default function CockpitPage() {
         <div className="mb-5 fade-in">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
-              <div className="micro-cap" style={{ color: "var(--muted)" }}>{ROLE_LABEL[persona.role as Role] ?? persona.role} · {persona.branch ?? persona.region ?? "Bajaj Life"}</div>
+              <div className="micro-cap" style={{ color: "var(--muted)" }}>{ROLE_LABEL[persona.role as Role] ?? persona.role} · {persona.branch ?? persona.region ?? "Tata AIG"}</div>
               <h1 className="display-lg mt-0.5" style={{ color: "var(--navy)" }}>{greeting()}, {firstName(persona.name)}.</h1>
             </div>
             {data?.modulesUsed && <ProvenanceRow modules={data.modulesUsed} />}

@@ -11,7 +11,7 @@ export type Gender = "female" | "male";
 
 const FEMALE = new Set([
   "neha", "priya", "kavita", "pooja", "meena", "fatima", "arti", "sunita", "anita",
-  "shruti", "lakshmi", "meenakshi", "sanjana", "priyanka", "meera", "riya", "deepika",
+  "shruti", "lakshmi", "meenakshi", "sanjana", "priyanka", "ananya", "riya", "deepika",
   "divya", "swati", "rekha", "asha", "geeta", "sneha", "ritu", "nisha", "aarti",
 ]);
 

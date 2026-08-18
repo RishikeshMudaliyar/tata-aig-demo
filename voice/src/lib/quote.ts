@@ -2,7 +2,7 @@
  * Quotation + incentive simulation — deterministic, illustrative, and configurable.
  * The premiums scale from the AI-recommended anchor (cover, premium); the commission
  * rates and monthly target are representative placeholders a real integration would
- * replace with Bajaj's actual rate card. Everything here is pure (no I/O).
+ * replace with Tata AIG's actual rate card. Everything here is pure (no I/O).
  */
 
 export type QuoteOption = { cover: number; annual: number; monthly: number; recommended: boolean };

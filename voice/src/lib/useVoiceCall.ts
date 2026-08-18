@@ -19,8 +19,8 @@ export type Line = { id: string; who: "agent" | "you"; text: string };
 const API_BASE = "https://agentx-prod.nurixlabs.tech";
 
 export const AGENT_IDS: Record<AgentKind, string> = {
-  COACH: "09183445-7988-496f-b28a-d4e8e426a3d9",
-  QUALIFIER: "f00a63fc-5e5d-43ff-bb1e-bd0b40ee6268",
+  COACH: process.env.NEXT_PUBLIC_NURIX_COACH_AGENT_ID ?? "a6874aeb-8061-43e7-bb0b-7515dbfa115a",
+  QUALIFIER: process.env.NEXT_PUBLIC_NURIX_QUALIFIER_AGENT_ID ?? "fbad08b6-4f3f-48ec-ac6b-056c6ba536fe",
 };
 
 /** Feed `out` with a 0..1 loudness for a track, so callers can drive animation. */

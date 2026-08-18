@@ -1,6 +1,6 @@
 /**
  * MODULE ADAPTERS.
- * Each adapter is a thin connector to ONE existing Bajaj Life digital asset.
+ * Each adapter is a thin connector to ONE existing Tata AIG digital asset.
  * In production these hit real backend systems; here they read the seeded store.
  * The point: the orchestration layer NEVER talks to a database directly — it
  * composes across these adapters, so "orchestrate existing modules" is the code.
@@ -102,7 +102,7 @@ export const Analytics = {
   },
 };
 
-// The five core modules exactly as Bajaj's requirements document lists them,
+// The five core modules exactly as Tata AIG's requirements document lists them,
 // each with its sub-capabilities from that document. Rendered by the Platform page.
 export const ADAPTER_REGISTRY = [
   { module: "LeadMgmt", ops: ["Lead Generation", "Pitch Creation", "Quotation", "Tasks & Meetings"] },

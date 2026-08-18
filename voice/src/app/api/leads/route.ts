@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     const refNo = `APP-2026-${String(4600 + (Math.abs(hash(lead.id)) % 300))}`;
     const analyst = await db.persona.findFirst({ where: { role: "ANALYST" } });
     const uw = await db.persona.findFirst({ where: { role: "UNDERWRITER" } });
-    const product = copilot.product ?? `Bajaj Allianz Life Smart Protect Goal`;
+    const product = copilot.product ?? `Tata AIG Life Assure Shield`;
     const app = await db.application.create({
       data: {
         refNo, customerId: customer.id, leadId: lead.id,

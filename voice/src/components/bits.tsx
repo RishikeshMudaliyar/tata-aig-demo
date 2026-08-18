@@ -53,7 +53,7 @@ export function RiskBadge({ score }: { score: number }) {
 export function StatusPill({ status }: { status: string }) {
   const map: Record<string, string> = {
     ISSUED: "#0c8934", SAVED: "#0c8934", REVIVED: "#0c8934", IN_FORCE: "#0c8934", CLEARED: "#0c8934",
-    REQUIREMENT_RAISED: "#c77700", REQUIREMENTS_OUT: "#c77700", GRACE: "#c77700", UNDER_REVIEW: "#005eac", RE_REVIEW: "#005eac", IN_PROGRESS: "#005eac",
+    REQUIREMENT_RAISED: "#c77700", REQUIREMENTS_OUT: "#c77700", GRACE: "#c77700", UNDER_REVIEW: "#004da7", RE_REVIEW: "#004da7", IN_PROGRESS: "#004da7",
     NIGO: "#d32f2f", LAPSED: "#d32f2f", DECLINED: "#d32f2f", AT_RISK: "#d32f2f",
   };
   const c = map[status] ?? "#64748d";
@@ -100,7 +100,7 @@ export function Gauge({ value, max = 100, label, sub }: { value: number; max?: n
         <path d={`M 20 90 A ${r} ${r} 0 ${large} 1 ${x} ${y}`} fill="none" stroke="url(#g)" strokeWidth="14" strokeLinecap="round" />
         <defs>
           <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#ff6f00" />
+            <stop offset="0%" stopColor="#e31e24" />
             <stop offset="100%" stopColor="#0c8934" />
           </linearGradient>
         </defs>

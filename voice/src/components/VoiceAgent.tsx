@@ -28,8 +28,8 @@ export type AgentKind = "COACH" | "QUALIFIER";
 const API_BASE = "https://agentx-prod.nurixlabs.tech";
 
 const AGENT_IDS: Record<AgentKind, string> = {
-  COACH: "09183445-7988-496f-b28a-d4e8e426a3d9",
-  QUALIFIER: "f00a63fc-5e5d-43ff-bb1e-bd0b40ee6268",
+  COACH: process.env.NEXT_PUBLIC_NURIX_COACH_AGENT_ID ?? "a6874aeb-8061-43e7-bb0b-7515dbfa115a",
+  QUALIFIER: process.env.NEXT_PUBLIC_NURIX_QUALIFIER_AGENT_ID ?? "fbad08b6-4f3f-48ec-ac6b-056c6ba536fe",
 };
 
 type Phase = "idle" | "starting" | "connecting" | "live" | "ended" | "error";
@@ -312,7 +312,7 @@ export function CallStage({
               onClick={() => void toggleMute()}
               aria-label={muted ? "Unmute" : "Mute"}
             >
-              {muted ? <MicOff size={18} color="#0a2e52" /> : <Mic size={18} color="#fff" />}
+              {muted ? <MicOff size={18} color="#0b2447" /> : <Mic size={18} color="#fff" />}
             </button>
             <button
               className="grid h-14 w-14 sm:h-12 sm:w-12 place-items-center rounded-full"

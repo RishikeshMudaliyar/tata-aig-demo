@@ -60,7 +60,7 @@ export async function seedAll(db: PrismaClient) {
           "Salaried, income band ₹20–30L — protection-gap segment with high issuance rates",
           "Age 33 — locking premium this year saves ~₹2,100/yr for life",
         ],
-        product: "Bajaj Allianz Life Smart Protect Goal (Term)",
+        product: "Tata AIG Life Assure Shield (Term)",
         cover: 1.5 * CR, premium: 16900, term: "up to age 60",
         talkTrack:
           "Open with her research: \"I saw you were comparing term covers — most people in your bracket land between ₹1–2 Cr, let me make that simple.\" Anchor on 10–15x income: at ₹24L that's ₹1.5 Cr. Position Smart Protect Goal at about ₹1,400/month — less than her weekend grocery run — with the return-of-premium option if she wants maturity value. Close on the medical: it's a 20-minute tele-call, no clinic visit.",
@@ -80,7 +80,7 @@ export async function seedAll(db: PrismaClient) {
       copilot: J({
         type: "D2C",
         whyScored: ["Used the retirement calculator on the website — goal-based intent", "Self-employed — no employer cover, whole protection gap open"],
-        product: "Bajaj Allianz Life Goal Assure II (ULIP)",
+        product: "Tata AIG Life Wealth Builder II (ULIP)",
         cover: 60 * L, premium: 60000, term: "15 years",
         talkTrack: "He came via the retirement calculator — lead with the goal, not the product. Ask what the number he saw was, then show Goal Assure II reaching it with return-of-mortality-charges at maturity. Business owners respond to flexibility: highlight partial withdrawals after year 5.",
         objections: [
@@ -98,7 +98,7 @@ export async function seedAll(db: PrismaClient) {
       copilot: J({
         type: "Referral",
         whyScored: ["Referred by an existing customer (Meena Iyer) — referral closes 3x cold rate", "Asked for a callback after 6 pm — respect the window"],
-        product: "Bajaj Allianz Life Smart Protect Goal + Young Assure",
+        product: "Tata AIG Life Assure Shield + Young Assure",
         cover: 1 * CR, premium: 13800, term: "up to age 60",
         talkTrack: "He asked for this callback — start there: \"You wanted to talk after hours, thanks for the time.\" Referral from Meena Iyer means trust is pre-built; mention her (with permission) once. He has a daughter (7) — bridge from term protection to Young Assure for her education corpus.",
         objections: [
@@ -115,7 +115,7 @@ export async function seedAll(db: PrismaClient) {
       copilot: J({
         type: "Branch",
         whyScored: ["Walked into the branch — highest-intent channel", "71 hours unworked — conversion probability decaying"],
-        product: "Bajaj Allianz Life Assured Wealth Goal",
+        product: "Tata AIG Life Guaranteed Wealth Plan",
         cover: 25 * L, premium: 50000, term: "10 pay / 20 benefit",
         talkTrack: "She walked in asking about guaranteed returns — do NOT open with market-linked products. Lead with Assured Wealth Goal's guaranteed income number in rupees, then the life-cover as the bonus. Keep it to two numbers: what she pays, what she gets.",
         objections: [
@@ -133,7 +133,7 @@ export async function seedAll(db: PrismaClient) {
       copilot: J({
         type: "D2C",
         whyScored: ["Downloaded the term brochure from the website", "55 hours unworked — conversion decaying"],
-        product: "Bajaj Allianz Life eTouch II (Term)",
+        product: "Tata AIG Life iRaksha Secure (Term)",
         cover: 1 * CR, premium: 12600, term: "up to age 60",
         talkTrack: "She downloaded the brochure two days ago — open by referencing it and offering to answer the three questions everyone asks: price lock, claim record, and what happens if she stops paying.",
         objections: [
@@ -158,7 +158,7 @@ export async function seedAll(db: PrismaClient) {
   await db.application.create({
     data: {
       refNo: "APP-2026-004417", customerId: priya.id,
-      product: "Bajaj Allianz Life Smart Protect Goal", plan: "Term",
+      product: "Tata AIG Life Assure Shield", plan: "Term",
       sumAssured: 150 * L, premium: 18400,
       status: "SENT_BACK", sentBackTo: "ANALYST",
       ownerId: fls.id, analystId: analyst.id, underwriterId: uw.id,
@@ -183,7 +183,7 @@ export async function seedAll(db: PrismaClient) {
   const priyaUlip = await db.policy.create({
     data: {
       policyNo: "0312 8891 2245", customerId: priya.id,
-      product: "Bajaj Allianz Life Goal Assure II", plan: "ULIP", status: "GRACE",
+      product: "Tata AIG Life Wealth Builder II", plan: "ULIP", status: "GRACE",
       issueDate: isoDay(22 * 30), premium: 60000, mode: "ANNUAL", sumAssured: 6 * L,
       fundValue: 135400, surrenderValue: 98200, dueDate: daysFromNow(9), cohortMonth: 25,
       advisorId: null,
@@ -212,7 +212,7 @@ export async function seedAll(db: PrismaClient) {
   await db.application.create({
     data: {
       refNo: "APP-2026-004521", customerId: deepak.id,
-      product: "Bajaj Allianz Life eTouch II", plan: "Term",
+      product: "Tata AIG Life iRaksha Secure", plan: "Term",
       sumAssured: 80 * L, premium: 11200,
       status: "ANALYST_REVIEW", ownerId: fls2.id, analystId: analyst.id, underwriterId: uw.id,
       docs: docsAllReceived(),
@@ -232,7 +232,7 @@ export async function seedAll(db: PrismaClient) {
   await db.application.create({
     data: {
       refNo: "APP-2026-004390", customerId: sunil.id,
-      product: "Bajaj Allianz Life Smart Protect Goal", plan: "Term",
+      product: "Tata AIG Life Assure Shield", plan: "Term",
       sumAssured: 2 * CR, premium: 31500,
       status: "UW_REVIEW", ownerId: fls.id, analystId: analyst.id, underwriterId: uw.id,
       docs: docsAllReceived(),
@@ -253,7 +253,7 @@ export async function seedAll(db: PrismaClient) {
   await db.application.create({
     data: {
       refNo: "APP-2026-004540", customerId: imran.id,
-      product: "Bajaj Allianz Life eTouch II", plan: "Term",
+      product: "Tata AIG Life iRaksha Secure", plan: "Term",
       sumAssured: 75 * L, premium: 10400,
       status: "DOC_COLLECTION", ownerId: fls3.id, analystId: analyst.id, underwriterId: uw.id,
       docs: J([
@@ -277,22 +277,22 @@ export async function seedAll(db: PrismaClient) {
 
   await mk(
     { name: "Suresh Patil", phone: "+91 98600 12345", language: "Marathi", city: "Nashik" },
-    { policyNo: "0312 3390 5567", product: "Bajaj Allianz Life Saral Jeevan Bima", plan: "Term", status: "LAPSED", premium: 12000, sumAssured: 25 * L, dueDate: daysFromNow(-8), cohortMonth: 13 },
+    { policyNo: "0312 3390 5567", product: "Tata AIG Life Saral Suraksha Bima", plan: "Term", status: "LAPSED", premium: 12000, sumAssured: 25 * L, dueDate: daysFromNow(-8), cohortMonth: 13 },
     { score: 95, reasons: [{ label: "Already lapsed 8 days ago — revival window open", module: "CustMgmt" }, { label: "Orphan policy, rural — no digital follow-up attempted", module: "TeamMgmt" }] }
   );
   await mk(
     { name: "Arjun Nair", phone: "+91 98470 77812", language: "Malayalam", city: "Kochi" },
-    { policyNo: "0312 5567 8890", product: "Bajaj Allianz Life ULIP Smart Wealth", plan: "ULIP", status: "GRACE", premium: 48000, sumAssured: 5 * L, fundValue: 7.2 * L, dueDate: daysFromNow(6), cohortMonth: 25 },
+    { policyNo: "0312 5567 8890", product: "Tata AIG Life Smart Wealth ULIP", plan: "ULIP", status: "GRACE", premium: 48000, sumAssured: 5 * L, fundValue: 7.2 * L, dueDate: daysFromNow(6), cohortMonth: 25 },
     { score: 91, reasons: [{ label: "₹7.2L fund value at stake on discontinuance", module: "CustMgmt" }, { label: "Orphan policy — advisor moved to competitor", module: "TeamMgmt" }] }
   );
   await mk(
     { name: "Rakesh Deshmukh", phone: "+91 98901 44321", language: "Marathi", city: "Pune" },
-    { policyNo: "0312 7789 1102", product: "Bajaj Allianz Life Goal Assure II", plan: "ULIP", status: "GRACE", premium: 36000, sumAssured: 3.6 * L, fundValue: 2.45 * L, dueDate: daysFromNow(11), cohortMonth: 13 },
+    { policyNo: "0312 7789 1102", product: "Tata AIG Life Wealth Builder II", plan: "ULIP", status: "GRACE", premium: 36000, sumAssured: 3.6 * L, fundValue: 2.45 * L, dueDate: daysFromNow(11), cohortMonth: 13 },
     { score: 82, reasons: [{ label: "First renewal — 13-month cohort risk", module: "Intelligence" }, { label: "Orphan policy", module: "TeamMgmt" }] }
   );
   const fatima = await mk(
     { name: "Fatima Sheikh", phone: "+91 99230 90111", language: "Hindi", city: "Aurangabad" },
-    { policyNo: "0312 8890 3324", product: "Bajaj Allianz Life POS Goal Suraksha", plan: "NonPar", status: "IN_FORCE", premium: 24000, sumAssured: 4.8 * L, dueDate: daysFromNow(12), cohortMonth: 37, advisorId: fls.id },
+    { policyNo: "0312 8890 3324", product: "Tata AIG Life POS Suraksha Goal", plan: "NonPar", status: "IN_FORCE", premium: 24000, sumAssured: 4.8 * L, dueDate: daysFromNow(12), cohortMonth: 37, advisorId: fls.id },
     { score: 71, reasons: [{ label: "Open grievance ticket — payout misunderstanding", module: "CustMgmt" }, { label: "Payment 12 days from due, no auto-pay mandate", module: "CustMgmt" }] }
   );
   await db.servicingTicket.create({
@@ -300,7 +300,7 @@ export async function seedAll(db: PrismaClient) {
   });
   await mk(
     { name: "Meena Iyer", phone: "+91 98844 32109", language: "Tamil", city: "Chennai" },
-    { policyNo: "0312 9912 6678", product: "Bajaj Allianz Life Flexi Income Goal", plan: "Par", status: "IN_FORCE", premium: 30000, sumAssured: 6 * L, dueDate: daysFromNow(18), cohortMonth: 49, advisorId: fls3.id },
+    { policyNo: "0312 9912 6678", product: "Tata AIG Life Flexi Income Plan", plan: "Par", status: "IN_FORCE", premium: 30000, sumAssured: 6 * L, dueDate: daysFromNow(18), cohortMonth: 49, advisorId: fls3.id },
     { score: 58, reasons: [{ label: "Missed last premium by 11 days (paid in grace)", module: "CustMgmt" }] }
   );
 
@@ -319,14 +319,14 @@ export async function seedAll(db: PrismaClient) {
     });
   };
   // Vikram — strong month
-  await closedSale(fls.id, "Aditya Rao", "Pune", "Bajaj Allianz Life Smart Protect Goal", "Term", 1_00_00_000, 14200, 3);
-  await closedSale(fls.id, "Sneha Kulkarni", "Pune", "Bajaj Allianz Life eTouch II", "Term", 75_00_000, 10800, 8);
-  await closedSale(fls.id, "Mohit Sethi", "Mumbai", "Bajaj Allianz Life Goal Assure II", "ULIP", 40_00_000, 60000, 12);
+  await closedSale(fls.id, "Aditya Rao", "Pune", "Tata AIG Life Assure Shield", "Term", 1_00_00_000, 14200, 3);
+  await closedSale(fls.id, "Sneha Kulkarni", "Pune", "Tata AIG Life iRaksha Secure", "Term", 75_00_000, 10800, 8);
+  await closedSale(fls.id, "Mohit Sethi", "Mumbai", "Tata AIG Life Wealth Builder II", "ULIP", 40_00_000, 60000, 12);
   // Rahul — mid
-  await closedSale(fls2.id, "Farah Khan", "Pune", "Bajaj Allianz Life Smart Protect Goal", "Term", 50_00_000, 8600, 5);
-  await closedSale(fls2.id, "Girish Patel", "Nashik", "Bajaj Allianz Life Assured Wealth Goal", "NonPar", 20_00_000, 50000, 10);
+  await closedSale(fls2.id, "Farah Khan", "Pune", "Tata AIG Life Assure Shield", "Term", 50_00_000, 8600, 5);
+  await closedSale(fls2.id, "Girish Patel", "Nashik", "Tata AIG Life Guaranteed Wealth Plan", "NonPar", 20_00_000, 50000, 10);
   // Arti — building
-  await closedSale(fls3.id, "Lata Menon", "Pune", "Bajaj Allianz Life eTouch II", "Term", 1_00_00_000, 13500, 6);
+  await closedSale(fls3.id, "Lata Menon", "Pune", "Tata AIG Life iRaksha Secure", "Term", 1_00_00_000, 13500, 6);
 
   // --- SEEDED JOURNEY EVENTS ----------------------------------------------
   console.log("Seeding activity timeline…");

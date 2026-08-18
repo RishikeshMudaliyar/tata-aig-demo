@@ -6,8 +6,8 @@ export type LeadTypeMeta = { label: string; intent: string; why: string };
 
 export const LEAD_TYPES: Record<string, LeadTypeMeta> = {
   "Hand-raise": { label: "Hand-raise", intent: "Very high", why: "Actively requested a quote or coverage — top-of-funnel intent. Same-day contact converts materially better." },
-  ETB: { label: "ETB — existing customer", intent: "High", why: "Already banks / holds a policy with Bajaj — KYC pre-verified, trust established, strong cross-sell fit." },
-  D2C: { label: "D2C — self-serve", intent: "Medium-high", why: "Came through Bajaj's own site/app and is researching independently — guide with one clear recommendation." },
+  ETB: { label: "ETB — existing customer", intent: "High", why: "Already banks / holds a policy with Tata AIG — KYC pre-verified, trust established, strong cross-sell fit." },
+  D2C: { label: "D2C — self-serve", intent: "Medium-high", why: "Came through Tata AIG's own site/app and is researching independently — guide with one clear recommendation." },
   VEM: { label: "VEM — virtual engagement", intent: "Medium", why: "From the virtual-engagement pool — best worked over video / WhatsApp; no branch visit needed." },
   "Sub-VEM": { label: "Sub-VEM — curated segment", intent: "Medium", why: "Curated micro-segment (life-stage / renewal-window match) for a personalised virtual campaign." },
   Referral: { label: "Referral", intent: "High", why: "Referred by an existing customer — trust is pre-built; referrals close ~3× the cold rate." },

@@ -7,14 +7,14 @@ const rubik = Rubik({ variable: "--font-rubik", subsets: ["latin"], weight: ["30
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Bajaj Life — Unified Sales Platform",
-  description: "Orchestration & intelligence layer over Bajaj Life's existing digital assets.",
+  title: "Tata AIG — Unified Sales Platform",
+  description: "Orchestration & intelligence layer over Tata AIG's existing digital assets.",
   manifest: "/manifest.webmanifest",
-  appleWebApp: { capable: true, title: "Bajaj Life", statusBarStyle: "default" },
+  appleWebApp: { capable: true, title: "Tata AIG", statusBarStyle: "default" },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#005dac",
+  themeColor: "#004da7",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,

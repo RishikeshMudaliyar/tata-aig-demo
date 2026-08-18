@@ -145,7 +145,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
         <div className="max-w-[1480px] mx-auto px-6 h-14 flex items-center justify-between gap-3">
           <Link href={HOME_BY_ROLE[persona.role] ?? "/cockpit"} className="flex items-center gap-2.5 shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/bajaj-life-logo.gif" alt="Bajaj Life" style={{ height: 38, width: "auto" }} />
+            <img src="/tata-aig-logo.png" alt="Tata AIG" style={{ height: 38, width: "auto" }} />
             <span className="hidden sm:block text-[14px] pl-2.5" style={{ color: "rgba(255,255,255,0.85)", fontWeight: 300, borderLeft: "1px solid rgba(255,255,255,0.3)" }}>
               Unified Sales Platform
             </span>

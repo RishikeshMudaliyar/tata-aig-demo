@@ -16,8 +16,8 @@ export const ROLE_LABEL: Record<Role, string> = {
   ADMIN: "Admin",
 };
 
-// The existing Bajaj Life digital assets our layer orchestrates (not replaces).
-// The FIVE core modules exactly as Bajaj's requirements document names them,
+// The existing Tata AIG digital assets our layer orchestrates (not replaces).
+// The FIVE core modules exactly as Tata AIG's requirements document names them,
 // plus one AI Intelligence overlay that sits on top. Nothing invented.
 export const MODULES = [
   { key: "LeadMgmt", label: "Lead Management", overlay: false },

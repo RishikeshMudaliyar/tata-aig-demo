@@ -12,7 +12,7 @@ import { createPortal } from "react-dom";
 import { Mic, MicOff, PhoneOff, Phone, X, Check } from "lucide-react";
 import { useVoiceCall, type Line } from "@/lib/useVoiceCall";
 
-const BAJAJ_LINE = "+91 20 6712 4400";
+const TATA_AIG_LINE = "+91 22 6693 8200";
 
 /** The five facts Riya is sent to collect — they light up as she gets them. */
 const FACTS = [
@@ -78,12 +78,12 @@ function Handset({
             style={{
               width: 52, height: 52,
               background: isAgent ? "rgba(255,255,255,0.14)" : "#dbe6f1",
-              color: isAgent ? "#fff" : "#0a2e52",
+              color: isAgent ? "#fff" : "#0b2447",
             }}
           >
             {title.slice(0, 1)}
           </div>
-          <div className="text-[15px]" style={{ color: isAgent ? "#fff" : "#0d2b4a" }}>{title}</div>
+          <div className="text-[15px]" style={{ color: isAgent ? "#fff" : "#0b2447" }}>{title}</div>
           <div className="text-[11.5px] mt-0.5" style={{ color: isAgent ? "rgba(255,255,255,0.55)" : "#64748d" }}>
             {subtitle}
           </div>
@@ -107,7 +107,7 @@ function Handset({
               className="rounded-2xl px-3 py-2 text-[13px] leading-snug fade-in"
               style={{
                 background: isAgent ? "rgba(255,255,255,0.12)" : "#ffffff",
-                color: isAgent ? "#eaf2fb" : "#0d2b4a",
+                color: isAgent ? "#eaf2fb" : "#0b2447",
                 border: isAgent ? "none" : "1px solid #e3e8ee",
               }}
             >
@@ -198,8 +198,8 @@ export function DelegationCall({
       <div className="flex-1 flex items-center justify-center gap-2 px-6 overflow-y-auto">
         <Handset
           title="Riya"
-          subtitle="AI agent · Bajaj Life"
-          number={BAJAJ_LINE}
+          subtitle="AI agent · Tata AIG"
+          number={TATA_AIG_LINE}
           tone="agent"
           lines={agentLines}
           speaking={speaker === "agent"}
@@ -287,7 +287,7 @@ export function DelegationCall({
                 onClick={() => void call.toggleMute()}
                 aria-label={call.muted ? "Unmute" : "Mute"}
               >
-                {call.muted ? <MicOff size={18} color="#0a2e52" /> : <Mic size={18} color="#fff" />}
+                {call.muted ? <MicOff size={18} color="#0b2447" /> : <Mic size={18} color="#fff" />}
               </button>
               <button
                 className="grid h-12 w-12 place-items-center rounded-full"

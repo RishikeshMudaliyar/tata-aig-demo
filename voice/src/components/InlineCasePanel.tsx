@@ -69,7 +69,7 @@ export function InlineCasePanel({ applicationId, personaId, role, onChanged, sho
     ? cf.aiScrutiny.notes
     : ["Income-proof legibility — confirm the ITR scan is readable", "Nominee relationship — confirm it matches the proposal"];
 
-  // Underwriter view: evidence pulled from Bajaj + external systems.
+  // Underwriter view: evidence pulled from Tata AIG + external systems.
   const uwEvidence = [
     { label: "Medical (TPA tele-MER)", value: cf.teleMer?.status === "COMPLETED" ? (cf.teleMer.report ?? "completed") : cf.teleMer?.status === "SCHEDULED" ? "booked with TPA — report pending" : "not required on grid" },
     { label: "Financial (income / HLV)", value: cf.hlv ? `Income verified · HLV ceiling ${inr(cf.hlv)}` : "income verified" },
@@ -239,7 +239,7 @@ export function InlineCasePanel({ applicationId, personaId, role, onChanged, sho
         </div>
       )}
 
-      {/* UW: decide on the evidence — data pulled from Bajaj & external systems (no bounce to sales) */}
+      {/* UW: decide on the evidence — data pulled from Tata AIG & external systems (no bounce to sales) */}
       {c.status === "UW_REVIEW" && (
         <div className="card p-4">
           <div className="flex items-center gap-2 mb-2">
@@ -248,7 +248,7 @@ export function InlineCasePanel({ applicationId, personaId, role, onChanged, sho
           </div>
           <div className="flex items-center gap-1.5 mb-1.5">
             <Database size={12} style={{ color: "var(--muted)" }} />
-            <span className="micro-cap" style={{ color: "var(--muted)" }}>Pulled from Bajaj PAS · CKYC · CIBIL · TPA medical</span>
+            <span className="micro-cap" style={{ color: "var(--muted)" }}>Pulled from Tata AIG PAS · CKYC · CIBIL · TPA medical</span>
           </div>
           <div className="grid gap-1.5 mb-3">
             {uwEvidence.map((e, i) => (

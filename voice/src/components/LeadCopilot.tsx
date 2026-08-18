@@ -143,10 +143,10 @@ export function LeadCopilot({
       <div className="card p-4">
         <div className="flex items-center justify-between gap-2 mb-2">
           <SectionTitle>Recommended pitch</SectionTitle>
-          <span className="chip" style={{ background: "var(--canvas-soft)", color: "var(--muted)", borderColor: "transparent" }}><Cpu size={11} /> Bajaj product-match engine</span>
+          <span className="chip" style={{ background: "var(--canvas-soft)", color: "var(--muted)", borderColor: "transparent" }}><Cpu size={11} /> Tata AIG product-match engine</span>
         </div>
         <div className="p-3 rounded-lg mb-3" style={{ background: "#e8f2fb" }}>
-          <div className="font-semibold text-sm">{cp.product ?? "Bajaj Allianz Life Smart Protect Goal"}</div>
+          <div className="font-semibold text-sm">{cp.product ?? "Tata AIG Life Assure Shield"}</div>
           <div className="text-sm tnum" style={{ color: "var(--ink-secondary)" }}>
             {cp.cover ? `${inr(cp.cover)} cover` : ""}{cp.premium ? ` · ${inr(cp.premium)}/yr` : ""}{cp.term ? ` · ${cp.term}` : ""}
           </div>
@@ -183,7 +183,7 @@ export function LeadCopilot({
           <div className="flex items-center gap-2">
             <FileText size={15} style={{ color: "var(--brand)" }} />
             <span className="micro-cap" style={{ color: "var(--ink-mute)" }}>Quotation</span>
-            <span className="chip" style={{ background: "var(--canvas-soft)", color: "var(--muted)", borderColor: "transparent" }}><Cpu size={10} /> Bajaj rating API</span>
+            <span className="chip" style={{ background: "var(--canvas-soft)", color: "var(--muted)", borderColor: "transparent" }}><Cpu size={10} /> Tata AIG rating API</span>
           </div>
           {term && (
             <button className="chip" style={{ cursor: "pointer", background: rop ? "#e8f2fb" : "var(--canvas-soft)", color: rop ? "var(--brand)" : "var(--muted)", borderColor: "transparent" }} onClick={() => setRop((v) => !v)}>

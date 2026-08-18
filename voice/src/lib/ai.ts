@@ -32,7 +32,7 @@ export type ReqInput = { type: string; title: string; detail: string; customerNa
 /** Plain-language, vernacular-ready explanation an FLS can send the customer. */
 export async function draftRequirementText(r: ReqInput): Promise<{ text: string; source: "claude" | "fallback" }> {
   const system =
-    "You are an assistant for a Bajaj Life insurance sales manager. Write a short, warm, plain-language WhatsApp message the salesperson can forward to a customer to explain ONE underwriting requirement and exactly what to do next. Max 55 words. No jargon. Reassuring tone. Do not invent facts beyond what is given.";
+    "You are an assistant for a Tata AIG insurance sales manager. Write a short, warm, plain-language WhatsApp message the salesperson can forward to a customer to explain ONE underwriting requirement and exactly what to do next. Max 55 words. No jargon. Reassuring tone. Do not invent facts beyond what is given.";
   const user = `Customer: ${r.customerName} (preferred language: ${r.language}). Product: ${r.product}, cover ${inr(r.sumAssured)}. Requirement: ${r.title}. Detail: ${r.detail}. Write the message in English, but if the language is not English or Hindi, add a one-line ${r.language} translation.`;
   const out = await ask(system, user, 400);
   if (out) return { text: out, source: "claude" };
@@ -57,13 +57,13 @@ export type SaveInput = { customerName: string; language: string; product: strin
 /** A vernacular save/reminder message for the Lapse Saver flow. */
 export async function draftSaveMessage(s: SaveInput): Promise<{ text: string; source: "claude" | "fallback" }> {
   const system =
-    "You are an assistant for Bajaj Life retention. Write a short, caring renewal-save message (max 55 words) for a customer whose policy is about to lapse. Acknowledge any pending service issue first, then gently remind about the renewal and offer to help pay. No pressure, no jargon.";
+    "You are an assistant for Tata AIG retention. Write a short, caring renewal-save message (max 55 words) for a customer whose policy is about to lapse. Acknowledge any pending service issue first, then gently remind about the renewal and offer to help pay. No pressure, no jargon.";
   const user = `Customer: ${s.customerName} (language: ${s.language}). Policy: ${s.product}, premium ${inr(s.premium)}, due ${s.dueDate}. Fund value at stake: ${inr(s.fundValue ?? 0)}. Context: ${s.reasons.join("; ")}. English, plus a one-line ${s.language} version if not English/Hindi.`;
   const out = await ask(system, user, 400);
   if (out) return { text: out, source: "claude" };
   const first = s.customerName.split(" ")[0];
   return {
-    text: `Hi ${first}, this is Bajaj Life. We noticed your fund switch is still pending — sorry about that, I'll get it done today. Also, your ${s.product} renewal of ${inr(s.premium)} is due ${s.dueDate}; your savings of ${inr(s.fundValue ?? 0)} stay invested if we renew. Shall I send a secure pay link?`,
+    text: `Hi ${first}, this is Tata AIG. We noticed your fund switch is still pending — sorry about that, I'll get it done today. Also, your ${s.product} renewal of ${inr(s.premium)} is due ${s.dueDate}; your savings of ${inr(s.fundValue ?? 0)} stay invested if we renew. Shall I send a secure pay link?`,
     source: "fallback",
   };
 }
@@ -71,7 +71,7 @@ export async function draftSaveMessage(s: SaveInput): Promise<{ text: string; so
 /** A talk-track for the advisor before they call. */
 export async function draftTalkTrack(s: SaveInput): Promise<{ text: string; source: "claude" | "fallback" }> {
   const system =
-    "You coach Bajaj Life advisors. Produce a 3-bullet talk-track (each under 18 words) for a retention call: 1) open by resolving their pending issue, 2) the save ask, 3) an objection-handling line. Plain, human.";
+    "You coach Tata AIG advisors. Produce a 3-bullet talk-track (each under 18 words) for a retention call: 1) open by resolving their pending issue, 2) the save ask, 3) an objection-handling line. Plain, human.";
   const user = `Customer ${s.customerName}. Policy ${s.product}, premium ${inr(s.premium)}, due ${s.dueDate}. Context: ${s.reasons.join("; ")}.`;
   const out = await ask(system, user, 300);
   if (out) return { text: out, source: "claude" };

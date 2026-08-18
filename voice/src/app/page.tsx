@@ -37,7 +37,7 @@ export default function Home() {
         <div className="mesh absolute inset-0" style={{ opacity: 0.1 }} />
         <div className="relative flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/bajaj-life-logo.gif" alt="Bajaj Life" style={{ height: 56, width: "auto" }} />
+          <img src="/tata-aig-logo.png" alt="Tata AIG" style={{ height: 56, width: "auto" }} />
           <div className="micro-cap pl-3" style={{ color: "rgba(255,255,255,0.75)", borderLeft: "1px solid rgba(255,255,255,0.3)" }}>Unified Sales Platform</div>
         </div>
 

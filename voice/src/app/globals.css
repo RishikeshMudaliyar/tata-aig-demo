@@ -1,31 +1,31 @@
 @import "tailwindcss";
 
 /* ============================================================
-   BAJAJ LIFE design system — Stripe-derived language, Bajaj palette.
-   primary CTA = Bajaj orange #FF6F00 (one filled pill per band)
-   ink & dark chrome = deep Bajaj blue; brand/link = Bajaj blue #005EAC
+   TATA AIG design system — Stripe-derived language, Tata AIG palette.
+   primary CTA = Tata AIG red #E31E24 (one filled pill per band)
+   ink & dark chrome = deep Tata AIG blue; brand/link = Tata AIG blue #004da7
    type = Inter 300, negative tracking on display, ss01 global, tnum on numerics
    ============================================================ */
 
 :root {
   /* surfaces */
   --canvas: #ffffff;
-  --canvas-soft: #eef7fc;         /* bajajlife page canvas — sampled */
+  --canvas-soft: #eef3fb;         /* tata aig page canvas */
   --canvas-cream: #fdf3e3;        /* warm interlude */
   --hairline: #e3e8ee;
   --hairline-input: #a8c3de;
 
   /* text */
-  --ink: #0d2b4a;                 /* deep bajaj-blue ink — never pure black */
-  --ink-secondary: #27415e;
+  --ink: #0b2447;                 /* deep tata-aig-blue ink — never pure black */
+  --ink-secondary: #23406b;
   --ink-mute: #64748d;
 
   /* brand & accent */
-  --primary: #ff6f00;             /* bajaj CTA orange — the filled pill */
-  --primary-press: #d95e00;
-  --brand: #005dac;               /* bajaj blue — sampled from bajajlifeinsurance.com */
-  --brand-2: #117bd6;             /* bright bajaj blue — sampled secondary chips */
-  --brand-dark-900: #0a2e52;      /* dark chrome / featured surfaces */
+  --primary: #e31e24;             /* tata aig CTA red — the filled pill */
+  --primary-press: #b8181d;
+  --brand: #004da7;               /* tata aig blue — locked brand blue */
+  --brand-2: #1f6fd6;             /* bright tata aig blue — secondary chips */
+  --brand-dark-900: #082249;      /* dark chrome / featured surfaces */
   --pink: #ef328b;                /* gradient stop + chart accent, never a button */
   --good: #0c8934;
   --warn: #c77700;
@@ -142,18 +142,18 @@ body {
 .hairline { border-top: 1px solid var(--hairline); }
 .mono { font-family: var(--font-mono), monospace; font-feature-settings: "tnum"; }
 
-/* ---- the gradient mesh (bajaj stops: cream → sherbet → sky → bajaj blue → pink) ---- */
+/* ---- the gradient mesh (tata aig stops: cream → coral → sky → tata aig blue → pink) ---- */
 .mesh {
   position: absolute; inset: 0; overflow: hidden; pointer-events: none;
 }
 .mesh::before {
   content: ""; position: absolute; inset: -20% -10%;
   background:
-    radial-gradient(38% 55% at 8% 20%, #fdeed3 0%, transparent 70%),
-    radial-gradient(34% 60% at 30% 10%, #ffc98f 0%, transparent 65%),
-    radial-gradient(30% 55% at 52% 28%, #ffddb8 0%, transparent 60%),
-    radial-gradient(36% 62% at 68% 8%, #a8d4f5 0%, transparent 65%),
-    radial-gradient(40% 66% at 88% 26%, #4a90d9 0%, transparent 62%),
+    radial-gradient(38% 55% at 8% 20%, #fde3d3 0%, transparent 70%),
+    radial-gradient(34% 60% at 30% 10%, #ff9f8f 0%, transparent 65%),
+    radial-gradient(30% 55% at 52% 28%, #ffc4b8 0%, transparent 60%),
+    radial-gradient(36% 62% at 68% 8%, #a8c4f5 0%, transparent 65%),
+    radial-gradient(40% 66% at 88% 26%, #2f66c4 0%, transparent 62%),
     radial-gradient(26% 44% at 97% 60%, #ef328b 0%, transparent 68%),
     linear-gradient(180deg, #fef8ef 0%, #fdf3e3 100%);
   filter: blur(28px) saturate(1.08);
@@ -235,8 +235,8 @@ body {
 /* ---- face-to-face call stage ---- */
 .call-stage {
   background:
-    radial-gradient(80% 60% at 50% 12%, #16406f 0%, transparent 70%),
-    linear-gradient(180deg, #0a2e52 0%, #061c33 100%);
+    radial-gradient(80% 60% at 50% 12%, #163f70 0%, transparent 70%),
+    linear-gradient(180deg, #082249 0%, #051730 100%);
   /* Deliberately NOT animated. A paused/backgrounded tab freezes CSS animations
      mid-flight, which stranded this overlay at partial opacity and let the page
      behind show through. A call screen should appear instantly regardless. */

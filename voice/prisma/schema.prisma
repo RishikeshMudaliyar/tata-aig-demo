@@ -1,4 +1,4 @@
-// Bajaj Life — Sales Enablement & Orchestration Platform (demo)
+// Tata AIG — Sales Enablement & Orchestration Platform (demo)
 // SQLite for zero-friction local run; schema kept Postgres-portable for Railway.
 // "enum" fields are String, "json" fields are stringified String — SQLite-safe & portable.
 
