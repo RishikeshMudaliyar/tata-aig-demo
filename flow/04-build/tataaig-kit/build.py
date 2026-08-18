@@ -21,9 +21,11 @@ engine = open("engine.js").read().replace("__CHAT__", chat).replace("__VOICE__",
 assert "</script" not in engine.lower(), "unsafe </script> in embedded data"
 
 logo = base64.b64encode(open("assets/tataaig-logo-small.png","rb").read()).decode()
+favicon = base64.b64encode(open("assets/favicon.ico","rb").read()).decode()
 
 base = (open("base_v9.html").read()
         .replace("__LOGO__", logo)
+        .replace("__FAVICON__", favicon)
         .replace("__TAB_TITLE__", TAB_TITLE)
         .replace("__HERO_TITLE__", HERO_TITLE)
         .replace("__HERO_SUBTITLE__", HERO_SUBTITLE))
