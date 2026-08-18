@@ -176,7 +176,7 @@ model ActivityEvent {
   createdAt  DateTime @default(now())
 }
 
-/// Audited BALIC public metrics (kept for pitch material; not shown in-app).
+/// Audited Tata AIG Life public metrics (kept for pitch material; not shown in-app).
 model MetricSnapshot {
   id          String  @id @default(cuid())
   key         String  @unique
