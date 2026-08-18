@@ -14,5 +14,15 @@ __pycache__/
 .railway/
 
 # Raw recording session scratch (recordings, transcripts, split working clips) —
-# the deliverable is 04-build/tataaig-kit/audio/, embedded into the built HTML.
-03-planning/recording-scripts/drop-here/
+# the deliverable is flow/04-build/tataaig-kit/audio/, embedded into the built HTML.
+flow/03-planning/recording-scripts/drop-here/
+
+# Node/Next.js (voice/ app)
+voice/node_modules/
+voice/.next/
+voice/out/
+voice/.vercel/
+voice/*.tsbuildinfo
+voice/next-env.d.ts
+voice/src/generated/prisma
+voice/.scratch-v0/
