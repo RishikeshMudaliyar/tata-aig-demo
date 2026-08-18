@@ -57,7 +57,7 @@ model Lead {
   id              String    @id @default(cuid())
   name            String
   phone           String
-  source          String // PolicyBazaar / Branch / Referral / Website
+  source          String // Website / Branch walk-in / Referral
   productInterest String
   city            String?
   language        String?

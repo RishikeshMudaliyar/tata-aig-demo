@@ -50,13 +50,13 @@ export async function seedAll(db: PrismaClient) {
   console.log("Seeding leads + copilot briefs…");
   await db.lead.create({
     data: {
-      name: "Neha Agarwal", phone: "+91 98230 55412", source: "PolicyBazaar", productInterest: "Term cover",
+      name: "Neha Agarwal", phone: "+91 98230 55412", source: "Website", productInterest: "Term cover",
       city: "Pune", language: "English", occupation: "Product Manager — tech company", incomeAnnual: 24 * L,
       ageHours: 2, score: 88, status: "NEW", ownerId: fls.id,
       copilot: J({
         type: "Hand-raise",
         whyScored: [
-          "Compared term plans twice on PolicyBazaar in the last 48 hours — high intent",
+          "Used the term-cover calculator on the website twice in the last 48 hours — high intent",
           "Salaried, income band ₹20–30L — protection-gap segment with high issuance rates",
           "Age 33 — locking premium this year saves ~₹2,100/yr for life",
         ],
@@ -102,7 +102,7 @@ export async function seedAll(db: PrismaClient) {
         cover: 1 * CR, premium: 13800, term: "up to age 60",
         talkTrack: "He asked for this callback — start there: \"You wanted to talk after hours, thanks for the time.\" Referral from Meena Iyer means trust is pre-built; mention her (with permission) once. He has a daughter (7) — bridge from term protection to Young Assure for her education corpus.",
         objections: [
-          { q: "LIC feels safer", a: "Fair — and claims data is public: our individual death-claim settlement is 99%+. I'll send the IRDAI page, not my word." },
+          { q: "A more established insurer feels safer", a: "Fair — and claims data is public: our individual death-claim settlement is 99%+. I'll send the IRDAI page, not my word." },
         ],
       }),
     },

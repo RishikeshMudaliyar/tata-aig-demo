@@ -19,7 +19,7 @@ const FACTS = [
   { key: "need", label: "need", hints: [/zaroorat|requirement|chahiye|cover chahi|abhi bhi/i] },
   { key: "dependants", label: "dependants", hints: [/wife|husband|bachch|children|parents|family|patni|beta|beti/i] },
   { key: "income", label: "income", hints: [/lakh|income|salary|kamata|kamati|annual/i] },
-  { key: "cover", label: "existing cover", hints: [/policy|insurance|LIC|office se|employer|group cover/i] },
+  { key: "cover", label: "existing cover", hints: [/policy|insurance|existing insurer|office se|employer|group cover/i] },
   { key: "urgency", label: "urgency", hints: [/mahine|month|jaldi|abhi|explore|dekh raha|soch/i] },
 ];
 
