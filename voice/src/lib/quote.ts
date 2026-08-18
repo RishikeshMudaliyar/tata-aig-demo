@@ -28,16 +28,16 @@ export const ROP_MULTIPLIER = 1.6;
 
 export function isTermPlan(s: string): boolean {
   const t = (s || "").toLowerCase();
-  return t.includes("term") || t.includes("protect") || t.includes("etouch") || t.includes("saral jeevan");
+  return t.includes("term") || t.includes("assure shield") || t.includes("iraksha") || t.includes("suraksha bima");
 }
 
 /** Illustrative first-year commission rate by product family (configurable). */
 export function commissionRate(product: string): number {
   const s = (product || "").toLowerCase();
-  if (s.includes("ulip") || s.includes("goal assure") || s.includes("wealth") || s.includes("smart wealth")) return 0.06;
+  if (s.includes("ulip") || s.includes("wealth builder") || s.includes("smart wealth")) return 0.06;
   if (isTermPlan(s)) return 0.28;
   if (s.includes("annuity") || s.includes("pension")) return 0.02;
-  return 0.15; // par / non-par savings
+  return 0.15; // par / non-par savings (Guaranteed Wealth Plan, Suraksha Goal, Flexi Income)
 }
 
 /** Illustrative monthly first-year-commission target for a Sales Manager. */

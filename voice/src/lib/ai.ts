@@ -42,7 +42,7 @@ export async function draftRequirementText(r: ReqInput): Promise<{ text: string;
 function fallbackReq(r: ReqInput): string {
   switch (r.type) {
     case "FINANCIAL_ITR":
-      return `Hi ${r.customerName.split(" ")[0]}, great news — your ${inr(r.sumAssured)} plan is almost through! For a cover this size the insurer just needs your last 2 years' ITR to confirm income. Could you share them? I'll upload them for you — takes 2 minutes.`;
+      return `Hi ${r.customerName.split(" ")[0]}, great news — your ${inr(r.sumAssured)} plan is almost through! For a cover this size Tata AIG just needs your last 2 years' ITR to confirm income. Could you share them? I'll upload them for you — takes 2 minutes.`;
     case "MEDICAL_TELE_MER":
       return `Hi ${r.customerName.split(" ")[0]}, one quick step left for your policy: a short tele-medical call with a doctor (10 mins, from home). Shall I book a slot for you this week? Nothing to prepare.`;
     case "KYC_MISMATCH":

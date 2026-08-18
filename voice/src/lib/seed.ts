@@ -63,7 +63,7 @@ export async function seedAll(db: PrismaClient) {
         product: "Tata AIG Life Assure Shield (Term)",
         cover: 1.5 * CR, premium: 16900, term: "up to age 60",
         talkTrack:
-          "Open with her research: \"I saw you were comparing term covers — most people in your bracket land between ₹1–2 Cr, let me make that simple.\" Anchor on 10–15x income: at ₹24L that's ₹1.5 Cr. Position Smart Protect Goal at about ₹1,400/month — less than her weekend grocery run — with the return-of-premium option if she wants maturity value. Close on the medical: it's a 20-minute tele-call, no clinic visit.",
+          "Open with her research: \"I saw you were comparing term covers — most people in your bracket land between ₹1–2 Cr, let me make that simple.\" Anchor on 10–15x income: at ₹24L that's ₹1.5 Cr. Position Assure Shield at about ₹1,400/month — less than her weekend grocery run — with the return-of-premium option if she wants maturity value. Close on the medical: it's a 20-minute tele-call, no clinic visit.",
         objections: [
           { q: "My employer already covers me", a: "Employer cover ends the day the job does — and it's usually 2–3x salary. This stays with you for 27 years, whoever the employer is." },
           { q: "Premium feels high", a: "₹1,400/month at 33 vs ₹2,300/month at 38 — the price of waiting is ₹3 lakh over the term. Locking now IS the discount." },
@@ -82,7 +82,7 @@ export async function seedAll(db: PrismaClient) {
         whyScored: ["Used the retirement calculator on the website — goal-based intent", "Self-employed — no employer cover, whole protection gap open"],
         product: "Tata AIG Life Wealth Builder II (ULIP)",
         cover: 60 * L, premium: 60000, term: "15 years",
-        talkTrack: "He came via the retirement calculator — lead with the goal, not the product. Ask what the number he saw was, then show Goal Assure II reaching it with return-of-mortality-charges at maturity. Business owners respond to flexibility: highlight partial withdrawals after year 5.",
+        talkTrack: "He came via the retirement calculator — lead with the goal, not the product. Ask what the number he saw was, then show Wealth Builder II reaching it with return-of-mortality-charges at maturity. Business owners respond to flexibility: highlight partial withdrawals after year 5.",
         objections: [
           { q: "Mutual funds give better returns", a: "Comparable fund options, plus a life cover and zero LTCG on maturity under current rules — the after-tax picture is closer than it looks." },
           { q: "Business cash flow is seasonal", a: "Annual mode with a 30-day grace, or monthly mode — we fit the premium to the cash cycle, not the other way." },
@@ -117,7 +117,7 @@ export async function seedAll(db: PrismaClient) {
         whyScored: ["Walked into the branch — highest-intent channel", "71 hours unworked — conversion probability decaying"],
         product: "Tata AIG Life Guaranteed Wealth Plan",
         cover: 25 * L, premium: 50000, term: "10 pay / 20 benefit",
-        talkTrack: "She walked in asking about guaranteed returns — do NOT open with market-linked products. Lead with Assured Wealth Goal's guaranteed income number in rupees, then the life-cover as the bonus. Keep it to two numbers: what she pays, what she gets.",
+        talkTrack: "She walked in asking about guaranteed returns — do NOT open with market-linked products. Lead with the Guaranteed Wealth Plan's guaranteed income number in rupees, then the life-cover as the bonus. Keep it to two numbers: what she pays, what she gets.",
         objections: [
           { q: "FD rates are similar", a: "FD interest is taxable every year; this payout is tax-free under 10(10D) and adds ₹25L life cover the FD never will." },
         ],
@@ -282,7 +282,7 @@ export async function seedAll(db: PrismaClient) {
   );
   await mk(
     { name: "Arjun Nair", phone: "+91 98470 77812", language: "Malayalam", city: "Kochi" },
-    { policyNo: "0312 5567 8890", product: "Tata AIG Life Smart Wealth ULIP", plan: "ULIP", status: "GRACE", premium: 48000, sumAssured: 5 * L, fundValue: 7.2 * L, dueDate: daysFromNow(6), cohortMonth: 25 },
+    { policyNo: "0312 5567 8890", product: "Tata AIG Life Wealth Builder", plan: "ULIP", status: "GRACE", premium: 48000, sumAssured: 5 * L, fundValue: 7.2 * L, dueDate: daysFromNow(6), cohortMonth: 25 },
     { score: 91, reasons: [{ label: "₹7.2L fund value at stake on discontinuance", module: "CustMgmt" }, { label: "Orphan policy — advisor moved to competitor", module: "TeamMgmt" }] }
   );
   await mk(
