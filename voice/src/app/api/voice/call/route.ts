@@ -19,6 +19,12 @@ export async function POST(req: Request) {
 
   const { status, body, userId } = await startWebCall(agent ?? "COACH", variables ?? {});
 
+  if (status === 0) {
+    return NextResponse.json(
+      { ok: false, reason: "UNREACHABLE", message: "Could not reach the voice gateway from the server. Use the browser-direct call path instead — see VoiceAgent.tsx.", upstream: body },
+      { status: 502 },
+    );
+  }
   if (status >= 400) {
     return NextResponse.json({ ok: false, reason: "UPSTREAM", status, upstream: body }, { status: 502 });
   }

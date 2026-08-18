@@ -41,33 +41,56 @@ export type WebCall = {
   call_id?: string;
 };
 
+/**
+ * NOTE: agentx-prod is network/VPN-gated — a Railway-hosted server generally CANNOT reach it
+ * (fetch hangs or throws after Railway's egress times out). The real, working call path is
+ * browser-direct (see VoiceAgent.tsx / useVoiceCall.ts), which agentx-prod CORS-allows. This
+ * server-side path exists only as a fallback/reference and is expected to fail in production —
+ * it must fail with a structured JSON error, never an unhandled throw, since a raw exception
+ * here becomes a bare empty-body 500 with no explanation for whatever called it.
+ */
 export async function startWebCall(kind: AgentKind, variables: Record<string, string> = {}) {
   const userId = uuid();
-  const r = await fetch(`${API_BASE}/voice/web/call`, {
-    method: "POST",
-    cache: "no-store",
-    headers: {
-      accept: "application/json",
-      "content-type": "application/json",
-      "user-id": userId,
-      "x-api-key": gatewayKey(),
-    },
-    body: JSON.stringify({
-      agent_id: AGENT_IDS[kind],
-      overide_previous_context: true, // sic — the real field name, not a typo
-      custom_dynamic_variables_config: variables,
-    }),
-  });
-  const body = (await r.json().catch(() => ({}))) as WebCall & { message?: string };
-  return { status: r.status, body, userId };
+  try {
+    const r = await fetch(`${API_BASE}/voice/web/call`, {
+      method: "POST",
+      cache: "no-store",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+        "user-id": userId,
+        "x-api-key": gatewayKey(),
+      },
+      body: JSON.stringify({
+        agent_id: AGENT_IDS[kind],
+        overide_previous_context: true, // sic — the real field name, not a typo
+        custom_dynamic_variables_config: variables,
+      }),
+    });
+    const body = (await r.json().catch(() => ({}))) as WebCall & { message?: string };
+    return { status: r.status, body, userId };
+  } catch (err) {
+    return {
+      status: 0,
+      body: { message: err instanceof Error ? err.message : "Server could not reach the voice gateway (network-gated host)." },
+      userId,
+    };
+  }
 }
 
 /** Transcript, server-side — the result pipeline the muthoot reference never built. */
 export async function callTranscript(callId: string, userId: string) {
-  const r = await fetch(`${API_BASE}/voice/web/transcript/${callId}`, {
-    method: "GET",
-    cache: "no-store",
-    headers: { accept: "application/json", "user-id": userId, "x-api-key": gatewayKey() },
-  });
-  return { status: r.status, body: await r.json().catch(() => ({})) };
+  try {
+    const r = await fetch(`${API_BASE}/voice/web/transcript/${callId}`, {
+      method: "GET",
+      cache: "no-store",
+      headers: { accept: "application/json", "user-id": userId, "x-api-key": gatewayKey() },
+    });
+    return { status: r.status, body: await r.json().catch(() => ({})) };
+  } catch (err) {
+    return {
+      status: 0,
+      body: { message: err instanceof Error ? err.message : "Server could not reach the voice gateway (network-gated host)." },
+    };
+  }
 }
